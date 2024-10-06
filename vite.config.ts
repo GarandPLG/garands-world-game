@@ -22,8 +22,8 @@ export default defineConfig({
     vueDevTools(),
     AutoImport({
       dts: './types/auto-imports.d.ts',
-      dirs: ['./composables', './stores'],
-      imports: ['vue', VueRouterAutoImports, 'pinia', '@vueuse/core', 'vitest'],
+      dirs: ['./composables', './stores', './components/ui/**/*.ts'],
+      imports: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'vitest'],
       eslintrc: {
         enabled: true
       },
