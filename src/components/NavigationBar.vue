@@ -11,12 +11,9 @@ onMounted(() => {
 })
 
 const { currentUser } = storeToRefs(listenCurrentUser())
-
-watch(currentUser, (user) => {
-  console.log('watch currentUser', user)
-})
-
 const mode = useColorMode()
+
+console.table(currentUser.value)
 </script>
 
 <template>
@@ -24,32 +21,62 @@ const mode = useColorMode()
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuLink href="/" :class="navigationMenuTriggerStyle()">
-            Strona główna
+          <NavigationMenuLink
+            href="/"
+            :class="navigationMenuTriggerStyle()"
+            class="flex items-center gap-1"
+          >
+            <Icon icon="line-md:home" class="h-4 w-4" />
+
+            <span>Strona główna</span>
           </NavigationMenuLink>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuLink href="/sandbox" :class="navigationMenuTriggerStyle()">
-            Sandbox
+          <NavigationMenuLink
+            href="/sandbox"
+            :class="navigationMenuTriggerStyle()"
+            class="flex items-center gap-1"
+          >
+            <Icon icon="file-icons:sandbox" class="h-4 w-4" />
+
+            <span>Sandbox</span>
           </NavigationMenuLink>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuLink href="/raport" :class="navigationMenuTriggerStyle()">
-            Raport
+          <NavigationMenuLink
+            href="/raport"
+            :class="navigationMenuTriggerStyle()"
+            class="flex items-center gap-1"
+          >
+            <Icon icon="oui:app-reporting" class="h-4 w-4" />
+
+            <span>Raport</span>
           </NavigationMenuLink>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuLink href="/charts-and-stats" :class="navigationMenuTriggerStyle()">
-            Wykresy i statystyki
+          <NavigationMenuLink
+            href="/charts-and-stats"
+            :class="navigationMenuTriggerStyle()"
+            class="flex items-center gap-1"
+          >
+            <Icon icon="majesticons:presentation-chart" class="h-4 w-4" />
+
+            <span>Wykresy i statystyki</span>
           </NavigationMenuLink>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuLink href="/map" :class="navigationMenuTriggerStyle()">
-            Mapy
+          <NavigationMenuLink
+            href="/map"
+            :class="navigationMenuTriggerStyle()"
+            class="flex items-center gap-1"
+          >
+            <Icon icon="game-icons:treasure-map" class="h-4 w-4" />
+
+            <span>Mapy</span>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
@@ -57,24 +84,14 @@ const mode = useColorMode()
 
     <NavigationMenu>
       <NavigationMenuList>
-        <!-- <NavigationMenuItem>
-          <NavigationMenuLink
-            v-if="currentUser"
-            href="/"
-            :class="navigationMenuTriggerStyle()"
-            @select="pb.authStore.clear()"
-          >
-            {{ currentUser.username }}
-          </NavigationMenuLink>
-          <NavigationMenuLink v-else href="/login" :class="navigationMenuTriggerStyle()">
-            Zaloguj się
-          </NavigationMenuLink>
-        </NavigationMenuItem> -->
-
         <NavigationMenuItem v-if="currentUser">
           <DropdownMenu>
             <DropdownMenuTrigger as-child>
-              <Button variant="ghost"> Konto </Button>
+              <Button variant="ghost" class="flex items-center gap-1">
+                <Icon icon="line-md:account" class="h-4 w-4" />
+
+                <span>{{ currentUser.username }}</span>
+              </Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end">
@@ -86,12 +103,25 @@ const mode = useColorMode()
                 </div>
               </DropdownMenuLabel>
 
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator v-if="['moderator', 'admin'].includes(currentUser.role)" />
 
-              <DropdownMenuGroup>
+              <DropdownMenuGroup v-if="['moderator', 'admin'].includes(currentUser.role)">
+                <DropdownMenuItem v-if="currentUser.role === 'admin'">
+                  <NavigationMenuLink href="/pb/_/" class="w-full h-full flex items-center gap-1">
+                    <Icon icon="logos:pocket-base" class="h-4 w-4" />
+
+                    <span>PocketBase</span>
+                  </NavigationMenuLink>
+                </DropdownMenuItem>
+
                 <DropdownMenuItem>
-                  <NavigationMenuLink href="/profile" class="w-full h-full">
-                    Profil
+                  <NavigationMenuLink
+                    href="/admin-panel"
+                    class="w-full h-full flex items-center gap-1"
+                  >
+                    <Icon icon="eos-icons:admin-outlined" class="h-4 w-4" />
+
+                    <span>Admin Panel</span>
                   </NavigationMenuLink>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
@@ -99,8 +129,24 @@ const mode = useColorMode()
               <DropdownMenuSeparator />
 
               <DropdownMenuItem>
-                <NavigationMenuLink href="/" @select="pb.authStore.clear()" class="w-full h-full">
-                  Wyloguj się
+                <NavigationMenuLink href="/profile" class="w-full h-full flex items-center gap-1">
+                  <Icon icon="streamline:user-profile-focus" class="h-4 w-4" />
+
+                  <span>Profil</span>
+                </NavigationMenuLink>
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem>
+                <NavigationMenuLink
+                  href="/"
+                  @select="pb.authStore.clear()"
+                  class="w-full h-full flex items-center gap-1"
+                >
+                  <Icon icon="material-symbols:logout" class="h-4 w-4" />
+
+                  <span>Wyloguj się</span>
                 </NavigationMenuLink>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -110,7 +156,11 @@ const mode = useColorMode()
         <NavigationMenuItem v-else>
           <DropdownMenu>
             <DropdownMenuTrigger as-child>
-              <Button variant="ghost"> Użytkownik </Button>
+              <Button variant="ghost" class="flex items-center gap-1">
+                <Icon icon="line-md:account" class="h-4 w-4" />
+
+                <span>Konto</span>
+              </Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end">
