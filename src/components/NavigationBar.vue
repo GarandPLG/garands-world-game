@@ -12,8 +12,6 @@ onMounted(() => {
 
 const { currentUser } = storeToRefs(listenCurrentUser())
 const mode = useColorMode()
-
-console.table(currentUser.value)
 </script>
 
 <template>

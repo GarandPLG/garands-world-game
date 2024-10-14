@@ -36,8 +36,6 @@ const maps: { [key: string]: Map } = pbMaps.reduce((acc, map) => {
   acc[key] = map
   return acc
 }, {})
-
-console.log(maps)
 </script>
 
 <template>
