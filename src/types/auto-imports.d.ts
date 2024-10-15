@@ -45,6 +45,8 @@ declare global {
   const NavigationMenuLink: typeof import('../components/ui/navigation-menu/index')['NavigationMenuLink']
   const NavigationMenuList: typeof import('../components/ui/navigation-menu/index')['NavigationMenuList']
   const NavigationMenuTrigger: typeof import('../components/ui/navigation-menu/index')['NavigationMenuTrigger']
+  const RadioGroup: typeof import('../components/ui/radio-group/index')['RadioGroup']
+  const RadioGroupItem: typeof import('../components/ui/radio-group/index')['RadioGroupItem']
   const Separator: typeof import('../components/ui/separator/index')['Separator']
   const Tabs: typeof import('../components/ui/tabs/index')['Tabs']
   const TabsContent: typeof import('../components/ui/tabs/index')['TabsContent']

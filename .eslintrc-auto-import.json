@@ -381,6 +381,8 @@
     "CardFooter": true,
     "CardHeader": true,
     "CardTitle": true,
-    "listenCurrentUser": true
+    "listenCurrentUser": true,
+    "RadioGroup": true,
+    "RadioGroupItem": true
   }
 }

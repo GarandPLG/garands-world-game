@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { routes, handleHotUpdate } from 'vue-router/auto-routes'
+import { createRouter, createWebHistory } from 'vue-router';
+import { routes, handleHotUpdate } from 'vue-router/auto-routes';
 
 export const router = createRouter({
-  history: createWebHistory(),
-  routes
-})
+	history: createWebHistory(),
+	routes
+});
 
-if (import.meta.hot) handleHotUpdate(router)
+if (import.meta.hot) handleHotUpdate(router);

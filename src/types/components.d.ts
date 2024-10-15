@@ -7,9 +7,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Avatar: typeof import('./../components/ui/avatar/Avatar.vue')['default']
-    AvatarFallback: typeof import('./../components/ui/avatar/AvatarFallback.vue')['default']
-    AvatarImage: typeof import('./../components/ui/avatar/AvatarImage.vue')['default']
     Button: typeof import('./../components/ui/button/Button.vue')['default']
     Card: typeof import('./../components/ui/card/Card.vue')['default']
     CardContent: typeof import('./../components/ui/card/CardContent.vue')['default']
@@ -36,7 +33,6 @@ declare module 'vue' {
     FormItem: typeof import('./../components/ui/form/FormItem.vue')['default']
     FormLabel: typeof import('./../components/ui/form/FormLabel.vue')['default']
     FormMessage: typeof import('./../components/ui/form/FormMessage.vue')['default']
-    InjectionKeys: typeof import('./../components/ui/form/injectionKeys.ts')['default']
     Input: typeof import('./../components/ui/input/Input.vue')['default']
     Label: typeof import('./../components/ui/label/Label.vue')['default']
     NavigationBar: typeof import('./../components/NavigationBar.vue')['default']
@@ -48,6 +44,8 @@ declare module 'vue' {
     NavigationMenuList: typeof import('./../components/ui/navigation-menu/NavigationMenuList.vue')['default']
     NavigationMenuTrigger: typeof import('./../components/ui/navigation-menu/NavigationMenuTrigger.vue')['default']
     NavigationMenuViewport: typeof import('./../components/ui/navigation-menu/NavigationMenuViewport.vue')['default']
+    RadioGroup: typeof import('./../components/ui/radio-group/RadioGroup.vue')['default']
+    RadioGroupItem: typeof import('./../components/ui/radio-group/RadioGroupItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Separator: typeof import('./../components/ui/separator/Separator.vue')['default']
@@ -55,6 +53,7 @@ declare module 'vue' {
     TabsContent: typeof import('./../components/ui/tabs/TabsContent.vue')['default']
     TabsList: typeof import('./../components/ui/tabs/TabsList.vue')['default']
     TabsTrigger: typeof import('./../components/ui/tabs/TabsTrigger.vue')['default']
+    ThemePicker: typeof import('./../components/ThemePicker.vue')['default']
     Toast: typeof import('./../components/ui/toast/Toast.vue')['default']
     ToastAction: typeof import('./../components/ui/toast/ToastAction.vue')['default']
     ToastClose: typeof import('./../components/ui/toast/ToastClose.vue')['default']
@@ -63,7 +62,5 @@ declare module 'vue' {
     ToastProvider: typeof import('./../components/ui/toast/ToastProvider.vue')['default']
     ToastTitle: typeof import('./../components/ui/toast/ToastTitle.vue')['default']
     ToastViewport: typeof import('./../components/ui/toast/ToastViewport.vue')['default']
-    UseFormField: typeof import('./../components/ui/form/useFormField.ts')['default']
-    UseToast: typeof import('./../components/ui/toast/use-toast.ts')['default']
   }
 }
