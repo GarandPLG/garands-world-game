@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { navigationMenuTriggerStyle } from './ui/navigation-menu';
 import { Icon } from '@iconify/vue';
+import { navigationMenuTriggerStyle } from './ui/navigation-menu';
 
 const pb = usePocketBase();
 
@@ -93,7 +93,7 @@ const mode = useColorMode();
 						</DropdownMenuTrigger>
 
 						<DropdownMenuContent align="end">
-							<DropdownMenuLabel class="font-normal flex">
+							<DropdownMenuLabel class="flex font-normal">
 								<div class="flex flex-col space-y-1">
 									<p class="text-sm font-medium leading-none">{{ currentUser.username }}</p>
 
@@ -105,7 +105,7 @@ const mode = useColorMode();
 
 							<DropdownMenuGroup v-if="['moderator', 'admin'].includes(currentUser.role)">
 								<DropdownMenuItem v-if="currentUser.role === 'admin'">
-									<NavigationMenuLink href="/pb/_/" class="w-full h-full flex items-center gap-1">
+									<NavigationMenuLink href="/pb/_/" class="flex h-full w-full items-center gap-1">
 										<Icon icon="logos:pocket-base" class="h-4 w-4" />
 
 										<span>PocketBase</span>
@@ -115,7 +115,7 @@ const mode = useColorMode();
 								<DropdownMenuItem>
 									<NavigationMenuLink
 										href="/admin-panel"
-										class="w-full h-full flex items-center gap-1"
+										class="flex h-full w-full items-center gap-1"
 									>
 										<Icon icon="eos-icons:admin-outlined" class="h-4 w-4" />
 
@@ -127,7 +127,7 @@ const mode = useColorMode();
 							<DropdownMenuSeparator />
 
 							<DropdownMenuItem>
-								<NavigationMenuLink href="/profile" class="w-full h-full flex items-center gap-1">
+								<NavigationMenuLink href="/profile" class="flex h-full w-full items-center gap-1">
 									<Icon icon="streamline:user-profile-focus" class="h-4 w-4" />
 
 									<span>Profil</span>
@@ -140,7 +140,7 @@ const mode = useColorMode();
 								<NavigationMenuLink
 									href="/"
 									@select="pb.authStore.clear()"
-									class="w-full h-full flex items-center gap-1"
+									class="flex h-full w-full items-center gap-1"
 								>
 									<Icon icon="material-symbols:logout" class="h-4 w-4" />
 
@@ -163,7 +163,7 @@ const mode = useColorMode();
 
 						<DropdownMenuContent align="end">
 							<DropdownMenuItem>
-								<NavigationMenuLink href="/login" class="w-full h-full">
+								<NavigationMenuLink href="/login" class="h-full w-full">
 									Zaloguj się
 								</NavigationMenuLink>
 							</DropdownMenuItem>
@@ -171,7 +171,7 @@ const mode = useColorMode();
 							<DropdownMenuSeparator />
 
 							<DropdownMenuItem>
-								<NavigationMenuLink href="/register" class="w-full h-full">
+								<NavigationMenuLink href="/register" class="h-full w-full">
 									Zarejestruj się
 								</NavigationMenuLink>
 							</DropdownMenuItem>
@@ -191,21 +191,6 @@ const mode = useColorMode();
 							<ThemePicker />
 						</DropdownMenuContent>
 					</DropdownMenu>
-				</NavigationMenuItem>
-
-				<NavigationMenuItem>
-					<Button variant="outline" @click="() => (mode = mode === 'light' ? 'dark' : 'light')">
-						<Icon
-							icon="radix-icons:moon"
-							class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-						/>
-
-						<Icon
-							icon="radix-icons:sun"
-							class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-						/>
-						<span class="sr-only">Toggle theme</span>
-					</Button>
 				</NavigationMenuItem>
 			</NavigationMenuList>
 		</NavigationMenu>

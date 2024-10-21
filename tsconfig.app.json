@@ -7,7 +7,8 @@
 		"src/types/auto-imports.d.ts",
 		"src/types/components.d.ts",
 		"src/types/typed-router.d.ts",
-		"src/types/pb-types.ts"
+		"src/types/pb-types.ts",
+		"src/types/theme-types.d.ts"
 	],
 	"exclude": ["src/**/__tests__/*"],
 	"compilerOptions": {

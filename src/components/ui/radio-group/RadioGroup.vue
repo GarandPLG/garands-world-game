@@ -2,9 +2,9 @@
 import { cn } from '@/lib/utils';
 import {
 	RadioGroupRoot,
+	useForwardPropsEmits,
 	type RadioGroupRootEmits,
-	type RadioGroupRootProps,
-	useForwardPropsEmits
+	type RadioGroupRootProps
 } from 'radix-vue';
 import { computed, type HTMLAttributes } from 'vue';
 

@@ -5,15 +5,15 @@ const pb = usePocketBase();
 export const listenCurrentUser = defineStore('listenCurrentUser', () => {
 	const currentUser = ref<AuthModel | null>(null);
 
-	function setCurrentUser(user: AuthModel | null) {
+	function setCurrentUser(user: AuthModel | null): void {
 		currentUser.value = user;
 	}
 
-	function initCurrentUser() {
+	function initCurrentUser(): void {
 		setCurrentUser(pb.authStore.model);
 	}
 
-	function listenCurrentUserChange() {
+	function listenCurrentUserChange(): void {
 		pb.authStore.onChange(user => {
 			setCurrentUser(pb.authStore.model);
 		});

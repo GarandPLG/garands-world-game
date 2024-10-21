@@ -1,5 +1,21 @@
 <script setup lang="ts">
+import { setGlobalColorTheme } from '@/lib/theme-colors';
+import { setGlobalRadius } from '@/lib/theme-radius';
+import type { ThemeColors, ThemeRadiuses } from '@/types/theme-types';
 import { Icon } from '@iconify/vue';
+
+const themeStore = useThemeStore();
+const mode = useColorMode();
+
+onMounted(() => {
+	themeStore.initThemeStore();
+
+	setGlobalColorTheme(
+		mode.value as Exclude<typeof mode.value, 'auto'>,
+		themeStore.currentColorTheme as ThemeColors
+	);
+	setGlobalRadius(themeStore.currentRadius as ThemeRadiuses);
+});
 </script>
 
 <template>
@@ -14,7 +30,7 @@ import { Icon } from '@iconify/vue';
 			</template>
 
 			<template #fallback>
-				<div class="flex items-center justify-center h-screen">
+				<div class="flex h-screen items-center justify-center">
 					<Icon icon="svg-spinners:blocks-wave" class="h-1/2 w-1/2" />
 				</div>
 			</template>

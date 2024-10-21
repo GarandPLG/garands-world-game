@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
-
 interface Map {
 	collectionId: string;
 	collectionName: string;
@@ -39,12 +37,12 @@ const maps: { [key: string]: Map } = pbMaps.reduce((acc, map) => {
 </script>
 
 <template>
-	<div class="mt-12 flex flex-col items-center justify-center h-screen">
-		<p class="text-2xl absolute right-0 top-28 m-2 text-black bg-slate-500 p-2 bg-opacity-55">
+	<div class="mt-12 flex h-screen flex-col items-center justify-center">
+		<p class="absolute right-0 top-28 m-2 bg-slate-500 bg-opacity-55 p-2 text-2xl text-black">
 			FPS: {{ fps }}
 		</p>
 
-		<Tabs default-value="Tura 1" class="w-full flex flex-col items-center justify-center">
+		<Tabs default-value="Tura 1" class="flex w-full flex-col items-center justify-center">
 			<TabsList class="w-full items-center justify-center">
 				<TabsTrigger v-for="(map, key) in maps" :key="key" :value="key">
 					{{ key }}
@@ -55,7 +53,7 @@ const maps: { [key: string]: Map } = pbMaps.reduce((acc, map) => {
 				v-for="(map, key) in maps"
 				:key="key"
 				:value="key"
-				class="w-full h-screen flex-col items-center justify-center"
+				class="h-screen w-full flex-col items-center justify-center"
 			>
 				<iframe
 					title="mapa"

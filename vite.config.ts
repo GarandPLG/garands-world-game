@@ -6,7 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import VueRouter from 'unplugin-vue-router/vite';
-import { VueRouterAutoImports } from 'unplugin-vue-router';
+// import { VueRouterAutoImports } from 'unplugin-vue-router';
 
 import tailwind from 'tailwindcss';
 import autoprefixer from 'autoprefixer';

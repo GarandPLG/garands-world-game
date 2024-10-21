@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
+import { useForm } from 'vee-validate';
 import * as z from 'zod';
 
 import { FormField } from '@/components/ui/form';
@@ -48,7 +48,7 @@ const onSubmit = handleSubmit(async values => {
 </script>
 
 <template>
-	<div class="flex items-center justify-center h-screen">
+	<div class="flex h-screen items-center justify-center">
 		<Card class="w-1/4">
 			<CardHeader class="space-y-1">
 				<CardTitle class="text-2xl"> Resetowanie hasła </CardTitle>

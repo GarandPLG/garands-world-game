@@ -10,5 +10,10 @@
 	"bracketSpacing": true,
 	"proseWrap": "always",
 	"htmlWhitespaceSensitivity": "strict",
-	"endOfLine": "lf"
+	"endOfLine": "lf",
+	"plugins": [
+		"prettier-plugin-classnames",
+		"prettier-plugin-organize-imports",
+		"prettier-plugin-tailwindcss"
+	]
 }
