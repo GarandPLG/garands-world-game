@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-const pb = usePocketBase();
+// const pb = usePocketBase();
 </script>
 
 <template>
 	<div class="mt-6 flex h-screen flex-col items-center justify-center">
 		<h1 class="mb-4 text-3xl font-bold">Witaj na Garandowym WG!</h1>
 
-		<p class="mb-4 text-sm">Wersja: 0.0.7 Indev</p>
+		<p class="mb-4 text-sm">Wersja: 0.0.8 Indev</p>
 
 		<a
 			href="https://discord.gg/vhBmFVpR3w"

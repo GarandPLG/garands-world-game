@@ -386,6 +386,14 @@
     "RadioGroupItem": true,
     "themeColors": true,
     "themeStore": true,
-    "useThemeStore": true
+    "useThemeStore": true,
+    "Popover": true,
+    "PopoverContent": true,
+    "PopoverTrigger": true,
+    "ScrollArea": true,
+    "ScrollBar": true,
+    "ResizableHandle": true,
+    "ResizablePanel": true,
+    "ResizablePanelGroup": true
   }
 }

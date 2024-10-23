@@ -14,7 +14,7 @@ export const listenCurrentUser = defineStore('listenCurrentUser', () => {
 	}
 
 	function listenCurrentUserChange(): void {
-		pb.authStore.onChange(user => {
+		pb.authStore.onChange(() => {
 			setCurrentUser(pb.authStore.model);
 		});
 	}

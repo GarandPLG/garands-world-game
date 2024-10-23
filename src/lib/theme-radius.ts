@@ -11,7 +11,9 @@ const radiuses: Radius = {
 function setGlobalRadius(selectedRadius: ThemeRadiuses): void {
 	const radius = radiuses[selectedRadius];
 
-	document.documentElement.style.setProperty('--radius', radius);
+	if (radius !== undefined) {
+		document.documentElement.style.setProperty('--radius', radius);
+	}
 }
 
 export { radiuses, setGlobalRadius };

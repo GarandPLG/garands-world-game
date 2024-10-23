@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
 import { setGlobalColorTheme, themes } from '@/lib/theme-colors';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('setGlobalColorTheme', () => {
 	it('powinna ustawić motyw kolorów dla aplikacji', () => {
@@ -19,7 +19,7 @@ describe('setGlobalColorTheme', () => {
 
 	it('powinna rzucać błąd, gdy niepoprawna nazwa koloru', () => {
 		expect(() => setGlobalColorTheme('light', 'niepoprawny')).toThrowError(
-			'Niepoprawna nazwa koloru. Dostępne nazwy kolorów to: Violet, ...'
+			'Niepoprawna nazwa koloru. Dostępne nazwy kolorów to: Zinc, Rose, Blue, Green, Orange, Red, Slate, Stone, Gray, Neutral, Yellow, Violet'
 		);
 	});
 });

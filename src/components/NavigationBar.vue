@@ -11,7 +11,6 @@ onMounted(() => {
 });
 
 const { currentUser } = storeToRefs(listenCurrentUser());
-const mode = useColorMode();
 </script>
 
 <template>

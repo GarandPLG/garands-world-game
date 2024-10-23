@@ -85,9 +85,9 @@ const onSubmit = handleSubmit(async values => {
 						</FormItem>
 					</FormField>
 
-					<NavigationMenuLink href="/reset-password" class="">
-						Zapomniałem hasła
-					</NavigationMenuLink>
+					<Button as-child variant="link">
+						<a href="/reset-password"> Zapomniałem hasła </a>
+					</Button>
 
 					<CardFooter>
 						<Button class="w-full" type="submit"> Zaloguj się </Button>

@@ -532,6 +532,16 @@ const themes: Theme = {
 };
 
 function setGlobalColorTheme(colorTheme: 'light' | 'dark', color: ThemeColors): void {
+	if (!['light', 'dark'].includes(colorTheme)) {
+		throw new Error(`Niepoprawny motyw kolorów. Dostępne motywy to: light, dark`);
+	}
+
+	if (!themes[color]) {
+		throw new Error(
+			`Niepoprawna nazwa koloru. Dostępne nazwy kolorów to: ${Object.keys(themes).join(', ')}`
+		);
+	}
+
 	const theme = themes[color][colorTheme];
 
 	for (const [key, value] of Object.entries(theme)) {

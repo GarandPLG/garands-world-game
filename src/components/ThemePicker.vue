@@ -11,6 +11,10 @@ const { toast } = useToast();
 
 type Mode = Exclude<typeof mode.value, 'auto'>;
 
+const usedThemeVariables = computed(() => themes[currentColorTheme.value][mode.value as Mode]);
+
+console.log(usedThemeVariables.value);
+
 function handleSaveClick(): void {
 	saveThemeStore();
 	toast({
@@ -47,6 +51,22 @@ function handleColorModeClick(themeColors: ThemeColors): void {
 
 <template>
 	<div class="flex flex-col gap-2 p-1">
+		<Label>Motyw</Label>
+
+		<Button variant="outline" @click="handleColorModeClick(currentColorTheme)">
+			<Icon
+				icon="radix-icons:moon"
+				class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+			/>
+
+			<Icon
+				icon="radix-icons:sun"
+				class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+			/>
+			<span class="sr-only">Toggle theme</span>
+		</Button>
+
+		<Separator />
 		<Label>Kolor</Label>
 
 		<RadioGroup :default-value="currentColorTheme" class="grid grid-cols-3 gap-2">
@@ -91,25 +111,19 @@ function handleColorModeClick(themeColors: ThemeColors): void {
 
 		<Separator />
 
-		<Label>Motyw</Label>
+		<Label>Podgląd</Label>
 
-		<Button variant="outline" @click="handleColorModeClick(currentColorTheme)">
-			<Icon
-				icon="radix-icons:moon"
-				class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-			/>
-
-			<Icon
-				icon="radix-icons:sun"
-				class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-			/>
-			<span class="sr-only">Toggle theme</span>
-		</Button>
+		<ScrollArea class="h-[100px]">
+			<div v-for="(value, key) of usedThemeVariables" :key="key" class="my-2 flex flex-row gap-2">
+				<div class="h-[25px] w-[25px] border" :style="`background-color: hsl(${value})`"></div>
+				<span>{{ key }}</span>
+			</div>
+		</ScrollArea>
 
 		<Separator />
 
 		<div class="flex items-center justify-between gap-4">
-			<Button class="w-full" @click="handleClearClick">Wyczyść</Button>
+			<Button class="w-full" variant="destructive" @click="handleClearClick">Wyczyść</Button>
 			<Button class="w-full" @click="handleSaveClick">Zapisz</Button>
 		</div>
 	</div>
