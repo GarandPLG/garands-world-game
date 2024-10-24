@@ -42,7 +42,7 @@ const maps: { [key: string]: Map } = pbMaps.reduce((acc, map) => {
 			FPS: {{ fps }}
 		</p>
 
-		<Tabs default-value="Tura 1" class="flex w-full flex-col items-center justify-center">
+		<Tabs :default-value="maps[Object.keys(maps)[0]].name" class="flex w-full flex-col items-center justify-center">
 			<TabsList class="w-full items-center justify-center">
 				<TabsTrigger v-for="(map, key) in maps" :key="key" :value="key">
 					{{ key }}
