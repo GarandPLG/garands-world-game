@@ -23,7 +23,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 						:class="navigationMenuTriggerStyle()"
 						class="flex items-center gap-1"
 					>
-						<Icon icon="line-md:home" class="h-4 w-4" />
+						<Icon icon="line-md:home" class="h-4 w-4 text-primary" />
 
 						<span>Strona główna</span>
 					</NavigationMenuLink>
@@ -35,7 +35,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 						:class="navigationMenuTriggerStyle()"
 						class="flex items-center gap-1"
 					>
-						<Icon icon="file-icons:sandbox" class="h-4 w-4" />
+						<Icon icon="file-icons:sandbox" class="h-4 w-4 text-primary" />
 
 						<span>Sandbox</span>
 					</NavigationMenuLink>
@@ -47,7 +47,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 						:class="navigationMenuTriggerStyle()"
 						class="flex items-center gap-1"
 					>
-						<Icon icon="oui:app-reporting" class="h-4 w-4" />
+						<Icon icon="oui:app-reporting" class="h-4 w-4 text-primary" />
 
 						<span>Raport</span>
 					</NavigationMenuLink>
@@ -59,7 +59,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 						:class="navigationMenuTriggerStyle()"
 						class="flex items-center gap-1"
 					>
-						<Icon icon="majesticons:presentation-chart" class="h-4 w-4" />
+						<Icon icon="majesticons:presentation-chart" class="h-4 w-4 text-primary" />
 
 						<span>Wykresy i statystyki</span>
 					</NavigationMenuLink>
@@ -71,7 +71,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 						:class="navigationMenuTriggerStyle()"
 						class="flex items-center gap-1"
 					>
-						<Icon icon="game-icons:treasure-map" class="h-4 w-4" />
+						<Icon icon="game-icons:treasure-map" class="h-4 w-4 text-primary" />
 
 						<span>Mapy</span>
 					</NavigationMenuLink>
@@ -85,7 +85,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 					<DropdownMenu>
 						<DropdownMenuTrigger as-child>
 							<Button variant="ghost" class="flex items-center gap-1">
-								<Icon icon="line-md:account" class="h-4 w-4" />
+								<Icon icon="line-md:account" class="h-4 w-4 text-primary" />
 
 								<span>{{ currentUser.username }}</span>
 							</Button>
@@ -116,7 +116,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 										href="/admin-panel"
 										class="flex h-full w-full items-center gap-1"
 									>
-										<Icon icon="eos-icons:admin-outlined" class="h-4 w-4" />
+										<Icon icon="eos-icons:admin-outlined" class="h-4 w-4 text-primary" />
 
 										<span>Admin Panel</span>
 									</NavigationMenuLink>
@@ -127,7 +127,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 
 							<DropdownMenuItem>
 								<NavigationMenuLink href="/profile" class="flex h-full w-full items-center gap-1">
-									<Icon icon="streamline:user-profile-focus" class="h-4 w-4" />
+									<Icon icon="streamline:user-profile-focus" class="h-4 w-4 text-primary" />
 
 									<span>Profil</span>
 								</NavigationMenuLink>
@@ -141,7 +141,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 									@select="pb.authStore.clear()"
 									class="flex h-full w-full items-center gap-1"
 								>
-									<Icon icon="material-symbols:logout" class="h-4 w-4" />
+									<Icon icon="material-symbols:logout" class="h-4 w-4 text-primary" />
 
 									<span>Wyloguj się</span>
 								</NavigationMenuLink>
@@ -154,7 +154,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 					<DropdownMenu>
 						<DropdownMenuTrigger as-child>
 							<Button variant="ghost" class="flex items-center gap-1">
-								<Icon icon="line-md:account" class="h-4 w-4" />
+								<Icon icon="line-md:account" class="h-4 w-4 text-primary" />
 
 								<span>Konto</span>
 							</Button>
@@ -182,7 +182,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 					<DropdownMenu>
 						<DropdownMenuTrigger as-child>
 							<Button variant="outline">
-								<Icon icon="lucide:paintbrush" class="h-4 w-4" />
+								<Icon icon="lucide:paintbrush" class="h-4 w-4 text-primary" />
 							</Button>
 						</DropdownMenuTrigger>
 
@@ -194,5 +194,5 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 			</NavigationMenuList>
 		</NavigationMenu>
 	</div>
-	<Separator label="Garand's WG" />
+	<Separator class="bg-primary" />
 </template>

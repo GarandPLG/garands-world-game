@@ -40,7 +40,8 @@ const onSubmit = handleSubmit(async values => {
 			username: values.username,
 			email: values.email,
 			password: values.password,
-			passwordConfirm: values.passwordConfirm
+			passwordConfirm: values.passwordConfirm,
+			role: 'user'
 		});
 
 		if (createUser) {
