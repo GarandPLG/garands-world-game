@@ -20,6 +20,7 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 </script>
 
 <template>
+	<!-- TODO: Spróbować zmienić kolor Browse... w inputach typu file na --primary  -->
 	<input
 		v-model="modelValue"
 		:class="

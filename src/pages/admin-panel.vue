@@ -1,17 +1,30 @@
 <script lang="ts" setup>
+import PreviewReportTab from '@/components/adminTabs/previewReportTab.vue';
+import TurnEndTab from '@/components/adminTabs/turnEndTab.vue';
+import type { Component } from 'vue';
+
 const route = useRoute();
 
 const sidebarNavItems: {
-	title: string;
-	href: string;
+	content: Component;
+	props: {
+		title: string;
+		description: string;
+	};
 }[] = [
 	{
-		title: 'Przeglądanie Raportów',
-		href: '/examples/forms'
+		content: TurnEndTab,
+		props: {
+			title: 'Koniec Tury',
+			description: 'Zarządzanie końcem tury'
+		}
 	},
 	{
-		title: 'Koniec Tury',
-		href: '/examples/forms/account'
+		content: PreviewReportTab,
+		props: {
+			title: 'Przeglądanie Raportów',
+			description: 'Możliwość obejrzenia raportóœ danego kraju'
+		}
 	}
 ];
 </script>
@@ -26,33 +39,27 @@ const sidebarNavItems: {
 		<Separator class="my-6" />
 
 		<Tabs
-			:default-value="sidebarNavItems[0].title"
+			:default-value="sidebarNavItems[0].props.title"
 			class="flex w-full gap-4"
 			orientation="vertical"
 		>
 			<TabsList class="grid h-1/2 w-1/6 grid-cols-1">
-				<TabsTrigger :value="item.title" v-for="item in sidebarNavItems" :key="item.title">
-					{{ item.title }}
+				<TabsTrigger
+					:value="item.props.title"
+					v-for="(item, index) in sidebarNavItems"
+					:key="index"
+				>
+					{{ item.props.title }}
 				</TabsTrigger>
 			</TabsList>
 
 			<TabsContent
-				:value="item.title"
+				:value="item.props.title"
 				class="w-5/6"
-				v-for="item in sidebarNavItems"
-				:key="item.title"
+				v-for="(item, index) in sidebarNavItems"
+				:key="index"
 			>
-				<Card>
-					<CardHeader>
-						<CardTitle> {{ item.title }} </CardTitle>
-
-						<CardDescription> </CardDescription>
-					</CardHeader>
-
-					<CardContent class="space-y-2"> </CardContent>
-
-					<CardFooter> </CardFooter>
-				</Card>
+				<component :is="item.content" v-bind="item.props"></component>
 			</TabsContent>
 		</Tabs>
 	</div>

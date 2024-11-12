@@ -13,8 +13,6 @@ type Mode = Exclude<typeof mode.value, 'auto'>;
 
 const usedThemeVariables = computed(() => themes[currentColorTheme.value][mode.value as Mode]);
 
-console.log(usedThemeVariables.value);
-
 function handleSaveClick(): void {
 	saveThemeStore();
 	toast({

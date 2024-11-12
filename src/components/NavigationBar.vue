@@ -18,62 +18,42 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 		<NavigationMenu>
 			<NavigationMenuList>
 				<NavigationMenuItem>
-					<NavigationMenuLink
-						href="/"
-						:class="navigationMenuTriggerStyle()"
-						class="flex items-center gap-1"
-					>
+					<NavigationMenuLink :class="navigationMenuTriggerStyle()" class="flex items-center gap-1">
 						<Icon icon="line-md:home" class="h-4 w-4 text-primary" />
 
-						<span>Strona główna</span>
+						<RouterLink to="/">Strona główna</RouterLink>
 					</NavigationMenuLink>
 				</NavigationMenuItem>
 
 				<NavigationMenuItem>
-					<NavigationMenuLink
-						href="/sandbox"
-						:class="navigationMenuTriggerStyle()"
-						class="flex items-center gap-1"
-					>
+					<NavigationMenuLink :class="navigationMenuTriggerStyle()" class="flex items-center gap-1">
 						<Icon icon="file-icons:sandbox" class="h-4 w-4 text-primary" />
 
-						<span>Sandbox</span>
+						<RouterLink to="/sandbox">Piaskownica</RouterLink>
 					</NavigationMenuLink>
 				</NavigationMenuItem>
 
 				<NavigationMenuItem>
-					<NavigationMenuLink
-						href="/raport"
-						:class="navigationMenuTriggerStyle()"
-						class="flex items-center gap-1"
-					>
+					<NavigationMenuLink :class="navigationMenuTriggerStyle()" class="flex items-center gap-1">
 						<Icon icon="oui:app-reporting" class="h-4 w-4 text-primary" />
 
-						<span>Raport</span>
+						<RouterLink to="/report">Raport</RouterLink>
 					</NavigationMenuLink>
 				</NavigationMenuItem>
 
 				<NavigationMenuItem>
-					<NavigationMenuLink
-						href="/charts-and-stats"
-						:class="navigationMenuTriggerStyle()"
-						class="flex items-center gap-1"
-					>
+					<NavigationMenuLink :class="navigationMenuTriggerStyle()" class="flex items-center gap-1">
 						<Icon icon="majesticons:presentation-chart" class="h-4 w-4 text-primary" />
 
-						<span>Wykresy i statystyki</span>
+						<RouterLink to="/charts-and-stats">Wykresy i statystyki</RouterLink>
 					</NavigationMenuLink>
 				</NavigationMenuItem>
 
 				<NavigationMenuItem>
-					<NavigationMenuLink
-						href="/map"
-						:class="navigationMenuTriggerStyle()"
-						class="flex items-center gap-1"
-					>
+					<NavigationMenuLink :class="navigationMenuTriggerStyle()" class="flex items-center gap-1">
 						<Icon icon="game-icons:treasure-map" class="h-4 w-4 text-primary" />
 
-						<span>Mapy</span>
+						<RouterLink to="/map">Mapy</RouterLink>
 					</NavigationMenuLink>
 				</NavigationMenuItem>
 			</NavigationMenuList>
@@ -104,21 +84,18 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 
 							<DropdownMenuGroup v-if="['moderator', 'admin'].includes(currentUser.role)">
 								<DropdownMenuItem v-if="currentUser.role === 'admin'">
-									<NavigationMenuLink href="/pb/_/" class="flex h-full w-full items-center gap-1">
+									<NavigationMenuLink class="flex h-full w-full items-center gap-1">
 										<Icon icon="logos:pocket-base" class="h-4 w-4" />
 
-										<span>PocketBase</span>
+										<a href="/pb/_/" target="_blank">PocketBase</a>
 									</NavigationMenuLink>
 								</DropdownMenuItem>
 
 								<DropdownMenuItem>
-									<NavigationMenuLink
-										href="/admin-panel"
-										class="flex h-full w-full items-center gap-1"
-									>
+									<NavigationMenuLink class="flex h-full w-full items-center gap-1">
 										<Icon icon="eos-icons:admin-outlined" class="h-4 w-4 text-primary" />
 
-										<span>Admin Panel</span>
+										<RouterLink to="/admin-panel">Admin Panel</RouterLink>
 									</NavigationMenuLink>
 								</DropdownMenuItem>
 							</DropdownMenuGroup>
@@ -126,10 +103,10 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 							<DropdownMenuSeparator />
 
 							<DropdownMenuItem>
-								<NavigationMenuLink href="/profile" class="flex h-full w-full items-center gap-1">
+								<NavigationMenuLink class="flex h-full w-full items-center gap-1">
 									<Icon icon="streamline:user-profile-focus" class="h-4 w-4 text-primary" />
 
-									<span>Profil</span>
+									<RouterLink to="/profile">Profil</RouterLink>
 								</NavigationMenuLink>
 							</DropdownMenuItem>
 
@@ -137,13 +114,12 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 
 							<DropdownMenuItem>
 								<NavigationMenuLink
-									href="/"
 									@select="pb.authStore.clear()"
 									class="flex h-full w-full items-center gap-1"
 								>
 									<Icon icon="material-symbols:logout" class="h-4 w-4 text-primary" />
 
-									<span>Wyloguj się</span>
+									<RouterLink to="/">Wyloguj się</RouterLink>
 								</NavigationMenuLink>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
@@ -162,16 +138,21 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 
 						<DropdownMenuContent align="end">
 							<DropdownMenuItem>
-								<NavigationMenuLink href="/login" class="h-full w-full">
-									Zaloguj się
+								<NavigationMenuLink class="flex h-full w-full items-center gap-1">
+									<Icon icon="material-symbols:login" class="h-4 w-4 text-primary" />
+
+									<RouterLink to="/login">Zaloguj się</RouterLink>
 								</NavigationMenuLink>
 							</DropdownMenuItem>
 
 							<DropdownMenuSeparator />
 
 							<DropdownMenuItem>
-								<NavigationMenuLink href="/register" class="h-full w-full">
-									Zarejestruj się
+								<NavigationMenuLink class="flex h-full w-full items-center gap-1">
+									<!-- TODO: Podmienić zmienić ikonkę dla rejestracji -->
+									<Icon icon="material-symbols:login" class="h-4 w-4 text-primary" />
+
+									<RouterLink to="/register">Zarejestruj się</RouterLink>
 								</NavigationMenuLink>
 							</DropdownMenuItem>
 						</DropdownMenuContent>

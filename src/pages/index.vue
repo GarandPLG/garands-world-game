@@ -5,9 +5,11 @@ import { Icon } from '@iconify/vue';
 
 <template>
 	<div class="mt-6 flex h-screen flex-col items-center justify-center">
-		<h1 class="mb-4 text-3xl font-bold">Witaj na <span class="text-primary">Garandowym WG</span>!</h1>
+		<h1 class="mb-4 text-3xl font-bold"
+			>Witaj na <span class="text-primary">Garandowym WG</span>!</h1
+		>
 
-		<p class="mb-4 text-sm">Wersja: <span class="text-primary">0.0.9 Indev</span></p>
+		<p class="mb-4 text-sm">Wersja: <span class="text-primary">0.0.10 Indev</span></p>
 
 		<a
 			href="https://discord.gg/vhBmFVpR3w"

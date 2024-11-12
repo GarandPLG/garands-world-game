@@ -1,15 +1,15 @@
 import path from 'path';
 
-import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import vueDevTools from 'vite-plugin-vue-devtools';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import VueRouter from 'unplugin-vue-router/vite';
+import { defineConfig } from 'vite';
+import vueDevTools from 'vite-plugin-vue-devtools';
 // import { VueRouterAutoImports } from 'unplugin-vue-router';
 
-import tailwind from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
+import tailwind from 'tailwindcss';
 
 // https://vitejs.dev/config/
 export default defineConfig({

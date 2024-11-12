@@ -394,6 +394,20 @@
     "ScrollBar": true,
     "ResizableHandle": true,
     "ResizablePanel": true,
-    "ResizablePanelGroup": true
+    "ResizablePanelGroup": true,
+    "NumberField": true,
+    "NumberFieldContent": true,
+    "NumberFieldDecrement": true,
+    "NumberFieldIncrement": true,
+    "NumberFieldInput": true,
+    "Dialog": true,
+    "DialogClose": true,
+    "DialogContent": true,
+    "DialogDescription": true,
+    "DialogFooter": true,
+    "DialogHeader": true,
+    "DialogScrollContent": true,
+    "DialogTitle": true,
+    "DialogTrigger": true
   }
 }
