@@ -28,9 +28,12 @@ const pbMaps = await pb.collection('maps').getFullList({
 	expand: 'turn'
 });
 
-const maps: { [key: string]: Map } = pbMaps.reduce((acc, map) => {
-	const turn = map.expand?.turn?.value;
-	const key = turn ? `Tura ${turn}` : map.name;
+const maps: { [key: string]: Map } = pbMaps.reduce((acc, map: Map) => {
+	let key: string;
+
+	if (map.expand) key = `Tura ${map.expand.turn.value}`;
+	else key = map.name;
+
 	acc[key] = map;
 	return acc;
 }, {});
@@ -42,7 +45,10 @@ const maps: { [key: string]: Map } = pbMaps.reduce((acc, map) => {
 			FPS: {{ fps }}
 		</p>
 
-		<Tabs :default-value="maps[Object.keys(maps)[0]].name" class="flex w-full flex-col items-center justify-center">
+		<Tabs
+			:default-value="maps[Object.keys(maps)[0]].name"
+			class="flex w-full flex-col items-center justify-center"
+		>
 			<TabsList class="w-full items-center justify-center">
 				<TabsTrigger v-for="(map, key) in maps" :key="key" :value="key">
 					{{ key }}

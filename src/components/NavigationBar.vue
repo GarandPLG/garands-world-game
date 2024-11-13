@@ -149,8 +149,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 
 							<DropdownMenuItem>
 								<NavigationMenuLink class="flex h-full w-full items-center gap-1">
-									<!-- TODO: Podmienić zmienić ikonkę dla rejestracji -->
-									<Icon icon="material-symbols:login" class="h-4 w-4 text-primary" />
+									<Icon icon="tdesign:user-arrow-up" class="h-4 w-4 text-primary" />
 
 									<RouterLink to="/register">Zarejestruj się</RouterLink>
 								</NavigationMenuLink>
