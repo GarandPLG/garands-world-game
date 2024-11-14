@@ -48,6 +48,9 @@ const formSchema = toTypedSchema(
 		religionsByNumberOfCellsCSV: z
 			.instanceof(File)
 			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
+		provincesByNumberOfCellsCSV: z
+			.instanceof(File)
+			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
 		map: z
 			.instanceof(File)
 			.refine(file => file.name.endsWith('.map'), 'Tylko pliki z rozszerzeniem .map są dozwolone')
@@ -69,6 +72,7 @@ const onSubmit = handleSubmit(async values => {
 	const provincesData = await parseCSVFile(values.provincesCSV);
 	const biomesData = await parseCSVFile(values.numberOfCellsGroupedByBiomeCSV);
 	const religionsCellsData = await parseCSVFile(values.religionsByNumberOfCellsCSV);
+	const provincesCellsData = await parseCSVFile(values.provincesByNumberOfCellsCSV);
 
 	if (
 		!statesData ||
@@ -77,7 +81,8 @@ const onSubmit = handleSubmit(async values => {
 		!religionsData ||
 		!provincesData ||
 		!biomesData ||
-		!religionsCellsData
+		!religionsCellsData ||
+		!provincesCellsData
 	)
 		return;
 
@@ -93,6 +98,11 @@ const onSubmit = handleSubmit(async values => {
 	}, {});
 
 	const religionsCellsFinalData = religionsCellsData.reduce((acc, current) => {
+		acc[current.Name] = current.Value;
+		return acc;
+	}, {});
+
+	const provincesCellsFinalData = provincesCellsData.reduce((acc, current) => {
 		acc[current.Name] = current.Value;
 		return acc;
 	}, {});
@@ -173,6 +183,7 @@ const onSubmit = handleSubmit(async values => {
 				nameFull: provincesData[i]['Full Name'],
 				state: statesResponses[provincesData[i].State],
 				color: provincesData[i].Color,
+				cells: parseInt(provincesCellsFinalData[provincesData[i].Province]),
 				burgs: parseInt(provincesData[i].Burgs),
 				ruralPopulation: parseInt(provincesData[i]['Rural Population']),
 				urbanPopulation: parseInt(provincesData[i]['Urban Population']),
@@ -413,7 +424,7 @@ async function parseCSVFile(file: File) {
 
 					<Separator class="my-6" />
 
-					<div class="grid grid-cols-2 gap-6">
+					<div class="grid grid-cols-3 gap-6">
 						<FormField v-slot="{ componentField }" name="numberOfCellsGroupedByBiomeCSV">
 							<FormItem>
 								<FormLabel>Plik CSV Ilości kratek pogrupowanych na biomy</FormLabel>
@@ -446,7 +457,7 @@ async function parseCSVFile(file: File) {
 
 						<FormField v-slot="{ componentField }" name="religionsByNumberOfCellsCSV">
 							<FormItem>
-								<FormLabel>Plik CSV Ilości kratek jakie posiada religia</FormLabel>
+								<FormLabel>Plik CSV Ilości kratek jakie posiadają religie</FormLabel>
 
 								<FormControl>
 									<Input type="file" placeholder="" v-bind="componentField" />
@@ -459,13 +470,46 @@ async function parseCSVFile(file: File) {
 										<DialogContent>
 											<DialogHeader>
 												<DialogTitle class="mb-2">
-													Plik CSV Ilości kratek jakie posiada religia
+													Plik CSV Ilości kratek jakie posiadają religie
 												</DialogTitle>
 
 												<DialogDescription>
 													<img
 														src="@/assets/turnEndGifs/get-religions-cells-csv.gif"
 														alt="get-religions-cells-csv"
+													/>
+												</DialogDescription>
+											</DialogHeader>
+										</DialogContent>
+									</Dialog>
+								</FormDescription>
+
+								<FormMessage />
+							</FormItem>
+						</FormField>
+
+						<FormField v-slot="{ componentField }" name="provincesByNumberOfCellsCSV">
+							<FormItem>
+								<FormLabel>Plik CSV Ilości kratek jakie posiadają prowincje</FormLabel>
+
+								<FormControl>
+									<Input type="file" placeholder="" v-bind="componentField" />
+								</FormControl>
+
+								<FormDescription>
+									<Dialog>
+										<DialogTrigger> Skąd znaleźć ten plik? </DialogTrigger>
+
+										<DialogContent>
+											<DialogHeader>
+												<DialogTitle class="mb-2">
+													Plik CSV Ilości kratek jakie posiadają prowincje
+												</DialogTitle>
+
+												<DialogDescription>
+													<img
+														src="@/assets/turnEndGifs/get-provinces-cells-csv.gif"
+														alt="get-provinces-cells-csv"
 													/>
 												</DialogDescription>
 											</DialogHeader>

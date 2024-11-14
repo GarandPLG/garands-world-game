@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+useHead({
+	title: "Garand's WG | Rejestracja"
+});
+
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import * as z from 'zod';

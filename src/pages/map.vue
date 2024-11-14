@@ -1,4 +1,8 @@
 <script setup lang="ts">
+useHead({
+	title: "Garand's WG | Mapa"
+});
+
 interface Map {
 	collectionId: string;
 	collectionName: string;

@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+useHead({
+	title: "Garand's WG | Panel Administratora"
+});
+
 import PreviewReportTab from '@/components/adminTabs/previewReportTab.vue';
 import TurnEndTab from '@/components/adminTabs/turnEndTab.vue';
 import type { Component } from 'vue';
@@ -23,7 +27,7 @@ const sidebarNavItems: {
 		content: PreviewReportTab,
 		props: {
 			title: 'Przeglądanie Raportów',
-			description: 'Możliwość obejrzenia raportóœ danego kraju'
+			description: 'Możliwość obejrzenia raportów danego kraju'
 		}
 	}
 ];

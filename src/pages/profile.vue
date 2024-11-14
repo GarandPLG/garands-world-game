@@ -14,6 +14,10 @@ const { setCurrentUser } = listenCurrentUser();
 
 if (!currentUser.value) router.push('/');
 
+useHead({
+	title: () => `Garand's WG | Profil użytkownika ${currentUser.value!.username}`
+});
+
 const { handleSubmit } = useForm({
 	validationSchema: toTypedSchema(
 		z.object({
@@ -176,7 +180,7 @@ const onSubmit = handleSubmit(async values => {
 					</FormField>
 
 					<CardFooter>
-						<Button disabled class="w-full" type="submit"> Utwórz konto </Button>
+						<Button disabled class="w-full" type="submit"> Zapisz zmiany </Button>
 					</CardFooter>
 				</form>
 			</CardContent>

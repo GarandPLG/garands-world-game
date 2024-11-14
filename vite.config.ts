@@ -1,5 +1,6 @@
 import path from 'path';
 
+import { unheadVueComposablesImports } from '@unhead/vue';
 import vue from '@vitejs/plugin-vue';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
@@ -23,7 +24,14 @@ export default defineConfig({
 		AutoImport({
 			dts: './types/auto-imports.d.ts',
 			dirs: ['./composables', './stores', './components/ui/**/*.ts'],
-			imports: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'vitest'],
+			imports: [
+				'vue',
+				'vue-router',
+				'pinia',
+				'@vueuse/core',
+				'vitest',
+				unheadVueComposablesImports
+			],
 			eslintrc: {
 				enabled: true
 			},
