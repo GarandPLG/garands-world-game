@@ -2,7 +2,183 @@
 useHead({
 	title: "Garand's WG | Wykresy i statystyki"
 });
+
+interface DataForCharts {
+	states: {
+		config: Config;
+		burgs: ChartData[];
+		provinces: ChartData[];
+		cells: ChartData[];
+		culturesCells: ChartData[];
+		religionCells: ChartData[];
+		biomesCells: ChartData[];
+		ruralPopulation: ChartData[];
+		urbanPopulation: ChartData[];
+		forms: ChartData[];
+	};
+	provinces: {
+		config: Config;
+		burgs: ChartData[];
+		cells: ChartData[];
+		ruralPopulation: ChartData[];
+		urbanPopulation: ChartData[];
+		forms: ChartData[];
+	};
+	burgs: {
+		config: Config;
+		population: ChartData[];
+		religions: ChartData[];
+		cultures: ChartData[];
+		capitals: ChartData[];
+		ports: ChartData[];
+		cities: ChartData[];
+		walls: ChartData[];
+		plazas: ChartData[];
+		temples: ChartData[];
+		shantyTowns: ChartData[];
+	};
+	cultures: {
+		config: Config;
+		cells: ChartData[];
+		population: ChartData[];
+		types: ChartData[];
+		namesbases: ChartData[];
+	};
+	religions: {
+		config: Config;
+		cells: ChartData[];
+		population: ChartData[];
+		types: ChartData[];
+		forms: ChartData[];
+	};
+}
+
+interface ChartData {
+	turn: number;
+	[key: string]: number;
+}
+
+interface Config {
+	categories: string[];
+	colors?: string[];
+}
+
 const pb = usePocketBase();
+const data = useChartsAndStatsStore();
+
+const turnsData = await data.fetchTurnsData();
+const statesData = await data.fetchStatesData();
+const provincesData = await data.fetchProvincesData();
+const burgsData = await data.fetchBurgsData();
+const culturesData = await data.fetchCulturesData();
+const religionsData = await data.fetchReligionsData();
+
+const dataForCharts: DataForCharts = {
+	states: {
+		config: { categories: [], colors: [] },
+		burgs: [],
+		provinces: [],
+		cells: [],
+		culturesCells: [],
+		religionCells: [],
+		biomesCells: [],
+		ruralPopulation: [],
+		urbanPopulation: [],
+		forms: []
+	},
+	provinces: {
+		config: { categories: [], colors: [] },
+		burgs: [],
+		cells: [],
+		ruralPopulation: [],
+		urbanPopulation: [],
+		forms: []
+	},
+	burgs: {
+		config: { categories: [], colors: [] },
+		population: [],
+		religions: [],
+		cultures: [],
+		capitals: [],
+		ports: [],
+		cities: [],
+		walls: [],
+		plazas: [],
+		temples: [],
+		shantyTowns: []
+	},
+	cultures: {
+		config: { categories: [], colors: [] },
+		cells: [],
+		population: [],
+		types: [],
+		namesbases: []
+	},
+	religions: {
+		config: { categories: [], colors: [] },
+		cells: [],
+		population: [],
+		types: [],
+		forms: []
+	}
+};
+
+const configsDataSets = [
+	{ data: statesData, key: 'states' },
+	{ data: provincesData, key: 'provinces' },
+	{ data: burgsData, key: 'burgs' },
+	{ data: culturesData, key: 'cultures' },
+	{ data: religionsData, key: 'religions' }
+];
+
+for (let i = 0; i < configsDataSets.length; i++) {
+	const dataset = configsDataSets[i];
+	const config = dataForCharts[dataset.key].config;
+
+	config.categories = dataset.data.map(item => item.name);
+	if (dataset.data[0].color) config.colors = dataset.data.map(item => item.color);
+}
+
+for (let i = 0; i < turnsData.length - 1; i++) {
+	const turn = turnsData[i];
+	const statesBurgsDataItem: ChartData = { turn: turn.value };
+	const statesProvincesDataItem: ChartData = { turn: turn.value };
+	const statesCellsDataItem: ChartData = { turn: turn.value };
+	const culturesCellsDataItem: ChartData = { turn: turn.value };
+	const religionCellsDataItem: ChartData = { turn: turn.value };
+	const biomesCellsDataItem: ChartData = { turn: turn.value };
+	const ruralPopulationDataItem: ChartData = { turn: turn.value };
+	const urbanPopulationDataItem: ChartData = { turn: turn.value };
+	const formsDataItem: ChartData = { turn: turn.value };
+
+	// TODO: Dokończyć resztę DataItems'ów
+
+	for (let j = 0; j < statesData.length; j++) {
+		const state = statesData[j];
+
+		statesBurgsDataItem[state.name] = state.burgs;
+		statesProvincesDataItem[state.name] = provincesData.filter(
+			province => province.turn === turn.id && province.state === state.id
+		).length;
+		statesCellsDataItem[state.name] = state.cells;
+	}
+
+	dataForCharts.states.burgs.push(statesBurgsDataItem);
+	dataForCharts.states.provinces.push(statesProvincesDataItem);
+	dataForCharts.states.cells.push(statesCellsDataItem);
+}
+
+console.log(dataForCharts);
+
+// console.log(provincesData);
+
+// console.table(statesData);
+// console.table(provincesData);
+// console.table(burgsData);
+// console.table(culturesData);
+// console.table(religionsData);
+
+// console.log(statesData);
 
 // TODO: dodać wykresy z shadcn-vue https://www.shadcn-vue.com/docs/charts.html
 
@@ -10,9 +186,9 @@ const pb = usePocketBase();
 //       - ilość miast - liniowy,
 //       - ilość prowincji - liniowy,
 //       - ilość kratek - liniowy,
-//       - ilość prowincji danej kultury - słupkowy,
-//       - ilość prowincji danej religii - słupkowy,
-//       - ilość prowincji danego biomu - słupkowy,z
+//       - ilość kratek danej kultury - słupkowy,
+//       - ilość kratek danej religii - słupkowy,
+//       - ilość kratek danego biomu - słupkowy,z
 //       - ilość populacji wiejskiej - liniowy,
 //       - ilość populacji miejskiej - liniowy,
 //       - ilość danych form rządu - liniowy

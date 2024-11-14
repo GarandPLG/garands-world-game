@@ -409,6 +409,17 @@
     "useSeoMeta": true,
     "useServerHead": true,
     "useServerHeadSafe": true,
-    "useServerSeoMeta": true
+    "useServerSeoMeta": true,
+    "BarChart": true,
+    "ChartCrosshair": true,
+    "ChartLegend": true,
+    "ChartSingleTooltip": true,
+    "ChartTooltip": true,
+    "LineChart": true,
+    "defaultColors": true,
+    "useDataStore": true,
+    "chartsAndStatsStore": true,
+    "useChartsAndStatsStore": true,
+    "useCacheStore": true
   }
 }
