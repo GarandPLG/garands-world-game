@@ -42,7 +42,13 @@ const formSchema = toTypedSchema(
 		provincesCSV: z
 			.instanceof(File)
 			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		numberOfCellsGroupedByBiomeCSV: z
+		statesByNumberOfCellsGroupedByBiomeCSV: z
+			.instanceof(File)
+			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
+		statesByNumberOfCellsGroupedByReligionsCSV: z
+			.instanceof(File)
+			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
+		statesByNumberOfCellsGroupedByCulturesCSV: z
 			.instanceof(File)
 			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
 		religionsByNumberOfCellsCSV: z
@@ -57,6 +63,50 @@ const formSchema = toTypedSchema(
 	})
 );
 
+const CSVFilesForms = [
+	createCSVForm('statesCSV', 'Państw', 'get-states-csv', 'Plik CSV'),
+	createCSVForm('burgsCSV', 'Miast', 'get-burgs-csv', 'Plik CSV'),
+	createCSVForm('culturesCSV', 'Kultur', 'get-cultures-csv', 'Plik CSV'),
+	createCSVForm('religionsCSV', 'Religii', 'get-religions-csv', 'Plik CSV'),
+	createCSVForm('provincesCSV', 'Prowincje', 'get-provinces-csv', 'Plik CSV')
+];
+
+const GroupedCSVFilesForms = [
+	createCSVForm(
+		'statesByNumberOfCellsGroupedByBiomeCSV',
+		'Biomy',
+		'get-cells-grouped-biomes-csv',
+		'Pliki CSV ilości kratek państw pogrupowane na'
+	),
+	createCSVForm(
+		'statesByNumberOfCellsGroupedByCulturesCSV',
+		'Kultury',
+		'get-cells-grouped-cultures-csv',
+		'Pliki CSV ilości kratek państw pogrupowane na'
+	),
+	createCSVForm(
+		'statesByNumberOfCellsGroupedByReligionsCSV',
+		'Religie',
+		'get-cells-grouped-religions-csv',
+		'Pliki CSV ilości kratek państw pogrupowane na'
+	)
+];
+
+const CellsCSVFilesForms = [
+	createCSVForm(
+		'religionsByNumberOfCellsCSV',
+		'Religie',
+		'get-cells-religions-csv',
+		'Pliki CSV ilości kratek jakie posiadają'
+	),
+	createCSVForm(
+		'provincesByNumberOfCellsCSV',
+		'Prowincje',
+		'get-cells-provinces-csv',
+		'Pliki CSV ilości kratek jakie posiadają'
+	)
+];
+
 const { handleSubmit } = useForm({
 	validationSchema: formSchema,
 	initialValues: {
@@ -70,9 +120,17 @@ const onSubmit = handleSubmit(async values => {
 	const culturesData = await parseCSVFile(values.culturesCSV);
 	const religionsData = await parseCSVFile(values.religionsCSV);
 	const provincesData = await parseCSVFile(values.provincesCSV);
-	const biomesData = await parseCSVFile(values.numberOfCellsGroupedByBiomeCSV);
-	const religionsCellsData = await parseCSVFile(values.religionsByNumberOfCellsCSV);
-	const provincesCellsData = await parseCSVFile(values.provincesByNumberOfCellsCSV);
+	const statesByNumberOfCellsGroupedByBiomeData = await parseCSVFile(
+		values.statesByNumberOfCellsGroupedByBiomeCSV
+	);
+	const statesByNumberOfCellsGroupedByReligionsData = await parseCSVFile(
+		values.statesByNumberOfCellsGroupedByReligionsCSV
+	);
+	const statesByNumberOfCellsGroupedByCulturesData = await parseCSVFile(
+		values.statesByNumberOfCellsGroupedByCulturesCSV
+	);
+	const religionsByNumberOfCellsData = await parseCSVFile(values.religionsByNumberOfCellsCSV);
+	const provincesByNumberOfCellsData = await parseCSVFile(values.provincesByNumberOfCellsCSV);
 
 	if (
 		!statesData ||
@@ -80,9 +138,11 @@ const onSubmit = handleSubmit(async values => {
 		!culturesData ||
 		!religionsData ||
 		!provincesData ||
-		!biomesData ||
-		!religionsCellsData ||
-		!provincesCellsData
+		!statesByNumberOfCellsGroupedByBiomeData ||
+		!statesByNumberOfCellsGroupedByReligionsData ||
+		!statesByNumberOfCellsGroupedByCulturesData ||
+		!religionsByNumberOfCellsData ||
+		!provincesByNumberOfCellsData
 	)
 		return;
 
@@ -91,18 +151,33 @@ const onSubmit = handleSubmit(async values => {
 	const religionsResponses: Record<string, string> = {};
 	const culturesResponses: Record<string, string> = {};
 
-	const biomesFinalData = biomesData.reduce((acc, current) => {
-		acc[current.Name] = acc[current.Name] || {};
-		acc[current.Name][current.Group] = current.Value;
-		return acc;
-	}, {});
+	const statesByNumberOfCellsGroupedByCulturesFinalData =
+		statesByNumberOfCellsGroupedByCulturesData.reduce((acc, current) => {
+			acc[current.Name] = acc[current.Name] || {};
+			acc[current.Name][current.Group] = current.Value;
+			return acc;
+		}, {});
 
-	const religionsCellsFinalData = religionsCellsData.reduce((acc, current) => {
+	const statesByNumberOfCellsGroupedByReligionsFinalData =
+		statesByNumberOfCellsGroupedByReligionsData.reduce((acc, current) => {
+			acc[current.Name] = acc[current.Name] || {};
+			acc[current.Name][current.Group] = current.Value;
+			return acc;
+		}, {});
+
+	const statesByNumberOfCellsGroupedByBiomeFinalData =
+		statesByNumberOfCellsGroupedByBiomeData.reduce((acc, current) => {
+			acc[current.Name] = acc[current.Name] || {};
+			acc[current.Name][current.Group] = current.Value;
+			return acc;
+		}, {});
+
+	const religionsCellsFinalData = religionsByNumberOfCellsData.reduce((acc, current) => {
 		acc[current.Name] = current.Value;
 		return acc;
 	}, {});
 
-	const provincesCellsFinalData = provincesCellsData.reduce((acc, current) => {
+	const provincesCellsFinalData = provincesByNumberOfCellsData.reduce((acc, current) => {
 		acc[current.Name] = current.Value;
 		return acc;
 	}, {});
@@ -155,17 +230,17 @@ const onSubmit = handleSubmit(async values => {
 				turn: turn.id,
 				name: statesData[i].State,
 				nameFull: statesData[i]['Full Name'],
+				form: statesData[i].Form,
 				color: statesData[i].Color,
-				culture: culturesResponses[statesData[i].Culture],
 				cells: parseInt(statesData[i].Cells),
-				biomes: biomesFinalData[statesData[i].State],
 				burgs: parseInt(statesData[i].Burgs),
 				urbanPopulation: parseInt(statesData[i]['Urban Population']),
 				ruralPopulation: parseInt(statesData[i]['Rural Population']),
-				occupiedRuralPopulation: 0,
-				occupiedUrbanPopulation: 0,
 				capital: statesData[i].Capital,
-				form: statesData[i].Form
+				culture: culturesResponses[statesData[i].Culture],
+				culturesCells: statesByNumberOfCellsGroupedByCulturesFinalData[statesData[i].State],
+				religionsCells: statesByNumberOfCellsGroupedByReligionsFinalData[statesData[i].State],
+				biomesCells: statesByNumberOfCellsGroupedByBiomeFinalData[statesData[i].State]
 			});
 
 			statesResponses[response.name] = response.id;
@@ -254,6 +329,27 @@ async function parseCSVFile(file: File) {
 		else console.error('Błąd przy parsowaniu pliku:', 'Nieznany błąd.');
 	}
 }
+
+function createCSVForm(
+	name: string,
+	label: string,
+	gif: string,
+	title: string
+): {
+	name: string;
+	label: string;
+	gif: string;
+	title: string;
+} {
+	return {
+		name,
+		label,
+		gif,
+		get title() {
+			return `${title} ${this.label}`;
+		}
+	};
+}
 </script>
 
 <template>
@@ -271,10 +367,17 @@ async function parseCSVFile(file: File) {
 
 			<CardContent class="space-y-2 py-6">
 				<form @submit.prevent="onSubmit">
+					<Separator class="mb-9" label="Pliki CSV" />
+
 					<div class="grid grid-cols-3 gap-6">
-						<FormField v-slot="{ componentField }" name="statesCSV">
+						<FormField
+							v-slot="{ componentField }"
+							:name="form.name"
+							v-for="form in CSVFilesForms"
+							:key="form.name"
+						>
 							<FormItem>
-								<FormLabel>Plik CSV Państw</FormLabel>
+								<FormLabel> {{ form.label }} </FormLabel>
 
 								<FormControl>
 									<Input type="file" placeholder="" v-bind="componentField" />
@@ -282,135 +385,14 @@ async function parseCSVFile(file: File) {
 
 								<FormDescription>
 									<Dialog>
-										<DialogTrigger> Skąd znaleźć ten plik? </DialogTrigger>
+										<DialogTrigger> Gdzie można znaleźć ten plik? </DialogTrigger>
 
 										<DialogContent>
 											<DialogHeader>
-												<DialogTitle class="mb-2"> Plik CSV Państw </DialogTitle>
+												<DialogTitle class="mb-2"> {{ form.title }} </DialogTitle>
 
 												<DialogDescription>
-													<img src="@/assets/turnEndGifs/get-states-csv.gif" alt="get-states-csv" />
-												</DialogDescription>
-											</DialogHeader>
-										</DialogContent>
-									</Dialog>
-								</FormDescription>
-
-								<FormMessage />
-							</FormItem>
-						</FormField>
-
-						<FormField v-slot="{ componentField }" name="burgsCSV">
-							<FormItem>
-								<FormLabel>Plik CSV Miast</FormLabel>
-
-								<FormControl>
-									<Input type="file" placeholder="" v-bind="componentField" />
-								</FormControl>
-
-								<FormDescription>
-									<Dialog>
-										<DialogTrigger> Skąd znaleźć ten plik? </DialogTrigger>
-
-										<DialogContent>
-											<DialogHeader>
-												<DialogTitle class="mb-2"> Plik CSV Miast </DialogTitle>
-
-												<DialogDescription>
-													<img src="@/assets/turnEndGifs/get-burgs-csv.gif" alt="get-burgs-csv" />
-												</DialogDescription>
-											</DialogHeader>
-										</DialogContent>
-									</Dialog>
-								</FormDescription>
-
-								<FormMessage />
-							</FormItem>
-						</FormField>
-
-						<FormField v-slot="{ componentField }" name="culturesCSV">
-							<FormItem>
-								<FormLabel>Plik CSV Kultur</FormLabel>
-
-								<FormControl>
-									<Input type="file" placeholder="" v-bind="componentField" />
-								</FormControl>
-
-								<FormDescription>
-									<Dialog>
-										<DialogTrigger> Skąd znaleźć ten plik? </DialogTrigger>
-
-										<DialogContent>
-											<DialogHeader>
-												<DialogTitle class="mb-2"> Plik CSV Kultur </DialogTitle>
-
-												<DialogDescription>
-													<img
-														src="@/assets/turnEndGifs/get-cultures-csv.gif"
-														alt="get-cultures-csv"
-													/>
-												</DialogDescription>
-											</DialogHeader>
-										</DialogContent>
-									</Dialog>
-								</FormDescription>
-
-								<FormMessage />
-							</FormItem>
-						</FormField>
-
-						<FormField v-slot="{ componentField }" name="religionsCSV">
-							<FormItem>
-								<FormLabel>Plik CSV Religii</FormLabel>
-
-								<FormControl>
-									<Input type="file" placeholder="" v-bind="componentField" />
-								</FormControl>
-
-								<FormDescription>
-									<Dialog>
-										<DialogTrigger> Skąd znaleźć ten plik? </DialogTrigger>
-
-										<DialogContent>
-											<DialogHeader>
-												<DialogTitle class="mb-2"> Plik CSV Religii </DialogTitle>
-
-												<DialogDescription>
-													<img
-														src="@/assets/turnEndGifs/get-religions-csv.gif"
-														alt="get-religions-csv"
-													/>
-												</DialogDescription>
-											</DialogHeader>
-										</DialogContent>
-									</Dialog>
-								</FormDescription>
-
-								<FormMessage />
-							</FormItem>
-						</FormField>
-
-						<FormField v-slot="{ componentField }" name="provincesCSV">
-							<FormItem>
-								<FormLabel>Plik CSV Prowincji</FormLabel>
-
-								<FormControl>
-									<Input type="file" placeholder="" v-bind="componentField" />
-								</FormControl>
-
-								<FormDescription>
-									<Dialog>
-										<DialogTrigger> Skąd znaleźć ten plik? </DialogTrigger>
-
-										<DialogContent>
-											<DialogHeader>
-												<DialogTitle class="mb-2"> Plik CSV Prowincji </DialogTitle>
-
-												<DialogDescription>
-													<img
-														src="@/assets/turnEndGifs/get-provinces-csv.gif"
-														alt="get-provinces-csv"
-													/>
+													<img :src="`@/assets/turnEndGifs/${form.gif}`" :alt="form.gif" />
 												</DialogDescription>
 											</DialogHeader>
 										</DialogContent>
@@ -422,12 +404,17 @@ async function parseCSVFile(file: File) {
 						</FormField>
 					</div>
 
-					<Separator class="my-6" />
+					<Separator class="my-9" label="Pliki CSV ilości kratek państw pogrupowane na" />
 
 					<div class="grid grid-cols-3 gap-6">
-						<FormField v-slot="{ componentField }" name="numberOfCellsGroupedByBiomeCSV">
+						<FormField
+							v-slot="{ componentField }"
+							:name="form.name"
+							v-for="form in GroupedCSVFilesForms"
+							:key="form.name"
+						>
 							<FormItem>
-								<FormLabel>Plik CSV Ilości kratek pogrupowanych na biomy</FormLabel>
+								<FormLabel> {{ form.label }} </FormLabel>
 
 								<FormControl>
 									<Input type="file" placeholder="" v-bind="componentField" />
@@ -435,82 +422,14 @@ async function parseCSVFile(file: File) {
 
 								<FormDescription>
 									<Dialog>
-										<DialogTrigger> Skąd znaleźć ten plik? </DialogTrigger>
+										<DialogTrigger> Gdzie można znaleźć ten plik? </DialogTrigger>
 
 										<DialogContent>
 											<DialogHeader>
-												<DialogTitle class="mb-2">
-													Plik CSV Ilości kratek pogrupowanych na biomy
-												</DialogTitle>
+												<DialogTitle class="mb-2"> {{ form.title }} </DialogTitle>
 
 												<DialogDescription>
-													<img src="@/assets/turnEndGifs/get-biomes-csv.gif" alt="get-biomes-csv" />
-												</DialogDescription>
-											</DialogHeader>
-										</DialogContent>
-									</Dialog>
-								</FormDescription>
-
-								<FormMessage />
-							</FormItem>
-						</FormField>
-
-						<FormField v-slot="{ componentField }" name="religionsByNumberOfCellsCSV">
-							<FormItem>
-								<FormLabel>Plik CSV Ilości kratek jakie posiadają religie</FormLabel>
-
-								<FormControl>
-									<Input type="file" placeholder="" v-bind="componentField" />
-								</FormControl>
-
-								<FormDescription>
-									<Dialog>
-										<DialogTrigger> Skąd znaleźć ten plik? </DialogTrigger>
-
-										<DialogContent>
-											<DialogHeader>
-												<DialogTitle class="mb-2">
-													Plik CSV Ilości kratek jakie posiadają religie
-												</DialogTitle>
-
-												<DialogDescription>
-													<img
-														src="@/assets/turnEndGifs/get-religions-cells-csv.gif"
-														alt="get-religions-cells-csv"
-													/>
-												</DialogDescription>
-											</DialogHeader>
-										</DialogContent>
-									</Dialog>
-								</FormDescription>
-
-								<FormMessage />
-							</FormItem>
-						</FormField>
-
-						<FormField v-slot="{ componentField }" name="provincesByNumberOfCellsCSV">
-							<FormItem>
-								<FormLabel>Plik CSV Ilości kratek jakie posiadają prowincje</FormLabel>
-
-								<FormControl>
-									<Input type="file" placeholder="" v-bind="componentField" />
-								</FormControl>
-
-								<FormDescription>
-									<Dialog>
-										<DialogTrigger> Skąd znaleźć ten plik? </DialogTrigger>
-
-										<DialogContent>
-											<DialogHeader>
-												<DialogTitle class="mb-2">
-													Plik CSV Ilości kratek jakie posiadają prowincje
-												</DialogTitle>
-
-												<DialogDescription>
-													<img
-														src="@/assets/turnEndGifs/get-provinces-cells-csv.gif"
-														alt="get-provinces-cells-csv"
-													/>
+													<img :src="`@/assets/turnEndGifs/${form.gif}.gif`" :alt="form.gif" />
 												</DialogDescription>
 											</DialogHeader>
 										</DialogContent>
@@ -522,7 +441,44 @@ async function parseCSVFile(file: File) {
 						</FormField>
 					</div>
 
-					<Separator class="my-6" />
+					<Separator class="my-9" label="Pliki CSV ilości kratek jakie posiadają" />
+
+					<div class="grid grid-cols-2 gap-6">
+						<FormField
+							v-slot="{ componentField }"
+							:name="form.name"
+							v-for="form in CellsCSVFilesForms"
+							:key="form.name"
+						>
+							<FormItem>
+								<FormLabel> {{ form.label }} </FormLabel>
+
+								<FormControl>
+									<Input type="file" placeholder="" v-bind="componentField" />
+								</FormControl>
+
+								<FormDescription>
+									<Dialog>
+										<DialogTrigger> Gdzie można znaleźć ten plik? </DialogTrigger>
+
+										<DialogContent>
+											<DialogHeader>
+												<DialogTitle class="mb-2"> {{ form.title }} </DialogTitle>
+
+												<DialogDescription>
+													<img :src="`@/assets/turnEndGifs/${form.gif}.gif`" :alt="form.gif" />
+												</DialogDescription>
+											</DialogHeader>
+										</DialogContent>
+									</Dialog>
+								</FormDescription>
+
+								<FormMessage />
+							</FormItem>
+						</FormField>
+					</div>
+
+					<Separator class="my-9" />
 
 					<FormField v-slot="{ componentField }" name="map">
 						<FormItem>
@@ -534,7 +490,7 @@ async function parseCSVFile(file: File) {
 
 							<FormDescription>
 								<Dialog>
-									<DialogTrigger> Skąd znaleźć ten plik? </DialogTrigger>
+									<DialogTrigger> Gdzie można znaleźć ten plik? </DialogTrigger>
 
 									<DialogContent>
 										<DialogHeader>
@@ -555,7 +511,7 @@ async function parseCSVFile(file: File) {
 						</FormItem>
 					</FormField>
 
-					<Separator class="my-6" />
+					<Separator class="my-9" />
 
 					<div class="flex justify-center">
 						<Button class="w-1/2" type="submit"> Submit </Button>

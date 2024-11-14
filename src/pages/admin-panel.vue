@@ -3,8 +3,8 @@ useHead({
 	title: "Garand's WG | Panel Administratora"
 });
 
-import PreviewReportTab from '@/components/adminTabs/previewReportTab.vue';
-import TurnEndTab from '@/components/adminTabs/turnEndTab.vue';
+import PreviewReportTab from '@/components/admin-panel/previewReportTab.vue';
+import TurnEndTab from '@/components/admin-panel/turnEndTab.vue';
 import type { Component } from 'vue';
 
 const route = useRoute();

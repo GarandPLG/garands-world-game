@@ -7,6 +7,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BarChart: typeof import('./../components/ui/chart-bar/BarChart.vue')['default']
+    BurgsCharts: typeof import('./../components/charts-and-stats/burgsCharts.vue')['default']
     Button: typeof import('./../components/ui/button/Button.vue')['default']
     Card: typeof import('./../components/ui/card/Card.vue')['default']
     CardContent: typeof import('./../components/ui/card/CardContent.vue')['default']
@@ -14,6 +16,11 @@ declare module 'vue' {
     CardFooter: typeof import('./../components/ui/card/CardFooter.vue')['default']
     CardHeader: typeof import('./../components/ui/card/CardHeader.vue')['default']
     CardTitle: typeof import('./../components/ui/card/CardTitle.vue')['default']
+    ChartCrosshair: typeof import('./../components/ui/chart/ChartCrosshair.vue')['default']
+    ChartLegend: typeof import('./../components/ui/chart/ChartLegend.vue')['default']
+    ChartSingleTooltip: typeof import('./../components/ui/chart/ChartSingleTooltip.vue')['default']
+    ChartTooltip: typeof import('./../components/ui/chart/ChartTooltip.vue')['default']
+    CulturesCharts: typeof import('./../components/charts-and-stats/culturesCharts.vue')['default']
     Dialog: typeof import('./../components/ui/dialog/Dialog.vue')['default']
     DialogClose: typeof import('./../components/ui/dialog/DialogClose.vue')['default']
     DialogContent: typeof import('./../components/ui/dialog/DialogContent.vue')['default']
@@ -44,6 +51,7 @@ declare module 'vue' {
     FormMessage: typeof import('./../components/ui/form/FormMessage.vue')['default']
     Input: typeof import('./../components/ui/input/Input.vue')['default']
     Label: typeof import('./../components/ui/label/Label.vue')['default']
+    LineChart: typeof import('./../components/ui/chart-line/LineChart.vue')['default']
     NavigationBar: typeof import('./../components/NavigationBar.vue')['default']
     NavigationMenu: typeof import('./../components/ui/navigation-menu/NavigationMenu.vue')['default']
     NavigationMenuContent: typeof import('./../components/ui/navigation-menu/NavigationMenuContent.vue')['default']
@@ -61,9 +69,11 @@ declare module 'vue' {
     Popover: typeof import('./../components/ui/popover/Popover.vue')['default']
     PopoverContent: typeof import('./../components/ui/popover/PopoverContent.vue')['default']
     PopoverTrigger: typeof import('./../components/ui/popover/PopoverTrigger.vue')['default']
-    PreviewReportTab: typeof import('./../components/adminTabs/previewReportTab.vue')['default']
+    PreviewReportTab: typeof import('./../components/admin-panel/previewReportTab.vue')['default']
+    ProvincesCharts: typeof import('./../components/charts-and-stats/provincesCharts.vue')['default']
     RadioGroup: typeof import('./../components/ui/radio-group/RadioGroup.vue')['default']
     RadioGroupItem: typeof import('./../components/ui/radio-group/RadioGroupItem.vue')['default']
+    ReligionsCharts: typeof import('./../components/charts-and-stats/religionsCharts.vue')['default']
     ResizableHandle: typeof import('./../components/ui/resizable/ResizableHandle.vue')['default']
     ResizablePanelGroup: typeof import('./../components/ui/resizable/ResizablePanelGroup.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -96,6 +106,7 @@ declare module 'vue' {
     SidebarRail: typeof import('./../components/ui/sidebar/SidebarRail.vue')['default']
     SidebarSeparator: typeof import('./../components/ui/sidebar/SidebarSeparator.vue')['default']
     SidebarTrigger: typeof import('./../components/ui/sidebar/SidebarTrigger.vue')['default']
+    StatesCharts: typeof import('./../components/charts-and-stats/statesCharts.vue')['default']
     Tabs: typeof import('./../components/ui/tabs/Tabs.vue')['default']
     TabsContent: typeof import('./../components/ui/tabs/TabsContent.vue')['default']
     TabsList: typeof import('./../components/ui/tabs/TabsList.vue')['default']
@@ -109,6 +120,6 @@ declare module 'vue' {
     ToastProvider: typeof import('./../components/ui/toast/ToastProvider.vue')['default']
     ToastTitle: typeof import('./../components/ui/toast/ToastTitle.vue')['default']
     ToastViewport: typeof import('./../components/ui/toast/ToastViewport.vue')['default']
-    TurnEndTab: typeof import('./../components/adminTabs/turnEndTab.vue')['default']
+    TurnEndTab: typeof import('./../components/admin-panel/turnEndTab.vue')['default']
   }
 }
