@@ -420,6 +420,8 @@
     "useDataStore": true,
     "chartsAndStatsStore": true,
     "useChartsAndStatsStore": true,
-    "useCacheStore": true
+    "useCacheStore": true,
+    "cacheFullListResponses": true,
+    "Switch": true
   }
 }

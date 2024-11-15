@@ -3,68 +3,9 @@ useHead({
 	title: "Garand's WG | Wykresy i statystyki"
 });
 
-interface DataForCharts {
-	states: {
-		config: Config;
-		burgs: ChartData[];
-		provinces: ChartData[];
-		cells: ChartData[];
-		culturesCells: ChartData[];
-		religionCells: ChartData[];
-		biomesCells: ChartData[];
-		ruralPopulation: ChartData[];
-		urbanPopulation: ChartData[];
-		forms: ChartData[];
-	};
-	provinces: {
-		config: Config;
-		burgs: ChartData[];
-		cells: ChartData[];
-		ruralPopulation: ChartData[];
-		urbanPopulation: ChartData[];
-		forms: ChartData[];
-	};
-	burgs: {
-		config: Config;
-		population: ChartData[];
-		religions: ChartData[];
-		cultures: ChartData[];
-		capitals: ChartData[];
-		ports: ChartData[];
-		cities: ChartData[];
-		walls: ChartData[];
-		plazas: ChartData[];
-		temples: ChartData[];
-		shantyTowns: ChartData[];
-	};
-	cultures: {
-		config: Config;
-		cells: ChartData[];
-		population: ChartData[];
-		types: ChartData[];
-		namesbases: ChartData[];
-	};
-	religions: {
-		config: Config;
-		cells: ChartData[];
-		population: ChartData[];
-		types: ChartData[];
-		forms: ChartData[];
-	};
-}
+import type { ChartData, Config, DataForCharts } from '@/types/chartsTypes';
 
-interface ChartData {
-	turn: number;
-	[key: string]: number;
-}
-
-interface Config {
-	categories: string[];
-	colors?: string[];
-}
-
-const pb = usePocketBase();
-const data = useChartsAndStatsStore();
+const data = cacheFullListResponses();
 
 const turnsData = await data.fetchTurnsData();
 const statesData = await data.fetchStatesData();
@@ -76,50 +17,55 @@ const religionsData = await data.fetchReligionsData();
 const dataForCharts: DataForCharts = {
 	states: {
 		config: { categories: [], colors: [] },
-		burgs: [],
-		provinces: [],
-		cells: [],
-		culturesCells: [],
-		religionCells: [],
-		biomesCells: [],
-		ruralPopulation: [],
-		urbanPopulation: [],
-		forms: []
+		charts: {
+			burgs: [],
+			provinces: [],
+			cells: [],
+			ruralPopulation: [],
+			urbanPopulation: []
+		}
 	},
 	provinces: {
 		config: { categories: [], colors: [] },
-		burgs: [],
-		cells: [],
-		ruralPopulation: [],
-		urbanPopulation: [],
-		forms: []
+		charts: {
+			burgs: [],
+			cells: [],
+			ruralPopulation: [],
+			urbanPopulation: []
+		}
 	},
 	burgs: {
 		config: { categories: [], colors: [] },
-		population: [],
-		religions: [],
-		cultures: [],
-		capitals: [],
-		ports: [],
-		cities: [],
-		walls: [],
-		plazas: [],
-		temples: [],
-		shantyTowns: []
+		charts: {
+			population: [],
+			religions: [],
+			cultures: [],
+			capitals: [],
+			ports: [],
+			cities: [],
+			walls: [],
+			plazas: [],
+			temples: [],
+			shantyTowns: []
+		}
 	},
 	cultures: {
 		config: { categories: [], colors: [] },
-		cells: [],
-		population: [],
-		types: [],
-		namesbases: []
+		charts: {
+			cells: [],
+			population: [],
+			types: [],
+			namesbases: []
+		}
 	},
 	religions: {
 		config: { categories: [], colors: [] },
-		cells: [],
-		population: [],
-		types: [],
-		forms: []
+		charts: {
+			cells: [],
+			population: [],
+			types: [],
+			forms: []
+		}
 	}
 };
 
@@ -139,66 +85,60 @@ for (let i = 0; i < configsDataSets.length; i++) {
 	if (dataset.data[0].color) config.colors = dataset.data.map(item => item.color);
 }
 
-for (let i = 0; i < turnsData.length - 1; i++) {
+for (let i = 0; i < turnsData.length - 0; i++) {
 	const turn = turnsData[i];
-	const statesBurgsDataItem: ChartData = { turn: turn.value };
-	const statesProvincesDataItem: ChartData = { turn: turn.value };
-	const statesCellsDataItem: ChartData = { turn: turn.value };
-	const culturesCellsDataItem: ChartData = { turn: turn.value };
-	const religionCellsDataItem: ChartData = { turn: turn.value };
-	const biomesCellsDataItem: ChartData = { turn: turn.value };
-	const ruralPopulationDataItem: ChartData = { turn: turn.value };
-	const urbanPopulationDataItem: ChartData = { turn: turn.value };
-	const formsDataItem: ChartData = { turn: turn.value };
 
-	// TODO: Dokończyć resztę DataItems'ów
+	const statesDataItems: ChartData[] = [
+		{ turn: turn.value },
+		{ turn: turn.value },
+		{ turn: turn.value },
+		{ turn: turn.value },
+		{ turn: turn.value }
+	];
 
-	for (let j = 0; j < statesData.length; j++) {
-		const state = statesData[j];
+	const provincesDataItems: ChartData[] = [
+		{ turn: turn.value },
+		{ turn: turn.value },
+		{ turn: turn.value },
+		{ turn: turn.value }
+	];
 
-		statesBurgsDataItem[state.name] = state.burgs;
-		statesProvincesDataItem[state.name] = provincesData.filter(
+	for (let i = 0; i < statesData.length; i++) {
+		const state = statesData[i];
+
+		statesDataItems[0][state.name] = state.burgs;
+		statesDataItems[1][state.name] = provincesData.filter(
 			province => province.turn === turn.id && province.state === state.id
 		).length;
-		statesCellsDataItem[state.name] = state.cells;
+		statesDataItems[2][state.name] = state.cells;
+		statesDataItems[3][state.name] = state.ruralPopulation;
+		statesDataItems[4][state.name] = state.urbanPopulation;
 	}
 
-	dataForCharts.states.burgs.push(statesBurgsDataItem);
-	dataForCharts.states.provinces.push(statesProvincesDataItem);
-	dataForCharts.states.cells.push(statesCellsDataItem);
+	dataForCharts.states.charts.burgs.push(statesDataItems[0]);
+	dataForCharts.states.charts.provinces.push(statesDataItems[1]);
+	dataForCharts.states.charts.cells.push(statesDataItems[2]);
+	dataForCharts.states.charts.ruralPopulation.push(statesDataItems[3]);
+	dataForCharts.states.charts.urbanPopulation.push(statesDataItems[4]);
+
+	for (let i = 0; i < provincesData.length; i++) {
+		const province = provincesData[i];
+
+		provincesDataItems[0][province.name] = province.burgs;
+		provincesDataItems[1][province.name] = province.cells;
+		provincesDataItems[2][province.name] = province.ruralPopulation;
+		provincesDataItems[3][province.name] = province.urbanPopulation;
+	}
+
+	dataForCharts.provinces.charts.burgs.push(provincesDataItems[0]);
+	dataForCharts.provinces.charts.cells.push(provincesDataItems[1]);
+	dataForCharts.provinces.charts.ruralPopulation.push(provincesDataItems[2]);
+	dataForCharts.provinces.charts.urbanPopulation.push(provincesDataItems[3]);
 }
 
 console.log(dataForCharts);
 
-// console.log(provincesData);
-
-// console.table(statesData);
-// console.table(provincesData);
-// console.table(burgsData);
-// console.table(culturesData);
-// console.table(religionsData);
-
-// console.log(statesData);
-
 // TODO: dodać wykresy z shadcn-vue https://www.shadcn-vue.com/docs/charts.html
-
-// TODO: Statystyki państw na przestrzeni tur, kolor z pola color:
-//       - ilość miast - liniowy,
-//       - ilość prowincji - liniowy,
-//       - ilość kratek - liniowy,
-//       - ilość kratek danej kultury - słupkowy,
-//       - ilość kratek danej religii - słupkowy,
-//       - ilość kratek danego biomu - słupkowy,z
-//       - ilość populacji wiejskiej - liniowy,
-//       - ilość populacji miejskiej - liniowy,
-//       - ilość danych form rządu - liniowy
-
-// TODO: Statystyki prowincji na przestrzeni tur, kolor z pola color:
-//       - ilość miast - liniowy,
-//       - ilość kratek - liniowy,
-//       - ilość populacji wiejskiej - liniowy,
-//       - ilość populacji miejskiej - liniowy,
-//       - ilość danych form rządu - liniowy
 
 // TODO: Statystyki miast na przestrzeni tur, kolor z pola color:
 //       - ilość populacji - liniowy,
@@ -224,44 +164,134 @@ console.log(dataForCharts);
 //       - ilość danych typów religii - liniowy,
 //       - ilość danych form religii - liniowy,
 
-const tabs: { [key: string]: string } = {
-	states: 'Państwa',
-	provinces: 'Prowincje',
-	burgs: 'Miasta',
-	cultures: 'Kultury',
-	religions: 'Religie'
-};
+const tabs: {
+	name: string;
+	label: string;
+	description: string;
+	props: {
+		config: Config;
+		labels: string[];
+		charts: Record<string, ChartData[]>;
+	};
+}[] = [
+	{
+		name: 'states',
+		label: 'Państwa',
+		description: 'Statystyki państw',
+		props: {
+			config: dataForCharts.states.config,
+			labels: [
+				'Ilość miast',
+				'Ilość prowincji',
+				'Ilość kratek',
+				'Ilość populacji wiejskiej ',
+				'Ilość populacji miejskiej'
+			],
+			charts: dataForCharts.states.charts
+		}
+	},
+	{
+		name: 'provinces',
+		label: 'Prowincje',
+		description: 'Statystyki prowincji',
+		props: {
+			config: dataForCharts.provinces.config,
+			labels: [
+				'Ilość miast',
+				'Ilość kratek',
+				'Ilość populacji wiejskiej ',
+				'Ilość populacji miejskiej'
+			],
+			charts: dataForCharts.provinces.charts
+		}
+	},
+	{
+		name: 'burgs',
+		label: 'Miasta',
+		description: 'Statystyki miast',
+		props: {
+			config: dataForCharts.burgs.config,
+			charts: dataForCharts.burgs.charts
+		}
+	},
+	{
+		name: 'cultures',
+		label: 'Kultury',
+		description: 'Statystyki kultur',
+		props: {
+			config: dataForCharts.cultures.config,
+			charts: dataForCharts.cultures.charts
+		}
+	},
+	{
+		name: 'religions',
+		label: 'Religie',
+		description: 'Statystyki religii',
+		props: {
+			config: dataForCharts.religions.config,
+			charts: dataForCharts.religions.charts
+		}
+	}
+];
+
+console.log(tabs);
 </script>
 
 <template>
 	<div class="mt-12 flex h-screen items-center justify-center">
-		<Tabs
-			class="flex w-full flex-col items-center justify-center"
-			:default-value="tabs[Object.keys(tabs)[0]]"
-		>
+		<Tabs class="flex w-full flex-col items-center justify-center" :default-value="tabs[0].name">
 			<TabsList class="w-full items-center justify-center">
-				<TabsTrigger v-for="(tab, key) in tabs" :key="key" :value="tab"> {{ tab }}</TabsTrigger>
+				<TabsTrigger v-for="tab in tabs" :key="tab.name" :value="tab.name">
+					{{ tab.label }}
+				</TabsTrigger>
 			</TabsList>
 
 			<TabsContent
-				v-for="(tab, key) in tabs"
-				:key="key"
-				:value="tab"
+				v-for="tab in tabs"
+				:key="tab.name"
+				:value="tab.name"
 				class="h-screen w-full flex-col items-center justify-center"
 			>
 				<Card>
 					<CardHeader>
 						<CardTitle>
-							{{ tab }}
-							<!-- {{ props.title }} Numer <span class="text-primary">{{ turn.value }}</span> -->
+							{{ tab.label }}
 						</CardTitle>
 
-						<CardDescription> Jeżyk </CardDescription>
+						<CardDescription class="flex flex-col">
+							{{ tab.description }}
+
+							<Label class="mb-2 mt-5"> Jakiego tooltip'a użyć? </Label>
+
+							<div>
+								<RadioGroup default-value="option-one">
+									<div class="flex items-center space-x-2">
+										<RadioGroupItem id="option-one" value="option-one" />
+										<Label for="option-one">Klasycznego</Label>
+									</div>
+									<div class="flex items-center space-x-2">
+										<RadioGroupItem id="option-two" value="option-two" />
+										<Label for="option-two">Uproszczonego</Label>
+									</div>
+									<div class="flex items-center space-x-2">
+										<RadioGroupItem id="option-three" value="option-three" />
+										<Label for="option-three">Najlepsi i najgorsi</Label>
+									</div>
+								</RadioGroup>
+							</div>
+						</CardDescription>
 					</CardHeader>
 
 					<Separator />
 
-					<CardContent class="space-y-2 py-6"> </CardContent>
+					<CardContent class="space-y-2 py-6">
+						<!-- <component :is="tab.component" v-bind="tab.props" /> -->
+						<ChartComponent
+							:config="tab.props.config"
+							:charts="tab.props.charts"
+							:labels="tab.props.labels"
+						/>
+					</CardContent>
 				</Card>
 			</TabsContent>
 		</Tabs>

@@ -1,6 +1,6 @@
 const ONE_HOUR = 60 * 60 * 1000; // 1 godzina w milisekundach
-// TODO: Napisać unit testy dla useChartsAndStatsStore
-export const useChartsAndStatsStore = defineStore('useChartsAndStatsStore', () => {
+// TODO: Napisać unit testy dla cacheFullListResponses
+export const cacheFullListResponses = defineStore('cacheFullListResponses', () => {
 	const pb = usePocketBase();
 
 	const turnsData = ref(null);
@@ -20,7 +20,7 @@ export const useChartsAndStatsStore = defineStore('useChartsAndStatsStore', () =
 
 	const fetchStatesData = async () => {
 		if (statesData.value && isCached('statesData')) return statesData.value;
-		const data = await pb.collection('states').getFullList({ expand: 'turn' });
+		const data = await pb.collection('states').getFullList();
 		statesData.value = data;
 		cacheData('statesData', data);
 		return data;
@@ -28,7 +28,7 @@ export const useChartsAndStatsStore = defineStore('useChartsAndStatsStore', () =
 
 	const fetchProvincesData = async () => {
 		if (provincesData.value && isCached('provincesData')) return provincesData.value;
-		const data = await pb.collection('provinces').getFullList({ expand: 'turn' });
+		const data = await pb.collection('provinces').getFullList();
 		provincesData.value = data;
 		cacheData('provincesData', data);
 		return data;
@@ -36,7 +36,7 @@ export const useChartsAndStatsStore = defineStore('useChartsAndStatsStore', () =
 
 	const fetchBurgsData = async () => {
 		if (burgsData.value && isCached('burgsData')) return burgsData.value;
-		const data = await pb.collection('burgs').getFullList({ expand: 'turn' });
+		const data = await pb.collection('burgs').getFullList();
 		burgsData.value = data;
 		cacheData('burgsData', data);
 		return data;
@@ -44,7 +44,7 @@ export const useChartsAndStatsStore = defineStore('useChartsAndStatsStore', () =
 
 	const fetchCulturesData = async () => {
 		if (culturesData.value && isCached('culturesData')) return culturesData.value;
-		const data = await pb.collection('cultures').getFullList({ expand: 'turn' });
+		const data = await pb.collection('cultures').getFullList();
 		culturesData.value = data;
 		cacheData('culturesData', data);
 		return data;
@@ -52,7 +52,7 @@ export const useChartsAndStatsStore = defineStore('useChartsAndStatsStore', () =
 
 	const fetchReligionsData = async () => {
 		if (religionsData.value && isCached('religionsData')) return religionsData.value;
-		const data = await pb.collection('religions').getFullList({ expand: 'turn' });
+		const data = await pb.collection('religions').getFullList();
 		religionsData.value = data;
 		cacheData('religionsData', data);
 		return data;
@@ -70,12 +70,12 @@ export const useChartsAndStatsStore = defineStore('useChartsAndStatsStore', () =
 	};
 
 	return {
-		turnsData,
-		statesData,
-		provincesData,
-		burgsData,
-		culturesData,
-		religionsData,
+		// turnsData,
+		// statesData,
+		// provincesData,
+		// burgsData,
+		// culturesData,
+		// religionsData,
 		fetchTurnsData,
 		fetchStatesData,
 		fetchProvincesData,
