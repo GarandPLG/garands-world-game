@@ -6,7 +6,6 @@ node_modules
 pocketbase/pb_data
 pocketbase/pocketbase.drawio
 
-.env
 .gitignore
 start-dev.sh
 shell.nix

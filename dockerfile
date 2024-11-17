@@ -1,5 +1,3 @@
-# TODO: dodać ENV na ścieszkę pocketbase
-
 FROM oven/bun:latest as build
 
 WORKDIR /app
@@ -17,9 +15,10 @@ LABEL version="0.0.15"
 LABEL description="Garand's WG. Pocketbase + Bun + Vue3 + Vite + TypeScript + TailwindCSS + Shadcn-vue"
 
 WORKDIR /pb
-COPY --from=build /app/dist ./pb_public
 COPY --from=build /app/pocketbase/pocketbase ./
+COPY --from=build /app/dist ./pb_public
 COPY --from=build /app/pocketbase/pb_migrations ./pb_migrations
+COPY --from=build /app/pocketbase/pb_hooks ./pb_hooks
 
 RUN mkdir -p pb_data
 RUN chmod +x ./pocketbase
@@ -29,7 +28,7 @@ RUN chown -R pocketbase:pocketbase /pb
 
 EXPOSE 8090
 
-CMD ["./pocketbase", "serve", "--http", "0.0.0.0:8090", "--dir", "./pb_data", "--migrationsDir", "./pb_migrations", "--publicDir", "./pb_public"]
+CMD ["./pocketbase", "serve", "--http", "0.0.0.0:8090", "--dir", "./pb_data", "--migrationsDir", "./pb_migrations", "--publicDir", "./pb_public", "--hooksDir", "./pb_hooks"]
 
 # # Nginx stage
 # FROM nginx:alpine
