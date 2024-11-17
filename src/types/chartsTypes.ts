@@ -22,15 +22,7 @@ interface DataForCharts {
 		config: Config;
 		charts: {
 			population: ChartData[];
-			religions: ChartData[];
-			cultures: ChartData[];
-			capitals: ChartData[];
-			ports: ChartData[];
-			cities: ChartData[];
-			walls: ChartData[];
-			plazas: ChartData[];
-			temples: ChartData[];
-			shantyTowns: ChartData[];
+			// features: ChartData[];
 		};
 	};
 	cultures: {
@@ -38,8 +30,7 @@ interface DataForCharts {
 		charts: {
 			cells: ChartData[];
 			population: ChartData[];
-			types: ChartData[];
-			namesbases: ChartData[];
+			burgs: ChartData[];
 		};
 	};
 	religions: {
@@ -47,8 +38,7 @@ interface DataForCharts {
 		charts: {
 			cells: ChartData[];
 			population: ChartData[];
-			types: ChartData[];
-			forms: ChartData[];
+			burgs: ChartData[];
 		};
 	};
 }
@@ -60,7 +50,7 @@ interface ChartData {
 
 interface Config {
 	categories: string[];
-	colors?: string[];
+	colors: string[];
 }
 
 export type { ChartData, Config, DataForCharts };

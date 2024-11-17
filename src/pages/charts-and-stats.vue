@@ -4,6 +4,7 @@ useHead({
 });
 
 import type { ChartData, Config, DataForCharts } from '@/types/chartsTypes';
+import type { BurgsResponse } from '@/types/pb-types';
 
 const data = cacheFullListResponses();
 
@@ -37,16 +38,8 @@ const dataForCharts: DataForCharts = {
 	burgs: {
 		config: { categories: [], colors: [] },
 		charts: {
-			population: [],
-			religions: [],
-			cultures: [],
-			capitals: [],
-			ports: [],
-			cities: [],
-			walls: [],
-			plazas: [],
-			temples: [],
-			shantyTowns: []
+			population: []
+			// features: []
 		}
 	},
 	cultures: {
@@ -54,8 +47,7 @@ const dataForCharts: DataForCharts = {
 		charts: {
 			cells: [],
 			population: [],
-			types: [],
-			namesbases: []
+			burgs: []
 		}
 	},
 	religions: {
@@ -63,8 +55,7 @@ const dataForCharts: DataForCharts = {
 		charts: {
 			cells: [],
 			population: [],
-			types: [],
-			forms: []
+			burgs: []
 		}
 	}
 };
@@ -83,20 +74,17 @@ for (let i = 0; i < configsDataSets.length; i++) {
 
 	config.categories = dataset.data.map(item => item.name);
 	if (dataset.data[0].color) config.colors = dataset.data.map(item => item.color);
+	else if (!dataset.data[0].color && dataset.key === 'burgs')
+		config.colors = dataset.data.map(
+			burg => statesData.find(state => state.id === (burg as BurgsResponse).state)?.color
+		);
 }
 
-for (let i = 0; i < turnsData.length - 0; i++) {
+for (let i = 0; i < turnsData.length - 1; i++) {
 	const turn = turnsData[i];
 
 	const statesDataItems: ChartData[] = [
 		{ turn: turn.value },
-		{ turn: turn.value },
-		{ turn: turn.value },
-		{ turn: turn.value },
-		{ turn: turn.value }
-	];
-
-	const provincesDataItems: ChartData[] = [
 		{ turn: turn.value },
 		{ turn: turn.value },
 		{ turn: turn.value },
@@ -121,6 +109,13 @@ for (let i = 0; i < turnsData.length - 0; i++) {
 	dataForCharts.states.charts.ruralPopulation.push(statesDataItems[3]);
 	dataForCharts.states.charts.urbanPopulation.push(statesDataItems[4]);
 
+	const provincesDataItems: ChartData[] = [
+		{ turn: turn.value },
+		{ turn: turn.value },
+		{ turn: turn.value },
+		{ turn: turn.value }
+	];
+
 	for (let i = 0; i < provincesData.length; i++) {
 		const province = provincesData[i];
 
@@ -134,35 +129,75 @@ for (let i = 0; i < turnsData.length - 0; i++) {
 	dataForCharts.provinces.charts.cells.push(provincesDataItems[1]);
 	dataForCharts.provinces.charts.ruralPopulation.push(provincesDataItems[2]);
 	dataForCharts.provinces.charts.urbanPopulation.push(provincesDataItems[3]);
+
+	const burgsDataItems: ChartData[] = [
+		{ turn: turn.value }
+		// { turn: turn.value }
+	];
+
+	const burgsBuildings = [0, 0, 0, 0, 0, 0, 0];
+	for (let i = 0; i < burgsData.length; i++) {
+		const burg = burgsData[i];
+		burgsDataItems[0][burg.name] = burg.population;
+
+		// if (burg.isCapital) burgsBuildings[0]++;
+		// if (burg.isPort) burgsBuildings[1]++;
+		// if (burg.isCitadel) burgsBuildings[2]++;
+		// if (burg.isWalls) burgsBuildings[3]++;
+		// if (burg.isPlaza) burgsBuildings[4]++;
+		// if (burg.isTemple) burgsBuildings[5]++;
+		// if (burg.isShantyTown) burgsBuildings[6]++;
+
+		// burgsDataItems[1]['Capitals'] = burgsBuildings[0];
+		// burgsDataItems[1]['Ports'] = burgsBuildings[1];
+		// burgsDataItems[1]['Citadels'] = burgsBuildings[2];
+		// burgsDataItems[1]['Walls'] = burgsBuildings[3];
+		// burgsDataItems[1]['Plazas'] = burgsBuildings[4];
+		// burgsDataItems[1]['Temples'] = burgsBuildings[5];
+		// burgsDataItems[1]['Shanty Towns'] = burgsBuildings[6];
+	}
+
+	dataForCharts.burgs.charts.population.push(burgsDataItems[0]);
+	// dataForCharts.burgs.charts.features.push(burgsDataItems[1]);
+
+	const culturesDataItems: ChartData[] = [
+		{ turn: turn.value },
+		{ turn: turn.value },
+		{ turn: turn.value }
+	];
+
+	for (let i = 0; i < culturesData.length; i++) {
+		const culture = culturesData[i];
+		const burgsCount = burgsData.filter(burg => burg.culture === culture.id).length;
+
+		culturesDataItems[0][culture.name] = culture.cells;
+		culturesDataItems[1][culture.name] = culture.population;
+		culturesDataItems[2][culture.name] = burgsCount;
+	}
+
+	dataForCharts.cultures.charts.cells.push(culturesDataItems[0]);
+	dataForCharts.cultures.charts.population.push(culturesDataItems[1]);
+	dataForCharts.cultures.charts.burgs.push(culturesDataItems[2]);
+
+	const religionsDataItems: ChartData[] = [
+		{ turn: turn.value },
+		{ turn: turn.value },
+		{ turn: turn.value }
+	];
+
+	for (let i = 0; i < religionsData.length; i++) {
+		const religion = religionsData[i];
+		const burgsCount = burgsData.filter(burg => burg.religion === religion.id).length;
+
+		religionsDataItems[0][religion.name] = religion.cells;
+		religionsDataItems[1][religion.name] = religion.population;
+		religionsDataItems[2][religion.name] = burgsCount;
+	}
+
+	dataForCharts.religions.charts.cells.push(religionsDataItems[0]);
+	dataForCharts.religions.charts.population.push(religionsDataItems[1]);
+	dataForCharts.religions.charts.burgs.push(religionsDataItems[2]);
 }
-
-console.log(dataForCharts);
-
-// TODO: dodać wykresy z shadcn-vue https://www.shadcn-vue.com/docs/charts.html
-
-// TODO: Statystyki miast na przestrzeni tur, kolor z pola color:
-//       - ilość populacji - liniowy,
-//       - ilość religii - liniowy,
-//       - ilość kultur - liniowy,
-//       - ilość stolic - liniowy,
-//       - ilość portów - liniowy,
-//       - ilość zamków - liniowy,
-//       - ilość murów - liniowy,
-//       - ilość placów - liniowy,
-//       - ilość świątyń - liniowy,
-//       - ilość przedmieść - liniowy
-
-// TODO: Statystyki kultur na przestrzeni tur, kolor z pola color:
-//       - ilość kratek - liniowy,
-//       - ilość populacji - liniowy,
-//       - ilość danych typów kultury - liniowy,
-//       - ilość danych namesbase'ów kultury - liniowy,
-
-// TODO: Statystyki religii na przestrzeni tur, kolor z pola color:
-//       - ilość kratek - liniowy,
-//       - ilość populacji - liniowy,
-//       - ilość danych typów religii - liniowy,
-//       - ilość danych form religii - liniowy,
 
 const tabs: {
 	name: string;
@@ -211,6 +246,7 @@ const tabs: {
 		description: 'Statystyki miast',
 		props: {
 			config: dataForCharts.burgs.config,
+			labels: ['Ilość populacji', 'Ilość specjalnych budynków'],
 			charts: dataForCharts.burgs.charts
 		}
 	},
@@ -220,6 +256,7 @@ const tabs: {
 		description: 'Statystyki kultur',
 		props: {
 			config: dataForCharts.cultures.config,
+			labels: ['Ilość kratek', 'Ilość populacji', 'Ilość miast'],
 			charts: dataForCharts.cultures.charts
 		}
 	},
@@ -229,6 +266,7 @@ const tabs: {
 		description: 'Statystyki religii',
 		props: {
 			config: dataForCharts.religions.config,
+			labels: ['Ilość kratek', 'Ilość populacji', 'Ilość miast'],
 			charts: dataForCharts.religions.charts
 		}
 	}
@@ -260,32 +298,12 @@ console.log(tabs);
 
 						<CardDescription class="flex flex-col">
 							{{ tab.description }}
-
-							<Label class="mb-2 mt-5"> Jakiego tooltip'a użyć? </Label>
-
-							<div>
-								<RadioGroup default-value="option-one">
-									<div class="flex items-center space-x-2">
-										<RadioGroupItem id="option-one" value="option-one" />
-										<Label for="option-one">Klasycznego</Label>
-									</div>
-									<div class="flex items-center space-x-2">
-										<RadioGroupItem id="option-two" value="option-two" />
-										<Label for="option-two">Uproszczonego</Label>
-									</div>
-									<div class="flex items-center space-x-2">
-										<RadioGroupItem id="option-three" value="option-three" />
-										<Label for="option-three">Najlepsi i najgorsi</Label>
-									</div>
-								</RadioGroup>
-							</div>
 						</CardDescription>
 					</CardHeader>
 
 					<Separator />
 
 					<CardContent class="space-y-2 py-6">
-						<!-- <component :is="tab.component" v-bind="tab.props" /> -->
 						<ChartComponent
 							:config="tab.props.config"
 							:charts="tab.props.charts"
