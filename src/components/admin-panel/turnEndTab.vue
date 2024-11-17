@@ -13,15 +13,23 @@ const props = defineProps<{
 	description: string;
 }>();
 
-let turn = (await pb.collection('turns').getFullList({ sort: '-value', limit: 1 }))[0];
+const data = cacheFullListResponses();
+
+let turns = await data.fetchTurnsData().then(turns => turns.reverse());
+let turn = turns[0];
 
 if (turn === undefined)
 	try {
 		turn = await pb.collection('turns').create({ value: 0 });
+		turns = await data.fetchTurnsData().then(turns => turns.reverse());
 	} catch (error: unknown) {
 		if (error instanceof Error) throw error;
 		else console.error('Błąd przy tworzeniu tury zerowej:', 'Nieznany błąd.');
 	}
+
+const statesFromPreviousTurn = await data
+	.fetchStatesData()
+	.then(states => states.filter(state => state.turn === turns[1].id));
 
 const formSchema = toTypedSchema(
 	// FIXME: Naprawić walidację zod'a dla pól plikowych
@@ -40,6 +48,9 @@ const formSchema = toTypedSchema(
 			.instanceof(File)
 			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
 		provincesCSV: z
+			.instanceof(File)
+			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
+		relationsCSV: z
 			.instanceof(File)
 			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
 		statesByNumberOfCellsGroupedByBiomeCSV: z
@@ -68,7 +79,8 @@ const CSVFilesForms = [
 	createCSVForm('burgsCSV', 'Miast', 'get-burgs-csv', 'Plik CSV'),
 	createCSVForm('culturesCSV', 'Kultur', 'get-cultures-csv', 'Plik CSV'),
 	createCSVForm('religionsCSV', 'Religii', 'get-religions-csv', 'Plik CSV'),
-	createCSVForm('provincesCSV', 'Prowincje', 'get-provinces-csv', 'Plik CSV')
+	createCSVForm('provincesCSV', 'Prowincje', 'get-provinces-csv', 'Plik CSV'),
+	createCSVForm('relationsCSV', 'Relacje dyplomatyczne', 'get-provinces-csv', 'Plik CSV')
 ];
 
 const GroupedCSVFilesForms = [
@@ -120,6 +132,7 @@ const onSubmit = handleSubmit(async values => {
 	const culturesData = await parseCSVFile(values.culturesCSV);
 	const religionsData = await parseCSVFile(values.religionsCSV);
 	const provincesData = await parseCSVFile(values.provincesCSV);
+	const relationsData = await parseCSVFile(values.relationsCSV);
 	const statesByNumberOfCellsGroupedByBiomeData = await parseCSVFile(
 		values.statesByNumberOfCellsGroupedByBiomeCSV
 	);
@@ -138,6 +151,7 @@ const onSubmit = handleSubmit(async values => {
 		!culturesData ||
 		!religionsData ||
 		!provincesData ||
+		!relationsData ||
 		!statesByNumberOfCellsGroupedByBiomeData ||
 		!statesByNumberOfCellsGroupedByReligionsData ||
 		!statesByNumberOfCellsGroupedByCulturesData ||
@@ -150,6 +164,13 @@ const onSubmit = handleSubmit(async values => {
 	const provincesResponses: Record<string, string> = {};
 	const religionsResponses: Record<string, string> = {};
 	const culturesResponses: Record<string, string> = {};
+
+	const relationsFinalData = relationsData.reduce((acc, relation) => {
+		const state = relation[''];
+		const { ['']: _1, [state]: _2, ...rest } = relation;
+		acc[state] = rest;
+		return acc;
+	}, {});
 
 	const statesByNumberOfCellsGroupedByCulturesFinalData =
 		statesByNumberOfCellsGroupedByCulturesData.reduce((acc, current) => {
@@ -182,6 +203,8 @@ const onSubmit = handleSubmit(async values => {
 		return acc;
 	}, {});
 
+	const startTimeAll = new Date().getTime();
+	let startTime = new Date().getTime();
 	for (let i = 0; i < religionsData.length; i++) {
 		try {
 			const response = await pb.collection('religions').create({
@@ -202,6 +225,14 @@ const onSubmit = handleSubmit(async values => {
 		}
 	}
 
+	let endTime = new Date().getTime();
+
+	toast({
+		title: 'Religie zostały dodane',
+		description: `Dodano ${religionsData.length} religii w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
+	});
+
+	startTime = new Date().getTime();
 	for (let i = 0; i < culturesData.length; i++) {
 		try {
 			const response = await pb.collection('cultures').create({
@@ -220,13 +251,23 @@ const onSubmit = handleSubmit(async values => {
 			else console.error('Błąd przy tworzeniu kultury:', 'Nieznany błąd.');
 		}
 	}
+	endTime = new Date().getTime();
 
+	toast({
+		title: 'Kultury zostały dodane',
+		description: `Dodano ${culturesData.length} kultur w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
+	});
+
+	startTime = new Date().getTime();
 	for (let i = 0; i < statesData.length; i++) {
 		try {
-			// const user = await pb.collection('states').getFirstListItem()
+			const stateFromPreviousTurn = statesFromPreviousTurn.find(
+				state => state.name === statesData[i].State
+			);
+			const user = stateFromPreviousTurn?.user ? stateFromPreviousTurn.user : null;
 
 			const response = await pb.collection('states').create({
-				user: 'esfa1bg2ovpxd0h', // TODO: poprawić pobieranie usera
+				user: user,
 				turn: turn.id,
 				name: statesData[i].State,
 				nameFull: statesData[i]['Full Name'],
@@ -240,7 +281,8 @@ const onSubmit = handleSubmit(async values => {
 				culture: culturesResponses[statesData[i].Culture],
 				culturesCells: statesByNumberOfCellsGroupedByCulturesFinalData[statesData[i].State],
 				religionsCells: statesByNumberOfCellsGroupedByReligionsFinalData[statesData[i].State],
-				biomesCells: statesByNumberOfCellsGroupedByBiomeFinalData[statesData[i].State]
+				biomesCells: statesByNumberOfCellsGroupedByBiomeFinalData[statesData[i].State],
+				relations: relationsFinalData[statesData[i].State]
 			});
 
 			statesResponses[response.name] = response.id;
@@ -249,7 +291,14 @@ const onSubmit = handleSubmit(async values => {
 			else console.error('Błąd przy tworzeniu państwa:', 'Nieznany błąd.');
 		}
 	}
+	endTime = new Date().getTime();
 
+	toast({
+		title: 'Państwa zostały dodane',
+		description: `Dodano ${statesData.length} państw w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
+	});
+
+	startTime = new Date().getTime();
 	for (let i = 0; i < provincesData.length; i++) {
 		try {
 			const response = await pb.collection('provinces').create({
@@ -272,7 +321,14 @@ const onSubmit = handleSubmit(async values => {
 			else console.error('Błąd przy tworzeniu prowincji:', 'Nieznany błąd.');
 		}
 	}
+	endTime = new Date().getTime();
 
+	toast({
+		title: 'Prowincje zostały dodane',
+		description: `Dodano ${provincesData.length} prowincji w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
+	});
+
+	startTime = new Date().getTime();
 	for (let i = 0; i < burgsData.length; i++) {
 		try {
 			await pb.collection('burgs').create({
@@ -298,13 +354,22 @@ const onSubmit = handleSubmit(async values => {
 			else console.error('Błąd przy tworzeniu miasta:', 'Nieznany błąd.');
 		}
 	}
+	endTime = new Date().getTime();
+
+	toast({
+		title: 'Miasta zostały dodane',
+		description: `Dodano ${burgsData.length} miast w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
+	});
+
 	// FIXME: Poprawić drawio, żeby znowu odwzorowywał obecną bazę danych
 
+	startTime = new Date().getTime();
 	try {
-		const nextTurn = await pb.collection('turns').create({ value: turn.value + 1 });
+		turn = await pb.collection('turns').create({ value: turn.value + 1 });
+		turns = await pb.collection('turns').getFullList({ sort: '-value' });
 
 		await pb.collection('maps').create({
-			turn: nextTurn.id,
+			turn: turn.id,
 			name: values.map.name.split(/ (?=\d{4}-\d{2}-\d{2}-\d{2}-\d{2})/)[0],
 			file: values.map
 		});
@@ -312,10 +377,17 @@ const onSubmit = handleSubmit(async values => {
 		if (error instanceof Error) throw error;
 		else console.error('Błąd przy tworzeniu mapy:', 'Nieznany błąd.');
 	}
+	endTime = new Date().getTime();
+	const endTimeAll = new Date().getTime();
+
+	toast({
+		title: 'Mapa i nowa tura zostały dodane!',
+		description: `Dodano mapę i nową turę w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
+	});
 
 	toast({
 		title: 'Udało się zakończyć turę!',
-		description: 'Dane z plików csv zostały wgrane do bazy danych.'
+		description: `Zakończono turę w czasie: ${((endTimeAll - startTimeAll) / 1000).toFixed(3)} s`
 	});
 });
 

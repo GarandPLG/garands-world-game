@@ -41,6 +41,12 @@ interface DataForCharts {
 			burgs: ChartData[];
 		};
 	};
+	misc: {
+		config: Config;
+		charts: {
+			features: ChartData[];
+		};
+	};
 }
 
 interface ChartData {

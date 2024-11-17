@@ -16,9 +16,7 @@ props.data.sort((a, b) => b.value - a.value);
 <template>
 	<Card class="text-sm">
 		<CardHeader v-if="title" class="border-b p-3">
-			<CardTitle>
-				{{ title }}
-			</CardTitle>
+			<CardTitle> <span class="text-primary">Tura</span>: {{ title }} </CardTitle>
 		</CardHeader>
 		<CardContent class="flex min-w-[180px] flex-col gap-1 p-3">
 			<ScrollArea class="h-full w-full">

@@ -1,5 +1,4 @@
 const ONE_HOUR = 60 * 60 * 1000; // 1 godzina w milisekundach
-// TODO: Napisać unit testy dla cacheFullListResponses
 export const cacheFullListResponses = defineStore('cacheFullListResponses', () => {
 	const pb = usePocketBase();
 

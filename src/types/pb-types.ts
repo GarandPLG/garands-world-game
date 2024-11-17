@@ -286,6 +286,7 @@ export enum StatesFormOptions {
 export type StatesRecord<
 	TbiomesCells = unknown,
 	TculturesCells = unknown,
+	Trelations = unknown,
 	TreligionsCells = unknown
 > = {
 	biomesCells?: null | TbiomesCells;
@@ -298,6 +299,7 @@ export type StatesRecord<
 	form?: StatesFormOptions;
 	name: string;
 	nameFull?: string;
+	relations?: null | Trelations;
 	religionsCells?: null | TreligionsCells;
 	ruralPopulation?: number;
 	turn: RecordIdString;
@@ -338,9 +340,10 @@ export type ReportsResponse<Texpand = unknown> = Required<ReportsRecord> &
 export type StatesResponse<
 	TbiomesCells = unknown,
 	TculturesCells = unknown,
+	Trelations = unknown,
 	TreligionsCells = unknown,
 	Texpand = unknown
-> = Required<StatesRecord<TbiomesCells, TculturesCells, TreligionsCells>> &
+> = Required<StatesRecord<TbiomesCells, TculturesCells, Trelations, TreligionsCells>> &
 	BaseSystemFields<Texpand>;
 export type TurnsResponse<Texpand = unknown> = Required<TurnsRecord> & BaseSystemFields<Texpand>;
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>;

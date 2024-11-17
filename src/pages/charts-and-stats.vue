@@ -57,6 +57,15 @@ const dataForCharts: DataForCharts = {
 			population: [],
 			burgs: []
 		}
+	},
+	misc: {
+		config: {
+			categories: ['Capitals', 'Ports', 'Citadels', 'Walls', 'Plazas', 'Temples', 'Shanty Towns'],
+			colors: ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#FFFFFF']
+		},
+		charts: {
+			features: []
+		}
 	}
 };
 
@@ -82,6 +91,12 @@ for (let i = 0; i < configsDataSets.length; i++) {
 
 for (let i = 0; i < turnsData.length - 1; i++) {
 	const turn = turnsData[i];
+	const statesDataInTurn = statesData.filter(state => state.turn === turn.id);
+	const provincesDataInTurn = provincesData.filter(province => province.turn === turn.id);
+	const buildingsFeaturesDataItems: ChartData[] = [{ turn: turn.value }];
+	const burgsDataInTurn = burgsData.filter(burg => burg.turn === turn.id);
+	const culturesDataInTurn = culturesData.filter(culture => culture.turn === turn.id);
+	const religionsDataInTurn = religionsData.filter(religion => religion.turn === turn.id);
 
 	const statesDataItems: ChartData[] = [
 		{ turn: turn.value },
@@ -91,12 +106,12 @@ for (let i = 0; i < turnsData.length - 1; i++) {
 		{ turn: turn.value }
 	];
 
-	for (let i = 0; i < statesData.length; i++) {
-		const state = statesData[i];
+	for (let j = 0; j < statesDataInTurn.length; j++) {
+		const state = statesDataInTurn[j];
 
 		statesDataItems[0][state.name] = state.burgs;
 		statesDataItems[1][state.name] = provincesData.filter(
-			province => province.turn === turn.id && province.state === state.id
+			province => province.state === state.id
 		).length;
 		statesDataItems[2][state.name] = state.cells;
 		statesDataItems[3][state.name] = state.ruralPopulation;
@@ -116,8 +131,8 @@ for (let i = 0; i < turnsData.length - 1; i++) {
 		{ turn: turn.value }
 	];
 
-	for (let i = 0; i < provincesData.length; i++) {
-		const province = provincesData[i];
+	for (let j = 0; j < provincesDataInTurn.length; j++) {
+		const province = provincesDataInTurn[j];
 
 		provincesDataItems[0][province.name] = province.burgs;
 		provincesDataItems[1][province.name] = province.cells;
@@ -130,35 +145,29 @@ for (let i = 0; i < turnsData.length - 1; i++) {
 	dataForCharts.provinces.charts.ruralPopulation.push(provincesDataItems[2]);
 	dataForCharts.provinces.charts.urbanPopulation.push(provincesDataItems[3]);
 
-	const burgsDataItems: ChartData[] = [
-		{ turn: turn.value }
-		// { turn: turn.value }
-	];
+	const burgsDataItems: ChartData[] = [{ turn: turn.value }];
 
-	const burgsBuildings = [0, 0, 0, 0, 0, 0, 0];
-	for (let i = 0; i < burgsData.length; i++) {
-		const burg = burgsData[i];
+	const buildingsFeatures = [0, 0, 0, 0, 0, 0, 0];
+	for (let j = 0; j < burgsDataInTurn.length; j++) {
+		const burg = burgsData[j];
 		burgsDataItems[0][burg.name] = burg.population;
 
-		// if (burg.isCapital) burgsBuildings[0]++;
-		// if (burg.isPort) burgsBuildings[1]++;
-		// if (burg.isCitadel) burgsBuildings[2]++;
-		// if (burg.isWalls) burgsBuildings[3]++;
-		// if (burg.isPlaza) burgsBuildings[4]++;
-		// if (burg.isTemple) burgsBuildings[5]++;
-		// if (burg.isShantyTown) burgsBuildings[6]++;
+		if (burg.isCapital) buildingsFeatures[0]++;
+		if (burg.isPort) buildingsFeatures[1]++;
+		if (burg.isCitadel) buildingsFeatures[2]++;
+		if (burg.isWalls) buildingsFeatures[3]++;
+		if (burg.isPlaza) buildingsFeatures[4]++;
+		if (burg.isTemple) buildingsFeatures[5]++;
+		if (burg.isShantyTown) buildingsFeatures[6]++;
 
-		// burgsDataItems[1]['Capitals'] = burgsBuildings[0];
-		// burgsDataItems[1]['Ports'] = burgsBuildings[1];
-		// burgsDataItems[1]['Citadels'] = burgsBuildings[2];
-		// burgsDataItems[1]['Walls'] = burgsBuildings[3];
-		// burgsDataItems[1]['Plazas'] = burgsBuildings[4];
-		// burgsDataItems[1]['Temples'] = burgsBuildings[5];
-		// burgsDataItems[1]['Shanty Towns'] = burgsBuildings[6];
+		const categories = dataForCharts.misc.config.categories;
+		for (let k = 0; k < categories.length; k++) {
+			buildingsFeaturesDataItems[0][categories[k]] = buildingsFeatures[k];
+		}
 	}
 
 	dataForCharts.burgs.charts.population.push(burgsDataItems[0]);
-	// dataForCharts.burgs.charts.features.push(burgsDataItems[1]);
+	dataForCharts.misc.charts.features.push(buildingsFeaturesDataItems[0]);
 
 	const culturesDataItems: ChartData[] = [
 		{ turn: turn.value },
@@ -166,9 +175,9 @@ for (let i = 0; i < turnsData.length - 1; i++) {
 		{ turn: turn.value }
 	];
 
-	for (let i = 0; i < culturesData.length; i++) {
-		const culture = culturesData[i];
-		const burgsCount = burgsData.filter(burg => burg.culture === culture.id).length;
+	for (let j = 0; j < culturesDataInTurn.length; j++) {
+		const culture = culturesDataInTurn[j];
+		const burgsCount = burgsDataInTurn.filter(burg => burg.culture === culture.id).length;
 
 		culturesDataItems[0][culture.name] = culture.cells;
 		culturesDataItems[1][culture.name] = culture.population;
@@ -185,9 +194,9 @@ for (let i = 0; i < turnsData.length - 1; i++) {
 		{ turn: turn.value }
 	];
 
-	for (let i = 0; i < religionsData.length; i++) {
-		const religion = religionsData[i];
-		const burgsCount = burgsData.filter(burg => burg.religion === religion.id).length;
+	for (let j = 0; j < religionsDataInTurn.length; j++) {
+		const religion = religionsDataInTurn[j];
+		const burgsCount = burgsDataInTurn.filter(burg => burg.religion === religion.id).length;
 
 		religionsDataItems[0][religion.name] = religion.cells;
 		religionsDataItems[1][religion.name] = religion.population;
@@ -269,10 +278,18 @@ const tabs: {
 			labels: ['Ilość kratek', 'Ilość populacji', 'Ilość miast'],
 			charts: dataForCharts.religions.charts
 		}
+	},
+	{
+		name: 'misc',
+		label: 'Pozostałe',
+		description: 'pozostałe statystyki',
+		props: {
+			config: dataForCharts.misc.config,
+			labels: ['Własności miast'],
+			charts: dataForCharts.misc.charts
+		}
 	}
 ];
-
-console.log(tabs);
 </script>
 
 <template>

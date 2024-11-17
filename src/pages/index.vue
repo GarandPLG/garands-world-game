@@ -4,6 +4,7 @@ useHead({
 	title: "Garand's WG"
 });
 // const pb = usePocketBase();
+const { toast } = useToast();
 </script>
 
 <template>
@@ -12,7 +13,7 @@ useHead({
 			>Witaj na <span class="text-primary">Garandowym WG</span>!</h1
 		>
 
-		<p class="mb-4 text-sm">Wersja: <span class="text-primary">0.0.16 Indev</span></p>
+		<p class="mb-4 text-sm">Wersja: <span class="text-primary">0.0.17 Indev</span></p>
 
 		<a
 			href="https://discord.gg/vhBmFVpR3w"
