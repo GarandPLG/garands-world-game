@@ -11,6 +11,8 @@ onMounted(() => {
 });
 
 const { currentUser } = storeToRefs(listenCurrentUser());
+
+const pb_url = import.meta.env.PROD ? '/_/' : '/pb/_/';
 </script>
 
 <template>
@@ -87,7 +89,7 @@ const { currentUser } = storeToRefs(listenCurrentUser());
 									<NavigationMenuLink class="flex h-full w-full items-center gap-1">
 										<Icon icon="logos:pocket-base" class="h-4 w-4" />
 
-										<a href="/pb/_/" target="_blank">PocketBase</a>
+										<a :href="pb_url" target="_blank">PocketBase</a>
 									</NavigationMenuLink>
 								</DropdownMenuItem>
 
