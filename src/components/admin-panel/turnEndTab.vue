@@ -18,11 +18,11 @@ const data = cacheFullListResponses();
 let turns = await data.fetchTurnsData().then(turns => turns.reverse());
 let turn = turns[0];
 
-if (turn === undefined)
+if (!turn)
 	try {
 		turn = await pb.collection('turns').create({ value: 0 });
 		turns = await data.fetchTurnsData().then(turns => turns.reverse());
-	} catch (error: unknown) {
+	} catch (error) {
 		if (error instanceof Error) throw error;
 		else console.error('Błąd przy tworzeniu tury zerowej:', 'Nieznany błąd.');
 	}
@@ -219,7 +219,7 @@ const onSubmit = handleSubmit(async values => {
 			});
 
 			religionsResponses[response.name] = response.id;
-		} catch (error: unknown) {
+		} catch (error) {
 			if (error instanceof Error) throw error;
 			else console.error('Błąd przy tworzeniu religii:', 'Nieznany błąd.');
 		}
@@ -246,7 +246,7 @@ const onSubmit = handleSubmit(async values => {
 			});
 
 			culturesResponses[response.name] = response.id;
-		} catch (error: unknown) {
+		} catch (error) {
 			if (error instanceof Error) throw error;
 			else console.error('Błąd przy tworzeniu kultury:', 'Nieznany błąd.');
 		}
@@ -286,7 +286,7 @@ const onSubmit = handleSubmit(async values => {
 			});
 
 			statesResponses[response.name] = response.id;
-		} catch (error: unknown) {
+		} catch (error) {
 			if (error instanceof Error) throw error;
 			else console.error('Błąd przy tworzeniu państwa:', 'Nieznany błąd.');
 		}
@@ -316,7 +316,7 @@ const onSubmit = handleSubmit(async values => {
 			});
 
 			provincesResponses[response.name] = response.id;
-		} catch (error: unknown) {
+		} catch (error) {
 			if (error instanceof Error) throw error;
 			else console.error('Błąd przy tworzeniu prowincji:', 'Nieznany błąd.');
 		}
@@ -349,7 +349,7 @@ const onSubmit = handleSubmit(async values => {
 				emblem: burgsData[i].Emblem,
 				cityGeneratorLink: burgsData[i]['City Generator Link']
 			});
-		} catch (error: unknown) {
+		} catch (error) {
 			if (error instanceof Error) throw error;
 			else console.error('Błąd przy tworzeniu miasta:', 'Nieznany błąd.');
 		}
@@ -373,7 +373,7 @@ const onSubmit = handleSubmit(async values => {
 			name: values.map.name.split(/ (?=\d{4}-\d{2}-\d{2}-\d{2}-\d{2})/)[0],
 			file: values.map
 		});
-	} catch (error: unknown) {
+	} catch (error) {
 		if (error instanceof Error) throw error;
 		else console.error('Błąd przy tworzeniu mapy:', 'Nieznany błąd.');
 	}
@@ -396,7 +396,7 @@ async function parseCSVFile(file: File) {
 		return parseCSV(await file.text(), {
 			skipFirstRow: true
 		});
-	} catch (error: unknown) {
+	} catch (error) {
 		if (error instanceof Error) throw error;
 		else console.error('Błąd przy parsowaniu pliku:', 'Nieznany błąd.');
 	}

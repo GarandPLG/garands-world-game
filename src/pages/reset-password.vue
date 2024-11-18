@@ -36,7 +36,7 @@ const onSubmit = handleSubmit(async values => {
 		});
 
 		router.push('/login');
-	} catch (error: unknown) {
+	} catch (error) {
 		if (error instanceof Error)
 			toast({
 				title: 'Błąd przy wypełnianiu formularza!',

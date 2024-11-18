@@ -37,7 +37,7 @@ const onSubmit = handleSubmit(async values => {
 		});
 
 		router.push('/');
-	} catch (error: unknown) {
+	} catch (error) {
 		if (error instanceof Error)
 			toast({
 				title: 'Błąd przy logowaniu się!',

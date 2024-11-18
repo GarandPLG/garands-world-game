@@ -1,68 +1,87 @@
-<!-- TODO: Napisać ładny README.md -->
+# Garand's WG
 
-# garands-world-game
+<!-- TODO: Ogarnąć fajne logo-->
 
-This template should help get you started developing with Vue 3 in Vite.
+![Logo](ścieżka/do/logo.png)
 
-## Recommended IDE Setup
+## 🌍 Opis
 
-[VSCode](https://code.visualstudio.com/) +
-[Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Garand's WG to nowoczesna aplikacja webowa stworzona z myślą o graczach, którzy chcą zarządzać
+krajami w grach typu World Game. Dzięki niej możesz zakładać konto, wypełniać raporty, przeglądać
+statystyki i mapy – wszystko w jednym miejscu.
 
-## Type Support for `.vue` Imports in TS
+## 🎯 Cel i założenia
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI
-with `vue-tsc` for type checking. In editors, we need
-[Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript
-language service aware of `.vue` types.
+Celem aplikacji jest ułatwienie zarządzania krajami w grach strategicznych. Dzięki Garand's WG
+możesz skupić się na najważniejszych aspektach rozgrywki, takich jak role play, prowadzenie wojen
+czy dyplomacja.
 
-## Customize configuration
+## ✨ Funkcjonalności
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- Tworzenie kont użytkowników.
+- Wysyłanie raportów dla zarządzanych krajów.
+- Wyświetlanie przejrzystych wykresów i statystyk.
+- Interaktywna mapa świata gry.
+- Panele administracyjne dla zaawansowanego zarządzania.
 
-## Project Setup
+## 🛠️ Użyte technologie
 
-```sh
-bun install
-```
+Projekt wykorzystuje nowoczesny stack technologiczny:
 
-### Compile and Hot-Reload for Development
+- **Bun** – runtime JavaScriptu.
+- **Vue.js** – framework frontendu.
+- **TailwindCSS** – narzędzie do stylizacji.
+- **Vite** – szybszy bundler.
+- **PocketBase** – backend do zarządzania danymi.
+- **Schadcn-vue** – zestaw komponentów UI.
+- **TypeScript** – typowanie dla lepszej czytelności kodu.
 
-```sh
-bun dev
-```
+## 🚀 Instalacja i uruchomienie
 
-### Type-Check, Compile and Minify for Production
+1. Zainstaluj **Bun** jako runtime JavaScriptu.
+2. Zainstaluj wymagane moduły za pomocą `bun install`.
+3. Uruchom projekt:
+   - Jeśli korzystasz z **nix** lub **nixOS**, uruchom projekt za pomocą `nix-shell`.
+   - W przypadku systemu **bash**, skorzystaj ze skryptu `./run.sh`.
+   - Jeśli napotkasz problemy, pobierz plik **PocketBase**, umieść go w folderze `/pocketbase` i
+     uruchom ręcznie dwa procesy:
+     - Serwer PocketBase z odpowiednimi ustawieniami.
+     - Serwer developerski z **bun**.
 
-```sh
-bun build
-```
+## 📖 Użycie
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+Po poprawnym uruchomieniu aplikacja będzie dostępna pod adresem:  
+`http://localhost:5173`
 
-```sh
-bun test:unit
-```
+Dostęp do panelu administratora w wersji developerskiej:  
+`http://localhost:5173/pb/_/`  
+W wersji produkcyjnej:  
+`http://localhost:5173/_/`
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+## 📋 Wymagania
 
-```sh
-bun test:e2e:dev
-```
+- **Bun** w wersji co najmniej `1.1.31`.
+- **PocketBase** w wersji co najmniej `0.22.21`.
 
-This runs the end-to-end tests against the Vite development server. It is much faster than the
-production build.
+## ⚖️ Licencja
 
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI
-environments):
+Projekt jest udostępniony na licencji **MIT** – możesz korzystać z niego dowolnie, zgodnie z
+warunkami licencji.
 
-```sh
-bun build
-bun test:e2e
-```
+## 📬 Kontakt
 
-### Lint with [ESLint](https://eslint.org/)
+Masz pytania lub pomysły? Skontaktuj się ze mną:  
+✉️ [garandplg@gmail.com](mailto:garandplg@gmail.com)
 
-```sh
-bun lint
-```
+## 🤝 Jak się zaangażować?
+
+Jeśli chcesz wesprzeć projekt, możesz:
+
+- Zgłaszać błędy na stronie
+  [issues](https://gitea.garandplg.com/GarandPLG/garands-world-game/issues).
+- Wysyłać swoje zmiany poprzez
+  [pull requests](https://gitea.garandplg.com/GarandPLG/garands-world-game/pulls).
+- Dołączyć do naszej społeczności na Discordzie i podzielić się swoimi uwagami:
+  [Discord](https://discord.gg/vhBmFVpR3w).
+
+Dziękuję za zainteresowanie projektem! 😊

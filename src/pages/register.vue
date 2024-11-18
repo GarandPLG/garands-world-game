@@ -23,8 +23,8 @@ const { handleSubmit } = useForm({
 		z.object({
 			username: z.string().min(2).max(50),
 			email: z.string().email(),
-			password: z.string().min(10).max(72),
-			passwordConfirm: z.string().min(10).max(72)
+			password: z.string().min(8).max(71),
+			passwordConfirm: z.string().min(8).max(71)
 		})
 	)
 });
@@ -59,7 +59,7 @@ const onSubmit = handleSubmit(async values => {
 
 			router.push('/login');
 		}
-	} catch (error: unknown) {
+	} catch (error) {
 		if (error instanceof Error)
 			toast({
 				title: 'Błąd przy tworzeniu konta!',

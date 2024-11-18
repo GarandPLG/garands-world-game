@@ -41,6 +41,8 @@ const maps: { [key: string]: Map } = pbMaps.reduce((acc, map: Map) => {
 	acc[key] = map;
 	return acc;
 }, {});
+
+const pb_origin = import.meta.env.PROD ? 'http://localhost:8090' : 'http://localhost:5173/pb';
 </script>
 
 <template>
@@ -67,7 +69,7 @@ const maps: { [key: string]: Map } = pbMaps.reduce((acc, map: Map) => {
 			>
 				<iframe
 					title="mapa"
-					:src="`https://azgaar.github.io/Fantasy-Map-Generator/?maplink=http://localhost:5173/pb/api/files/${map.collectionId}/${map.id}/${map.file}`"
+					:src="`https://azgaar.github.io/Fantasy-Map-Generator/?maplink=${pb_origin}/api/files/${map.collectionId}/${map.id}/${map.file}`"
 					width="100%"
 					height="100%"
 					class="items-center justify-center"
