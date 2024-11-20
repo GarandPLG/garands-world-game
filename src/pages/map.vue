@@ -26,11 +26,21 @@ interface Map {
 }
 
 const pb = usePocketBase();
+const { toast } = useToast();
 const fps = useFps();
 
-const pbMaps = await pb.collection('maps').getFullList({
-	expand: 'turn'
-});
+const pbMaps = await pb
+	.collection('maps')
+	.getFullList({
+		expand: 'turn'
+	})
+	.catch((error: unknown) => {
+		toast({
+			title: `Błąd przy pobieraniu map!`,
+			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+		});
+		if (error instanceof Error) throw error;
+	});
 
 const maps: { [key: string]: Map } = pbMaps.reduce((acc, map: Map) => {
 	let key: string;

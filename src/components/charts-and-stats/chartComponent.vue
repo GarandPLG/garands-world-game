@@ -13,6 +13,7 @@ defineProps<{
 		<Label class="my-4 text-center text-5xl font-bold text-primary"> {{ labels[index] }} </Label>
 
 		<LineChart
+			v-once
 			:categories="config.categories"
 			index="turn"
 			:colors="config.colors"

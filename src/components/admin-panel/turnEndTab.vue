@@ -5,31 +5,36 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import * as z from 'zod';
 
-const pb = usePocketBase();
-const router = useRouter();
-const { toast } = useToast();
 const props = defineProps<{
 	title: string;
 	description: string;
 }>();
 
-const data = cacheFullListResponses();
+const pb = usePocketBase();
+const { toast } = useToast();
 
-let turns = await data.fetchTurnsData().then(turns => turns.reverse());
-let turn = turns[0];
+const cd = cacheFullListResponsesStore();
 
-if (!turn)
+if (!cd.turnsData.length) await cd.fetchTurnsData();
+if (!cd.statesData.length) await cd.fetchStatesData();
+
+const turns = ref(cd.turnsData.slice().reverse());
+const turn = ref(turns[0]);
+
+if (!turn.value) {
 	try {
-		turn = await pb.collection('turns').create({ value: 0 });
-		turns = await data.fetchTurnsData().then(turns => turns.reverse());
+		turn.value = await pb.collection('turns').create({ value: 0 });
+		turns.value = cd.turnsData.slice().reverse();
 	} catch (error) {
+		toast({
+			title: 'Błąd przy tworzeniu tury zerowej!',
+			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+		});
 		if (error instanceof Error) throw error;
-		else console.error('Błąd przy tworzeniu tury zerowej:', 'Nieznany błąd.');
 	}
+}
 
-const statesFromPreviousTurn = await data
-	.fetchStatesData()
-	.then(states => states.filter(state => state.turn === turns[1].id));
+const statesFromPreviousTurn = cd.statesData.filter(state => state.turn === turns.value[1].id);
 
 const formSchema = toTypedSchema(
 	// FIXME: Naprawić walidację zod'a dla pól plikowych
@@ -206,8 +211,9 @@ const onSubmit = handleSubmit(async values => {
 	const startTimeAll = new Date().getTime();
 	let startTime = new Date().getTime();
 	for (let i = 0; i < religionsData.length; i++) {
-		try {
-			const response = await pb.collection('religions').create({
+		const response = await pb
+			.collection('religions')
+			.create({
 				name: religionsData[i].Name,
 				turn: turn.id,
 				color: religionsData[i].Color,
@@ -216,13 +222,16 @@ const onSubmit = handleSubmit(async values => {
 				form: religionsData[i].Form,
 				supremeDeity: religionsData[i]['Supreme Deity'],
 				population: parseInt(religionsData[i].Believers)
+			})
+			.catch(error => {
+				toast({
+					title: `Błąd przy tworzeniu religii ${religionsData[i].Name}!`,
+					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+				});
+				if (error instanceof Error) throw error;
 			});
 
-			religionsResponses[response.name] = response.id;
-		} catch (error) {
-			if (error instanceof Error) throw error;
-			else console.error('Błąd przy tworzeniu religii:', 'Nieznany błąd.');
-		}
+		religionsResponses[response.name] = response.id;
 	}
 
 	let endTime = new Date().getTime();
@@ -234,8 +243,9 @@ const onSubmit = handleSubmit(async values => {
 
 	startTime = new Date().getTime();
 	for (let i = 0; i < culturesData.length; i++) {
-		try {
-			const response = await pb.collection('cultures').create({
+		const response = await pb
+			.collection('cultures')
+			.create({
 				name: culturesData[i].Name,
 				turn: turn.id,
 				color: culturesData[i].Color,
@@ -243,13 +253,16 @@ const onSubmit = handleSubmit(async values => {
 				type: culturesData[i].Type,
 				population: parseInt(culturesData[i].Population),
 				namesbase: culturesData[i].Namesbase
+			})
+			.catch(error => {
+				toast({
+					title: `Błąd przy tworzeniu kultury ${culturesData[i].Name}!`,
+					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+				});
+				if (error instanceof Error) throw error;
 			});
 
-			culturesResponses[response.name] = response.id;
-		} catch (error) {
-			if (error instanceof Error) throw error;
-			else console.error('Błąd przy tworzeniu kultury:', 'Nieznany błąd.');
-		}
+		culturesResponses[response.name] = response.id;
 	}
 	endTime = new Date().getTime();
 
@@ -260,13 +273,14 @@ const onSubmit = handleSubmit(async values => {
 
 	startTime = new Date().getTime();
 	for (let i = 0; i < statesData.length; i++) {
-		try {
-			const stateFromPreviousTurn = statesFromPreviousTurn.find(
-				state => state.name === statesData[i].State
-			);
-			const user = stateFromPreviousTurn?.user ? stateFromPreviousTurn.user : null;
+		const stateFromPreviousTurn = statesFromPreviousTurn.find(
+			state => state.name === statesData[i].State
+		);
+		const user = stateFromPreviousTurn?.user ? stateFromPreviousTurn.user : null;
 
-			const response = await pb.collection('states').create({
+		const response = await pb
+			.collection('states')
+			.create({
 				user: user,
 				turn: turn.id,
 				name: statesData[i].State,
@@ -283,13 +297,16 @@ const onSubmit = handleSubmit(async values => {
 				religionsCells: statesByNumberOfCellsGroupedByReligionsFinalData[statesData[i].State],
 				biomesCells: statesByNumberOfCellsGroupedByBiomeFinalData[statesData[i].State],
 				relations: relationsFinalData[statesData[i].State]
+			})
+			.catch(error => {
+				toast({
+					title: `Błąd przy tworzeniu państwa ${statesData[i].State}!`,
+					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+				});
+				if (error instanceof Error) throw error;
 			});
 
-			statesResponses[response.name] = response.id;
-		} catch (error) {
-			if (error instanceof Error) throw error;
-			else console.error('Błąd przy tworzeniu państwa:', 'Nieznany błąd.');
-		}
+		statesResponses[response.name] = response.id;
 	}
 	endTime = new Date().getTime();
 
@@ -300,8 +317,9 @@ const onSubmit = handleSubmit(async values => {
 
 	startTime = new Date().getTime();
 	for (let i = 0; i < provincesData.length; i++) {
-		try {
-			const response = await pb.collection('provinces').create({
+		const response = await pb
+			.collection('provinces')
+			.create({
 				turn: turn.id,
 				name: provincesData[i].Province,
 				nameFull: provincesData[i]['Full Name'],
@@ -313,13 +331,16 @@ const onSubmit = handleSubmit(async values => {
 				urbanPopulation: parseInt(provincesData[i]['Urban Population']),
 				capital: provincesData[i].Capital,
 				form: provincesData[i].Form
+			})
+			.catch(error => {
+				toast({
+					title: `Błąd przy tworzeniu prowincji ${provincesData[i].Province}!`,
+					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+				});
+				if (error instanceof Error) throw error;
 			});
 
-			provincesResponses[response.name] = response.id;
-		} catch (error) {
-			if (error instanceof Error) throw error;
-			else console.error('Błąd przy tworzeniu prowincji:', 'Nieznany błąd.');
-		}
+		provincesResponses[response.name] = response.id;
 	}
 	endTime = new Date().getTime();
 
@@ -330,8 +351,9 @@ const onSubmit = handleSubmit(async values => {
 
 	startTime = new Date().getTime();
 	for (let i = 0; i < burgsData.length; i++) {
-		try {
-			await pb.collection('burgs').create({
+		await pb
+			.collection('burgs')
+			.create({
 				turn: turn.id,
 				name: burgsData[i].Burg,
 				province: provincesResponses[burgsData[i].Province],
@@ -348,11 +370,14 @@ const onSubmit = handleSubmit(async values => {
 				isShantyTown: burgsData[i]['Shanty Town'] === 'shanty town' ? true : false,
 				emblem: burgsData[i].Emblem,
 				cityGeneratorLink: burgsData[i]['City Generator Link']
+			})
+			.catch(error => {
+				toast({
+					title: `Błąd przy tworzeniu miasta ${burgsData[i].Burg}!`,
+					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+				});
+				if (error instanceof Error) throw error;
 			});
-		} catch (error) {
-			if (error instanceof Error) throw error;
-			else console.error('Błąd przy tworzeniu miasta:', 'Nieznany błąd.');
-		}
 	}
 	endTime = new Date().getTime();
 
@@ -365,18 +390,39 @@ const onSubmit = handleSubmit(async values => {
 
 	startTime = new Date().getTime();
 	try {
-		turn = await pb.collection('turns').create({ value: turn.value + 1 });
-		turns = await pb.collection('turns').getFullList({ sort: '-value' });
+		turn.value = await pb.collection('turns').create({ value: turn.value + 1 });
+	} catch (error) {
+		toast({
+			title: `Błąd przy tworzeniu następnej tury!`,
+			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+		});
+		if (error instanceof Error) throw error;
+	}
 
-		await pb.collection('maps').create({
+	try {
+		turns.value = await pb.collection('turns').getFullList({ sort: '-value' });
+	} catch (error) {
+		toast({
+			title: `Błąd przy tworzeniu nowej listy tur!`,
+			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+		});
+		if (error instanceof Error) throw error;
+	}
+
+	await pb
+		.collection('maps')
+		.create({
 			turn: turn.id,
 			name: values.map.name.split(/ (?=\d{4}-\d{2}-\d{2}-\d{2}-\d{2})/)[0],
 			file: values.map
+		})
+		.catch((error: unknown) => {
+			toast({
+				title: `Błąd przy tworzeniu mapy!`,
+				description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+			});
+			if (error instanceof Error) throw error;
 		});
-	} catch (error) {
-		if (error instanceof Error) throw error;
-		else console.error('Błąd przy tworzeniu mapy:', 'Nieznany błąd.');
-	}
 	endTime = new Date().getTime();
 	const endTimeAll = new Date().getTime();
 
@@ -397,8 +443,17 @@ async function parseCSVFile(file: File) {
 			skipFirstRow: true
 		});
 	} catch (error) {
-		if (error instanceof Error) throw error;
-		else console.error('Błąd przy parsowaniu pliku:', 'Nieznany błąd.');
+		if (error instanceof Error) {
+			toast({
+				title: 'Błąd przy parsowaniu pliku CSV!',
+				description: `${error.name}: ${error.message}`
+			});
+			throw error;
+		} else
+			toast({
+				title: 'Błąd przy parsowaniu pliku CSV!',
+				description: 'Nieznany błąd.'
+			});
 	}
 }
 

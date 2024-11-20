@@ -5,10 +5,13 @@ const props = defineProps<{
 	description: string;
 }>();
 
-const fetchData = cacheFullListResponses();
+const cd = cacheFullListResponsesStore();
 
-const turnsData = await fetchData.fetchTurnsData();
-const statesData = await fetchData.fetchStatesData();
+if (!cd.turnsData.length) await cd.fetchTurnsData();
+if (!cd.statesData.length) await cd.fetchStatesData();
+
+const turnsData = cd.turnsData;
+const statesData = cd.statesData;
 
 const data: string[][] = []; // TODO: Linki do report/[turn]/[state] + status raportu
 for (let i = 0; i < turnsData.length; i++) {

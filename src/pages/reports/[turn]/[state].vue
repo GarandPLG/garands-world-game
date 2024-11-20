@@ -6,22 +6,28 @@ useHead({
 });
 
 const pb = usePocketBase();
+const { toast } = useToast();
 
 const turn = await pb
 	.collection('turns')
 	.getFirstListItem(`value = "${route.params.turn}"`)
-	.catch(error => {
-		// TODO: W podobnym stylu zrobić pozostałe fetche z trycatch
+	.catch((error: unknown) => {
+		toast({
+			title: `Błąd przy pobieraniu tury ${route.params.turn}!`,
+			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+		});
 		if (error instanceof Error) throw error;
-		else console.error(`Błąd przy pobieraniu tury ${route.params.turn}:`, 'Nieznany błąd.');
 	});
 
 const state = await pb
 	.collection('states')
 	.getFirstListItem(`name = "${route.params.state}" && turn = "${turn.id}"`)
-	.catch(error => {
+	.catch((error: unknown) => {
+		toast({
+			title: `Błąd przy pobieraniu state ${route.params.state}!`,
+			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+		});
 		if (error instanceof Error) throw error;
-		else console.error(`Błąd przy pobieraniu state ${route.params.state}:`, 'Nieznany błąd.');
 	});
 
 console.log(state);

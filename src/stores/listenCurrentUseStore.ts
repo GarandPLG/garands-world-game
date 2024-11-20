@@ -2,7 +2,7 @@ import type { AuthModel } from 'pocketbase';
 
 const pb = usePocketBase();
 
-export const listenCurrentUser = defineStore('listenCurrentUser', () => {
+export const listenCurrentUserStore = defineStore('listenCurrentUserStore', () => {
 	const currentUser = ref<AuthModel | null>(null);
 
 	function setCurrentUser(user: AuthModel | null): void {

@@ -9,8 +9,8 @@ const pb = usePocketBase();
 const router = useRouter();
 
 const { toast } = useToast();
-const { currentUser } = storeToRefs(listenCurrentUser());
-const { setCurrentUser } = listenCurrentUser();
+const { currentUser } = storeToRefs(listenCurrentUserStore());
+const { setCurrentUser } = listenCurrentUserStore();
 
 if (!currentUser.value) router.push('/');
 
@@ -40,68 +40,73 @@ const onSubmit = handleSubmit(async values => {
 		return;
 	}
 
-	try {
-		interface UserData {
-			username: string;
-			email: string;
-			oldPassword: string;
-			password?: string;
-			passwordConfirm?: string;
-			verified: boolean;
-		}
+	interface UserData {
+		username: string;
+		email: string;
+		oldPassword: string;
+		password?: string;
+		passwordConfirm?: string;
+		verified: boolean;
+	}
 
-		const userData: UserData = {
-			username: values.username,
-			email: values.email,
-			oldPassword: values.oldPassword,
-			verified: true
-		};
+	const userData: UserData = {
+		username: values.username,
+		email: values.email,
+		oldPassword: values.oldPassword,
+		verified: true
+	};
 
-		if (values.email !== currentUser.value!.email) {
-			userData.verified = false;
-		}
+	if (values.email !== currentUser.value!.email) {
+		userData.verified = false;
+	}
 
-		if (values.password) {
-			userData.password = values.password;
-			userData.passwordConfirm = values.passwordConfirm;
-		} else {
-			userData.password = values.oldPassword;
-			userData.passwordConfirm = values.oldPassword;
-		}
+	if (values.password) {
+		userData.password = values.password;
+		userData.passwordConfirm = values.passwordConfirm;
+	} else {
+		userData.password = values.oldPassword;
+		userData.passwordConfirm = values.oldPassword;
+	}
 
-		await pb.collection('users').update(pb.authStore.model!.id, userData);
-
-		if (values.email !== currentUser.value!.email) {
-			await pb.collection('users').requestVerification(values.email);
-
+	await pb
+		.collection('users')
+		.update(pb.authStore.model!.id, userData)
+		.catch((error: unknown) => {
 			toast({
-				title: 'Dane konta zostały zmienione!',
-				description: 'Teraz na nowo musisz zweryfikować email, aby móc korzystać z aplikacji.'
+				title: `Błąd przy aktualizowaniu danych konta!`,
+				description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+			});
+			if (error instanceof Error) throw error;
+		});
+
+	if (values.email !== currentUser.value!.email) {
+		await pb
+			.collection('users')
+			.requestVerification(values.email)
+			.catch((error: unknown) => {
+				toast({
+					title: `Błąd przy wysyłaniu e-maila z potwierdzeniem nowego maila!`,
+					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+				});
+				if (error instanceof Error) throw error;
 			});
 
-			pb.authStore.clear();
+		toast({
+			title: 'Dane konta zostały zmienione!',
+			description: 'Teraz na nowo musisz zweryfikować email, aby móc korzystać z aplikacji.'
+		});
 
-			router.push('/login');
-		} else {
-			toast({
-				title: 'Dane konta zostały zmienione!'
-			});
+		pb.authStore.clear();
 
-			setCurrentUser(pb.authStore.model);
+		router.push('/login');
+	} else {
+		toast({
+			title: 'Dane konta zostały zmienione!'
+		});
 
-			router.push('/');
-		}
-	} catch (error) {
-		if (error instanceof Error)
-			toast({
-				title: 'Błąd przy zmienianiu danych konta!',
-				description: `${error.name}: ${error.message}`
-			});
-		else
-			toast({
-				title: 'Błąd przy zmienianiu danych konta!',
-				description: 'Nieznany błąd.'
-			});
+		setCurrentUser(pb.authStore.model);
+
+		router.push('/');
 	}
 });
 </script>

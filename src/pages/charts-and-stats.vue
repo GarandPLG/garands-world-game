@@ -6,14 +6,21 @@ useHead({
 import type { ChartData, Config, DataForCharts } from '@/types/chartsTypes';
 import type { BurgsResponse } from '@/types/pb-types';
 
-const data = cacheFullListResponses();
+const cd = cacheFullListResponsesStore();
 
-const turnsData = await data.fetchTurnsData();
-const statesData = await data.fetchStatesData();
-const provincesData = await data.fetchProvincesData();
-const burgsData = await data.fetchBurgsData();
-const culturesData = await data.fetchCulturesData();
-const religionsData = await data.fetchReligionsData();
+if (!cd.turnsData.length) await cd.fetchTurnsData();
+if (!cd.statesData.length) await cd.fetchStatesData();
+if (!cd.provincesData.length) await cd.fetchProvincesData();
+if (!cd.burgsData.length) await cd.fetchBurgsData();
+if (!cd.culturesData.length) await cd.fetchCulturesData();
+if (!cd.religionsData.length) await cd.fetchReligionsData();
+
+const turnsData = cd.turnsData;
+const statesData = cd.statesData;
+const provincesData = cd.provincesData;
+const burgsData = cd.burgsData;
+const culturesData = cd.culturesData;
+const religionsData = cd.religionsData;
 
 const dataForCharts: DataForCharts = {
 	states: {

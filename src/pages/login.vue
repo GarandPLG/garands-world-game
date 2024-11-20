@@ -11,11 +11,11 @@ import { FormField } from '@/components/ui/form';
 
 const pb = usePocketBase();
 const router = useRouter();
-const { setCurrentUser } = listenCurrentUser();
+const { setCurrentUser } = listenCurrentUserStore();
 const { toast } = useToast();
-const { currentUser } = listenCurrentUser();
+const { currentUser } = storeToRefs(listenCurrentUserStore());
 
-if (currentUser) router.push('/');
+if (currentUser.value) router.push('/');
 
 const { handleSubmit } = useForm({
 	validationSchema: toTypedSchema(
@@ -27,28 +27,24 @@ const { handleSubmit } = useForm({
 });
 
 const onSubmit = handleSubmit(async values => {
-	try {
-		await pb.collection('users').authWithPassword(values.username, values.password);
-
-		setCurrentUser(pb.authStore.model);
-
-		toast({
-			title: 'Udało się zalogować!'
+	await pb
+		.collection('users')
+		.authWithPassword(values.username, values.password)
+		.catch((error: unknown) => {
+			toast({
+				title: `Błąd przy logowaniu się!`,
+				description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+			});
+			if (error instanceof Error) throw error;
 		});
 
-		router.push('/');
-	} catch (error) {
-		if (error instanceof Error)
-			toast({
-				title: 'Błąd przy logowaniu się!',
-				description: `${error.name}: ${error.message}`
-			});
-		else
-			toast({
-				title: 'Błąd przy logowaniu się!',
-				description: 'Nieznany błąd.'
-			});
-	}
+	setCurrentUser(pb.authStore.model);
+
+	toast({
+		title: 'Udało się zalogować!'
+	});
+
+	router.push('/');
 });
 </script>
 

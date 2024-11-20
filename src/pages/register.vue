@@ -12,11 +12,9 @@ import { FormField } from '@/components/ui/form';
 const pb = usePocketBase();
 const router = useRouter();
 const { toast } = useToast();
-const { currentUser } = listenCurrentUser();
+const { currentUser } = storeToRefs(listenCurrentUserStore());
 
-onMounted(() => {
-	if (currentUser) router.push('/');
-});
+if (currentUser.value) router.push('/');
 
 const { handleSubmit } = useForm({
 	validationSchema: toTypedSchema(
@@ -39,37 +37,42 @@ const onSubmit = handleSubmit(async values => {
 		return;
 	}
 
-	try {
-		const createUser = await pb.collection('users').create({
+	const createUser = await pb
+		.collection('users')
+		.create({
 			username: values.username,
 			email: values.email,
 			password: values.password,
 			passwordConfirm: values.passwordConfirm,
 			role: 'user'
+		})
+		.catch((error: unknown) => {
+			toast({
+				title: `Błąd przy tworzeniu konta!`,
+				description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+			});
+			if (error instanceof Error) throw error;
 		});
 
-		if (createUser) {
-			await pb.collection('users').requestVerification(values.email);
-
-			toast({
-				title: 'Konto zostało utworzone!',
-				description:
-					'Aktywuj swoje konto klikając w link, który został wysłany na podany adres email.'
+	if (createUser) {
+		await pb
+			.collection('users')
+			.requestVerification(values.email)
+			.catch((error: unknown) => {
+				toast({
+					title: `Błąd przy wysyłaniu e-maila z weryfikacją!`,
+					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+				});
+				if (error instanceof Error) throw error;
 			});
 
-			router.push('/login');
-		}
-	} catch (error) {
-		if (error instanceof Error)
-			toast({
-				title: 'Błąd przy tworzeniu konta!',
-				description: `${error.name}: ${error.message}`
-			});
-		else
-			toast({
-				title: 'Błąd przy tworzeniu konta!',
-				description: 'Nieznany błąd.'
-			});
+		toast({
+			title: 'Konto zostało utworzone!',
+			description:
+				'Aktywuj swoje konto klikając w link, który został wysłany na podany adres email.'
+		});
+
+		router.push('/login');
 	}
 });
 </script>

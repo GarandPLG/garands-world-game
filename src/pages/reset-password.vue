@@ -12,11 +12,9 @@ import { FormField } from '@/components/ui/form';
 const pb = usePocketBase();
 const router = useRouter();
 const { toast } = useToast();
-const { currentUser } = listenCurrentUser();
+const { currentUser } = storeToRefs(listenCurrentUserStore());
 
-onMounted(() => {
-	if (currentUser) router.push('/');
-});
+if (currentUser.value) router.push('/');
 
 const { handleSubmit } = useForm({
 	validationSchema: toTypedSchema(
@@ -27,27 +25,23 @@ const { handleSubmit } = useForm({
 });
 
 const onSubmit = handleSubmit(async values => {
-	try {
-		await pb.collection('users').requestPasswordReset(values.email);
-
-		toast({
-			title: 'Mail z resetem hasła został wysłany!',
-			description: 'Sprawdź swoją skrzynkę pocztową.'
+	await pb
+		.collection('users')
+		.requestPasswordReset(values.email)
+		.catch((error: unknown) => {
+			toast({
+				title: `Błąd przy wypełnianiu formularza!`,
+				description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+			});
+			if (error instanceof Error) throw error;
 		});
 
-		router.push('/login');
-	} catch (error) {
-		if (error instanceof Error)
-			toast({
-				title: 'Błąd przy wypełnianiu formularza!',
-				description: `${error.name}: ${error.message}`
-			});
-		else
-			toast({
-				title: 'Błąd przy wypełnianiu formularza!',
-				description: 'Nieznany błąd.'
-			});
-	}
+	toast({
+		title: 'Mail z resetem hasła został wysłany!',
+		description: 'Sprawdź swoją skrzynkę pocztową.'
+	});
+
+	router.push('/login');
 });
 </script>
 
