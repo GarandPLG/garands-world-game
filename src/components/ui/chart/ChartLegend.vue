@@ -49,7 +49,7 @@ function onLegendItemClick(d: BulletLegendItemInterface, i: number) {
 
 <template>
 	<div ref="elRef" class="w-max">
-		<ScrollArea class="mb-2 ms-40 w-screen whitespace-nowrap rounded-md border">
+		<ScrollArea class="mb-2 w-screen whitespace-nowrap rounded-md border">
 			<VisBulletLegend :items="items" :on-legend-item-click="onLegendItemClick" class="ms-10" />
 			<ScrollBar orientation="horizontal" />
 		</ScrollArea>

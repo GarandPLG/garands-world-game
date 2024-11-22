@@ -104,7 +104,7 @@ const pb_url = import.meta.env.PROD ? '/_/' : '/pb/_/';
 					<NavigationMenuLink :class="navigationMenuTriggerStyle()" class="flex items-center gap-1">
 						<Icon icon="majesticons:presentation-chart" class="h-4 w-4 text-primary" />
 
-						<RouterLink to="/charts-and-stats">Wykresy i statystyki</RouterLink>
+						<RouterLink to="/charts-and-stats/states/cells">Wykresy i statystyki</RouterLink>
 					</NavigationMenuLink>
 				</NavigationMenuItem>
 

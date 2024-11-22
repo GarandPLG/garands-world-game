@@ -16,14 +16,18 @@ import tailwind from 'tailwindcss';
 export default defineConfig({
 	plugins: [
 		VueRouter({
-			dts: './src/types/typed-router.d.ts',
+			dts: './src/auto-types/typed-router.d.ts',
 			importMode: 'async'
 		}),
 		vue(),
 		vueDevTools(),
 		AutoImport({
-			dts: './types/auto-imports.d.ts',
-			dirs: ['./composables', './stores', './components/ui/**/*.ts'],
+			include: [
+				/\.(d\.ts|[tj]sx?)$/, // .ts, .tsx, .js, .jsx
+				/\.vue$/,
+				/\.vue\?vue/, // .vue
+				/\.md$/ // .md
+			],
 			imports: [
 				'vue',
 				'vue-router',
@@ -32,13 +36,23 @@ export default defineConfig({
 				'vitest',
 				unheadVueComposablesImports
 			],
+			dirs: [
+				'./composables',
+				'./stores',
+				'./components/ui/**/*.ts',
+				'./data',
+				'./types',
+				'./auto-types'
+			],
+			dts: './auto-types/auto-imports.d.ts',
+			vueTemplate: true,
 			eslintrc: {
 				enabled: true
 			},
 			packagePresets: ['pocketbase']
 		}),
 		Components({
-			dts: './types/components.d.ts',
+			dts: './auto-types/components.d.ts',
 			dirs: ['./components/**'],
 			directoryAsNamespace: true,
 			collapseSamePrefixes: true,

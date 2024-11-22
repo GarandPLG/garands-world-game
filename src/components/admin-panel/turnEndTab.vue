@@ -13,10 +13,9 @@ const props = defineProps<{
 const pb = usePocketBase();
 const { toast } = useToast();
 
-const cd = cacheFullListResponsesStore();
+const { cd, fetchDataForTurnEndTab } = usePBDataFetch();
 
-if (!cd.turnsData.length) await cd.fetchTurnsData();
-if (!cd.statesData.length) await cd.fetchStatesData();
+await fetchDataForTurnEndTab();
 
 const turns = ref(cd.turnsData.slice().reverse());
 const turn = ref(turns[0]);

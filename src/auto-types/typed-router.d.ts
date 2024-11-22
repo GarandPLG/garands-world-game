@@ -20,7 +20,12 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/admin-panel': RouteRecordInfo<'/admin-panel', '/admin-panel', Record<never, never>, Record<never, never>>,
-    '/charts-and-stats': RouteRecordInfo<'/charts-and-stats', '/charts-and-stats', Record<never, never>, Record<never, never>>,
+    '/charts-and-stats/burgs/[subgroup]': RouteRecordInfo<'/charts-and-stats/burgs/[subgroup]', '/charts-and-stats/burgs/:subgroup', { subgroup: ParamValue<true> }, { subgroup: ParamValue<false> }>,
+    '/charts-and-stats/cultures/[subgroup]': RouteRecordInfo<'/charts-and-stats/cultures/[subgroup]', '/charts-and-stats/cultures/:subgroup', { subgroup: ParamValue<true> }, { subgroup: ParamValue<false> }>,
+    '/charts-and-stats/misc/[subgroup]': RouteRecordInfo<'/charts-and-stats/misc/[subgroup]', '/charts-and-stats/misc/:subgroup', { subgroup: ParamValue<true> }, { subgroup: ParamValue<false> }>,
+    '/charts-and-stats/provinces/[subgroup]': RouteRecordInfo<'/charts-and-stats/provinces/[subgroup]', '/charts-and-stats/provinces/:subgroup', { subgroup: ParamValue<true> }, { subgroup: ParamValue<false> }>,
+    '/charts-and-stats/religions/[subgroup]': RouteRecordInfo<'/charts-and-stats/religions/[subgroup]', '/charts-and-stats/religions/:subgroup', { subgroup: ParamValue<true> }, { subgroup: ParamValue<false> }>,
+    '/charts-and-stats/states/[subgroup]': RouteRecordInfo<'/charts-and-stats/states/[subgroup]', '/charts-and-stats/states/:subgroup', { subgroup: ParamValue<true> }, { subgroup: ParamValue<false> }>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/map': RouteRecordInfo<'/map', '/map', Record<never, never>, Record<never, never>>,
     '/profile': RouteRecordInfo<'/profile', '/profile', Record<never, never>, Record<never, never>>,
