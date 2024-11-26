@@ -6,7 +6,6 @@ import type {
 	StatesResponse,
 	TurnsResponse
 } from '@/types/pb-types';
-import type { UnsubscribeFunc } from 'pocketbase';
 
 const ONE_HOUR = 60 * 60 * 1000; // 1 godzina w milisekundach
 export const cacheFullListResponsesStore = defineStore('cacheFullListResponsesStore', () => {
@@ -160,155 +159,155 @@ export const cacheFullListResponsesStore = defineStore('cacheFullListResponsesSt
 		}
 	};
 
-	let turnsSubscription: UnsubscribeFunc;
-	let statesSubscription: UnsubscribeFunc;
-	let provincesSubscription: UnsubscribeFunc;
-	let burgsSubscription: UnsubscribeFunc;
-	let culturesSubscription: UnsubscribeFunc;
-	let religionsSubscription: UnsubscribeFunc;
+	// let turnsSubscription: UnsubscribeFunc;
+	// let statesSubscription: UnsubscribeFunc;
+	// let provincesSubscription: UnsubscribeFunc;
+	// let burgsSubscription: UnsubscribeFunc;
+	// let culturesSubscription: UnsubscribeFunc;
+	// let religionsSubscription: UnsubscribeFunc;
 
-	onMounted(async () => {
-		turnsSubscription = await pb.collection('turns').subscribe('*', e => {
-			switch (e.action) {
-				case 'create':
-					turnsData.value.push(e.record);
-					cacheData('turnsData', turnsData.value);
-					break;
+	// onMounted(async () => {
+	// 	turnsSubscription = await pb.collection('turns').subscribe('*', e => {
+	// 		switch (e.action) {
+	// 			case 'create':
+	// 				turnsData.value.push(e.record);
+	// 				cacheData('turnsData', turnsData.value);
+	// 				break;
 
-				case 'update':
-					turnsData.value = turnsData.value.map(turn => {
-						if (turn.id === e.record.id) return e.record;
-						return turn;
-					});
-					cacheData('turnsData', turnsData.value);
-					break;
+	// 			case 'update':
+	// 				turnsData.value = turnsData.value.map(turn => {
+	// 					if (turn.id === e.record.id) return e.record;
+	// 					return turn;
+	// 				});
+	// 				cacheData('turnsData', turnsData.value);
+	// 				break;
 
-				case 'delete':
-					turnsData.value = turnsData.value.filter(turn => turn.id !== e.record.id);
-					cacheData('turnsData', turnsData.value);
-					break;
-			}
-		});
+	// 			case 'delete':
+	// 				turnsData.value = turnsData.value.filter(turn => turn.id !== e.record.id);
+	// 				cacheData('turnsData', turnsData.value);
+	// 				break;
+	// 		}
+	// 	});
 
-		statesSubscription = await pb.collection('states').subscribe('*', e => {
-			switch (e.action) {
-				case 'create':
-					statesData.value.push(e.record);
-					cacheData('statesData', statesData.value);
-					break;
+	// 	statesSubscription = await pb.collection('states').subscribe('*', e => {
+	// 		switch (e.action) {
+	// 			case 'create':
+	// 				statesData.value.push(e.record);
+	// 				cacheData('statesData', statesData.value);
+	// 				break;
 
-				case 'update':
-					statesData.value = statesData.value.map(state => {
-						if (state.id === e.record.id) return e.record;
-						return state;
-					});
-					cacheData('statesData', statesData.value);
-					break;
+	// 			case 'update':
+	// 				statesData.value = statesData.value.map(state => {
+	// 					if (state.id === e.record.id) return e.record;
+	// 					return state;
+	// 				});
+	// 				cacheData('statesData', statesData.value);
+	// 				break;
 
-				case 'delete':
-					statesData.value = statesData.value.filter(state => state.id !== e.record.id);
-					cacheData('statesData', statesData.value);
-					break;
-			}
-		});
+	// 			case 'delete':
+	// 				statesData.value = statesData.value.filter(state => state.id !== e.record.id);
+	// 				cacheData('statesData', statesData.value);
+	// 				break;
+	// 		}
+	// 	});
 
-		provincesSubscription = await pb.collection('provinces').subscribe('*', e => {
-			switch (e.action) {
-				case 'create':
-					provincesData.value.push(e.record);
-					cacheData('provincesData', provincesData.value);
-					break;
+	// 	provincesSubscription = await pb.collection('provinces').subscribe('*', e => {
+	// 		switch (e.action) {
+	// 			case 'create':
+	// 				provincesData.value.push(e.record);
+	// 				cacheData('provincesData', provincesData.value);
+	// 				break;
 
-				case 'update':
-					provincesData.value = provincesData.value.map(province => {
-						if (province.id === e.record.id) return e.record;
-						return province;
-					});
-					cacheData('provincesData', provincesData.value);
-					break;
+	// 			case 'update':
+	// 				provincesData.value = provincesData.value.map(province => {
+	// 					if (province.id === e.record.id) return e.record;
+	// 					return province;
+	// 				});
+	// 				cacheData('provincesData', provincesData.value);
+	// 				break;
 
-				case 'delete':
-					provincesData.value = provincesData.value.filter(province => province.id !== e.record.id);
-					cacheData('provincesData', provincesData.value);
-					break;
-			}
-		});
+	// 			case 'delete':
+	// 				provincesData.value = provincesData.value.filter(province => province.id !== e.record.id);
+	// 				cacheData('provincesData', provincesData.value);
+	// 				break;
+	// 		}
+	// 	});
 
-		burgsSubscription = await pb.collection('burgs').subscribe('*', e => {
-			switch (e.action) {
-				case 'create':
-					burgsData.value.push(e.record);
-					cacheData('burgsData', burgsData.value);
-					break;
+	// 	burgsSubscription = await pb.collection('burgs').subscribe('*', e => {
+	// 		switch (e.action) {
+	// 			case 'create':
+	// 				burgsData.value.push(e.record);
+	// 				cacheData('burgsData', burgsData.value);
+	// 				break;
 
-				case 'update':
-					burgsData.value = burgsData.value.map(burg => {
-						if (burg.id === e.record.id) return e.record;
-						return burg;
-					});
-					cacheData('burgsData', burgsData.value);
-					break;
+	// 			case 'update':
+	// 				burgsData.value = burgsData.value.map(burg => {
+	// 					if (burg.id === e.record.id) return e.record;
+	// 					return burg;
+	// 				});
+	// 				cacheData('burgsData', burgsData.value);
+	// 				break;
 
-				case 'delete':
-					burgsData.value = burgsData.value.filter(burg => burg.id !== e.record.id);
-					cacheData('burgsData', burgsData.value);
-					break;
-			}
-		});
+	// 			case 'delete':
+	// 				burgsData.value = burgsData.value.filter(burg => burg.id !== e.record.id);
+	// 				cacheData('burgsData', burgsData.value);
+	// 				break;
+	// 		}
+	// 	});
 
-		culturesSubscription = await pb.collection('cultures').subscribe('*', e => {
-			switch (e.action) {
-				case 'create':
-					culturesData.value.push(e.record);
-					cacheData('culturesData', culturesData.value);
-					break;
+	// 	culturesSubscription = await pb.collection('cultures').subscribe('*', e => {
+	// 		switch (e.action) {
+	// 			case 'create':
+	// 				culturesData.value.push(e.record);
+	// 				cacheData('culturesData', culturesData.value);
+	// 				break;
 
-				case 'update':
-					culturesData.value = culturesData.value.map(culture => {
-						if (culture.id === e.record.id) return e.record;
-						return culture;
-					});
-					cacheData('culturesData', culturesData.value);
-					break;
+	// 			case 'update':
+	// 				culturesData.value = culturesData.value.map(culture => {
+	// 					if (culture.id === e.record.id) return e.record;
+	// 					return culture;
+	// 				});
+	// 				cacheData('culturesData', culturesData.value);
+	// 				break;
 
-				case 'delete':
-					culturesData.value = culturesData.value.filter(culture => culture.id !== e.record.id);
-					cacheData('culturesData', culturesData.value);
-					break;
-			}
-		});
+	// 			case 'delete':
+	// 				culturesData.value = culturesData.value.filter(culture => culture.id !== e.record.id);
+	// 				cacheData('culturesData', culturesData.value);
+	// 				break;
+	// 		}
+	// 	});
 
-		religionsSubscription = await pb.collection('religions').subscribe('*', e => {
-			switch (e.action) {
-				case 'create':
-					religionsData.value.push(e.record);
-					cacheData('religionsData', religionsData.value);
-					break;
+	// 	religionsSubscription = await pb.collection('religions').subscribe('*', e => {
+	// 		switch (e.action) {
+	// 			case 'create':
+	// 				religionsData.value.push(e.record);
+	// 				cacheData('religionsData', religionsData.value);
+	// 				break;
 
-				case 'update':
-					religionsData.value = religionsData.value.map(religion => {
-						if (religion.id === e.record.id) return e.record;
-						return religion;
-					});
-					cacheData('religionsData', religionsData.value);
-					break;
+	// 			case 'update':
+	// 				religionsData.value = religionsData.value.map(religion => {
+	// 					if (religion.id === e.record.id) return e.record;
+	// 					return religion;
+	// 				});
+	// 				cacheData('religionsData', religionsData.value);
+	// 				break;
 
-				case 'delete':
-					religionsData.value = religionsData.value.filter(religion => religion.id !== e.record.id);
-					cacheData('religionsData', religionsData.value);
-					break;
-			}
-		});
-	});
+	// 			case 'delete':
+	// 				religionsData.value = religionsData.value.filter(religion => religion.id !== e.record.id);
+	// 				cacheData('religionsData', religionsData.value);
+	// 				break;
+	// 		}
+	// 	});
+	// });
 
-	onUnmounted(() => {
-		turnsSubscription();
-		statesSubscription();
-		provincesSubscription();
-		burgsSubscription();
-		culturesSubscription();
-		religionsSubscription();
-	});
+	// onUnmounted(() => {
+	// 	turnsSubscription();
+	// 	statesSubscription();
+	// 	provincesSubscription();
+	// 	burgsSubscription();
+	// 	culturesSubscription();
+	// 	religionsSubscription();
+	// });
 
 	// TODO: Subskrypcja in real time aktualizująca localstorage jeżeli się zmieni kolekcja
 
@@ -324,6 +323,7 @@ export const cacheFullListResponsesStore = defineStore('cacheFullListResponsesSt
 		fetchProvincesData,
 		fetchBurgsData,
 		fetchCulturesData,
-		fetchReligionsData
+		fetchReligionsData,
+		cacheData
 	};
 });

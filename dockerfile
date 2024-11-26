@@ -1,4 +1,4 @@
-FROM oven/bun:1.1.31 as build
+FROM oven/bun:1.1.34 AS build
 
 WORKDIR /build
 
@@ -11,7 +11,7 @@ RUN bun run build-only
 FROM alpine:latest
 
 LABEL maintainer="garandplg@garandplg.com"
-LABEL version="0.0.19"
+LABEL version="0.0.20"
 LABEL description="Garand's WG. Pocketbase + Bun + Vue3 + Vite + TypeScript + TailwindCSS + Shadcn-vue"
 
 ARG PB_VERSION=0.22.26
@@ -22,20 +22,19 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
-RUN unzip /tmp/pb.zip -d ./
-
-RUN rm -rf ./CHANGELOG.md ./LICENSE.md /tmp/pb.zip
-
 COPY --from=build /build/dist ./pb_public
 COPY --from=build /build/pocketbase/pb_migrations ./pb_migrations
 COPY --from=build /build/pocketbase/pb_hooks ./pb_hooks
 
-RUN mkdir -p pb_data
-RUN chmod +x ./pocketbase
+ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
 
-RUN adduser -D pocketbase
-RUN chown -R pocketbase:pocketbase /app
+RUN unzip /tmp/pb.zip -d ./ \
+    && rm -rf ./CHANGELOG.md ./LICENSE.md /tmp/pb.zip \
+    && mkdir -p pb_data \
+    && chmod +x ./pocketbase \
+    && adduser -D pocketbase \
+    && chown -R pocketbase:pocketbase /app \
+    && rm -rf /build
 
 EXPOSE 8090
 

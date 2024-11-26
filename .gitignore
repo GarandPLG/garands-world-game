@@ -19,6 +19,8 @@ coverage
 
 # Editor directories and files
 .vscode/*
+"$(pwd)"
+slim.report.json
 !.vscode/extensions.json
 .idea
 *.suo

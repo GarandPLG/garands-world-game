@@ -1,5 +1,6 @@
 .vscode
 .git
+"$(pwd)"
 
 node_modules
 
@@ -8,5 +9,6 @@ pocketbase/pocketbase
 pocketbase/pocketbase.drawio
 
 .gitignore
+slim.report.json
 start-dev.sh
 shell.nix

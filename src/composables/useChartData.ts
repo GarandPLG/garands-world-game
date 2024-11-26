@@ -1,97 +1,65 @@
 import type { ChartData, DataForChart } from '@/types/chartsTypes';
-// TODO: dodać specjalne przypadki
+
 export const useChartData = (cd: any, dataForChart: globalThis.ComputedRef<DataForChart>) => {
 	const generateChartContent = () => {
 		for (let i = 0; i < cd.turnsData.value.length - 1; i++) {
 			const turn = cd.turnsData.value[i];
-			const dataInTurn = cd[`${dataForChart.value.group}Data`].value.filter(
-				item => item.turn === turn.id
-			);
+			const grupData =
+				dataForChart.value.group === 'misc' ? 'burgsData' : `${dataForChart.value.group}Data`;
+			const dataInTurn = cd[grupData].value.filter(item => item.turn === turn.id);
 			const dataItem = { turn: turn.value } as ChartData;
 
-			for (let j = 0; j < dataInTurn.length; j++) {
-				const item = dataInTurn[j];
-				dataItem[item.name] = item[dataForChart.value.subgroup];
-			}
+			if (dataForChart.value.group == 'states' && dataForChart.value.subgroup == 'provinces')
+				for (let j = 0; j < dataInTurn.length; j++) {
+					const item = dataInTurn[j];
+					const provincesInItem = cd.provincesData.value.filter(
+						province => province.state === item.id
+					);
+					dataItem[item.name] = provincesInItem.length;
+				}
+			else if (dataForChart.value.group == 'religions' && dataForChart.value.subgroup == 'burgs')
+				for (let j = 0; j < dataInTurn.length; j++) {
+					const item = dataInTurn[j];
+					const burgsInItem = cd.burgsData.value.filter(burg => burg.religion === item.id);
+					dataItem[item.name] = burgsInItem.length;
+				}
+			else if (dataForChart.value.group == 'cultures' && dataForChart.value.subgroup == 'burgs')
+				for (let j = 0; j < dataInTurn.length; j++) {
+					const item = dataInTurn[j];
+					const burgsInItem = cd.burgsData.value.filter(burg => burg.culture === item.id);
+					dataItem[item.name] = burgsInItem.length;
+				}
+			else if (dataForChart.value.group == 'misc' && dataForChart.value.subgroup == 'features') {
+				const features = [
+					'Capitals',
+					'Ports',
+					'Citadels',
+					'Walls',
+					'Plazas',
+					'Temples',
+					'Shanty Towns'
+				];
+				const buildingsFeatures = features.map(feature => 0);
+				for (let j = 0; j < dataInTurn.length; j++) {
+					const item = dataInTurn[j];
+					if (item.isCapital) buildingsFeatures[0]++;
+					if (item.isPort) buildingsFeatures[1]++;
+					if (item.isCitadel) buildingsFeatures[2]++;
+					if (item.isWalls) buildingsFeatures[3]++;
+					if (item.isPlaza) buildingsFeatures[4]++;
+					if (item.isTemple) buildingsFeatures[5]++;
+					if (item.isShantyTown) buildingsFeatures[6]++;
+				}
+				features.forEach((feature, index) => {
+					dataItem[feature] = buildingsFeatures[index];
+				});
+			} else
+				for (let j = 0; j < dataInTurn.length; j++) {
+					const item = dataInTurn[j];
+					dataItem[item.name] = item[dataForChart.value.subgroup];
+				}
 			dataForChart.value.chart.push(dataItem);
-
-			// metrics.forEach(metric => {
-			// 	const dataItem = { turn: turn.value };
-			// 	if (metric === 'burgs' && (key === 'states' || key === 'religions' || key === 'cultures')) {
-			// 		dataInTurn.forEach(item => {
-			// 			const burgsCount = cd.burgsData.value.filter(
-			// 				burg => burg[key.slice(0, -1)] === item.id
-			// 			).length;
-			// 			dataItem[item.name] = burgsCount || 0;
-			// 		});
-			// 	} else {
-			// 		dataInTurn.forEach(item => {
-			// 			dataItem[item.name] = item[metric] || 0;
-			// 		});
-			// 	}
-			// 	dataForCharts.value[key].charts[metric].push(dataItem);
-			// });
 		}
-
-		// Object.entries(chartMappings).forEach(([key, metrics]) => {
-		// 	for (let i = 0; i < cd.turnsData.value.length - 1; i++) {
-		// 		const turn = cd.turnsData.value[i];
-		// 		const dataInTurn = cd[`${key}Data`].value.filter(item => item.turn === turn.id);
-		// 		metrics.forEach(metric => {
-		// 			const dataItem = { turn: turn.value };
-		// 			if (
-		// 				metric === 'burgs' &&
-		// 				(key === 'states' || key === 'religions' || key === 'cultures')
-		// 			) {
-		// 				dataInTurn.forEach(item => {
-		// 					const burgsCount = cd.burgsData.value.filter(
-		// 						burg => burg[key.slice(0, -1)] === item.id
-		// 					).length;
-		// 					dataItem[item.name] = burgsCount || 0;
-		// 				});
-		// 			} else {
-		// 				dataInTurn.forEach(item => {
-		// 					dataItem[item.name] = item[metric] || 0;
-		// 				});
-		// 			}
-		// 			dataForCharts.value[key].charts[metric].push(dataItem);
-		// 		});
-		// 	}
-		// });
-		// for (let i = 0; i < cd.turnsData.value.length - 1; i++) {
-		// 	const turn = cd.turnsData.value[i];
-		// 	const statesDataInTurn = cd.statesData.value.filter(state => state.turn === turn.id);
-		// 	const dataItem = { turn: turn.value };
-		// 	statesDataInTurn.forEach(state => {
-		// 		const provincesCount = cd.provincesData.value.filter(
-		// 			province => province.state === state.id
-		// 		).length;
-		// 		dataItem[state.name] = provincesCount;
-		// 	});
-		// 	dataForCharts.value.states.charts.provinces.push(dataItem);
-		// }
-		// for (let i = 0; i < cd.turnsData.value.length - 1; i++) {
-		// 	const turn = cd.turnsData.value[i];
-		// 	const burgsDataInTurn = cd.burgsData.value.filter(burg => burg.turn === turn.id);
-		// 	const populationDataItem = { turn: turn.value };
-		// 	const buildingsFeatures = [0, 0, 0, 0, 0, 0, 0];
-		// 	burgsDataInTurn.forEach(burg => {
-		// 		populationDataItem[burg.name] = burg.population || 0;
-		// 		if (burg.isCapital) buildingsFeatures[0]++;
-		// 		if (burg.isPort) buildingsFeatures[1]++;
-		// 		if (burg.isCitadel) buildingsFeatures[2]++;
-		// 		if (burg.isWalls) buildingsFeatures[3]++;
-		// 		if (burg.isPlaza) buildingsFeatures[4]++;
-		// 		if (burg.isTemple) buildingsFeatures[5]++;
-		// 		if (burg.isShantyTown) buildingsFeatures[6]++;
-		// 	});
-		// 	dataForCharts.value.burgs.charts.population.push(populationDataItem);
-		// 	const featuresDataItem = { turn: turn.value };
-		// 	dataForCharts.value.misc.config.categories.forEach((category, index) => {
-		// 		featuresDataItem[category] = buildingsFeatures[index];
-		// 	});
-		// 	dataForCharts.value.misc.charts.features.push(featuresDataItem);
-		// }
 	};
 
 	return { generateChartContent };

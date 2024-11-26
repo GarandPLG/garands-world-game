@@ -60,8 +60,8 @@ W wersji produkcyjnej:
 
 ## 📋 Wymagania
 
-- **Bun** w wersji co najmniej `1.1.31`.
-- **PocketBase** w wersji co najmniej `0.22.21`.
+- **Bun** w wersji co najmniej `1.1.34`.
+- **PocketBase** w wersji co najmniej `0.22.26`.
 
 ## ⚖️ Licencja
 

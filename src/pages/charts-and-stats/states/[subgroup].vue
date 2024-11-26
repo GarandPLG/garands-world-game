@@ -6,23 +6,22 @@ useHead({
 	title: `Garand's WG | Wykresy i statystyki | Państwa`
 });
 
-// TODO: przenieść subskrypcję z cache do tego pliku
-// TODO: dokończyć resztę plików
-
 const route = useRoute();
 const group = ref('states');
-const subgroup = computed(() => route.params.subgroup);
+const subgroup = computed<string>(() => route.params.subgroup);
+const pb = usePocketBase();
 
 const chartsSubcategories = computed(
 	() => chartsCategories.filter(category => category.name === group.value)[0].labels
 );
 
-const { fetchTurnsData, fetchStatesData } = cacheFullListResponsesStore();
+const { fetchTurnsData, fetchStatesData, fetchProvincesData } = cacheFullListResponsesStore();
 
 const cd = storeToRefs(cacheFullListResponsesStore());
 
 if (!cd.turnsData.value.length) await fetchTurnsData();
 if (!cd.statesData.value.length) await fetchStatesData();
+if (subgroup.value === 'provinces' && !cd.provincesData.value.length) await fetchProvincesData();
 
 const dataForCharts = computed<DataForChart>(() => ({
 	group: group.value,
@@ -37,11 +36,7 @@ const statesDataItem = cd.statesData.value.filter(
 
 dataForCharts.value.config.categories = statesDataItem.map(item => item.name);
 
-dataForCharts.value.config.colors = statesDataItem[0]?.color
-	? statesDataItem.map(item => item.color)
-	: statesDataItem.map(item => {
-			return cd.statesData.value.find(state => state.id === item.state)?.color || '#000';
-		});
+dataForCharts.value.config.colors = statesDataItem.map(item => item.color);
 
 const { generateChartContent } = useChartData(cd, dataForCharts);
 
@@ -53,16 +48,94 @@ const chartData = computed(() => {
 	return dataForCharts.value.chart;
 });
 
-watch(
-	[cd.turnsData, cd.statesData, cd.provincesData, cd.burgsData, cd.culturesData, cd.religionsData],
-	() => {
-		dataForCharts.value.chart = [];
-		generateChartContent();
-	},
-	{ deep: true }
-);
+// const turnsSubscription = await pb.collection('turns').subscribe('*', e => {
+// 	switch (e.action) {
+// 		case 'create':
+// 			cd.turnsData.value.push(e.record);
+// 			cacheData('turnsData', cd.turnsData.value);
+// 			break;
 
-watch([subgroup], () => {
+// 		case 'update':
+// 			cd.turnsData.value = cd.turnsData.value.map(turn => {
+// 				if (turn.id === e.record.id) return e.record;
+// 				return turn;
+// 			});
+// 			cacheData('turnsData', cd.turnsData.value);
+// 			break;
+
+// 		case 'delete':
+// 			cd.turnsData.value = cd.turnsData.value.filter(turn => turn.id !== e.record.id);
+// 			cacheData('turnsData', cd.turnsData.value);
+// 			break;
+// 	}
+// });
+
+// const statesSubscription = await pb.collection('states').subscribe('*', e => {
+// 	switch (e.action) {
+// 		case 'create':
+// 			cd.statesData.value.push(e.record);
+// 			cacheData('statesData', cd.statesData.value);
+// 			break;
+
+// 		case 'update':
+// 			cd.statesData.value = cd.statesData.value.map(state => {
+// 				if (state.id === e.record.id) return e.record;
+// 				return state;
+// 			});
+// 			cacheData('statesData', cd.statesData.value);
+// 			break;
+
+// 		case 'delete':
+// 			cd.statesData.value = cd.statesData.value.filter(state => state.id !== e.record.id);
+// 			cacheData('statesData', cd.statesData.value);
+// 			break;
+// 	}
+// });
+
+// let provincesSubscription: UnsubscribeFunc;
+// if (subgroup.value === 'provinces') {
+// 	provincesSubscription = await pb.collection('provinces').subscribe('*', e => {
+// 		switch (e.action) {
+// 			case 'create':
+// 				cd.provincesData.value.push(e.record);
+// 				cacheData('provincesData', cd.provincesData.value);
+// 				break;
+
+// 			case 'update':
+// 				cd.provincesData.value = cd.provincesData.value.map(province => {
+// 					if (province.id === e.record.id) return e.record;
+// 					return province;
+// 				});
+// 				cacheData('provincesData', cd.provincesData.value);
+// 				break;
+
+// 			case 'delete':
+// 				cd.provincesData.value = cd.provincesData.value.filter(
+// 					province => province.id !== e.record.id
+// 				);
+// 				cacheData('provincesData', cd.provincesData.value);
+// 				break;
+// 		}
+// 	});
+// }
+// onUnmounted(() => {
+// 	turnsSubscription();
+// 	statesSubscription();
+// 	if (subgroup.value === 'provinces') provincesSubscription();
+// });
+
+// watch(
+// 	[cd.turnsData, cd.statesData, cd.provincesData, cd.burgsData, cd.culturesData, cd.religionsData],
+// 	() => {
+// 		dataForCharts.value.chart = [];
+// 		generateChartContent();
+// 	},
+// 	{ deep: true }
+// );
+
+watch([subgroup], async () => {
+	if (subgroup.value === 'provinces' && !cd.provincesData.value.length) await fetchProvincesData();
+
 	dataForCharts.value.chart = [];
 	generateChartContent();
 });
