@@ -471,6 +471,15 @@
     "useFetchData": true,
     "function": true,
     "useChartDataFetch": true,
-    "chartsCategories": true
+    "chartsCategories": true,
+    "Table": true,
+    "TableBody": true,
+    "TableCaption": true,
+    "TableCell": true,
+    "TableEmpty": true,
+    "TableFooter": true,
+    "TableHead": true,
+    "TableHeader": true,
+    "TableRow": true
   }
 }

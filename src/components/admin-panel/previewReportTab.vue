@@ -1,24 +1,35 @@
 <script lang="ts" setup>
-// TODO: Strona z podglądem raportów wszystkich krajów z ze wszystkich tur
 const props = defineProps<{
 	title: string;
 	description: string;
 }>();
 
-const cd = cacheFullListResponsesStore();
+const { fetchTurnsData, fetchStatesData } = cacheFullListResponsesStore();
 
-if (!cd.turnsData.length) await cd.fetchTurnsData();
-if (!cd.statesData.length) await cd.fetchStatesData();
+const cd = storeToRefs(cacheFullListResponsesStore());
 
-const turnsData = cd.turnsData;
-const statesData = cd.statesData;
+if (!cd.turnsData.value.length) await fetchTurnsData();
+if (!cd.statesData.value.length) await fetchStatesData();
 
-const data: string[][] = []; // TODO: Linki do report/[turn]/[state] + status raportu
-for (let i = 0; i < turnsData.length; i++) {
-	const statesInTurn = statesData.filter(state => state.turn === turnsData[i].id);
-	// data.push(statesInTurn);
-}
-console.log(data);
+const turns = [...cd.turnsData.value].slice(0, -1);
+
+const reportsData = cd.statesData.value
+	.filter(state => state.name !== 'Neutrals')
+	.map(state => {
+		const matchingTurn = turns.find(turn => state.turn === turn.id);
+		return matchingTurn ? `reports/${matchingTurn.value}/${state.name}` : null;
+	})
+	.filter(Boolean)
+	.reverse();
+
+const groupedReportsData = reportsData.reduce((acc, str) => {
+	const key = str.split('/')[2];
+	acc[key] = acc[key] || [];
+	acc[key].push(str);
+	return acc;
+}, {});
+
+const reports = Object.values(groupedReportsData).reverse();
 </script>
 
 <template>
@@ -33,7 +44,27 @@ console.log(data);
 			<Separator />
 
 			<CardContent class="space-y-2 py-6">
-				<p>Jeżyk</p>
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead v-for="turn in turns.reverse()" :key="turn.id" class="text-center">
+								{{ turn.value }}
+							</TableHead>
+						</TableRow>
+					</TableHeader>
+
+					<TableBody>
+						<TableRow v-for="(states, index) in reports" :key="index">
+							<TableCell v-for="state in states" :key="state" class="text-center">
+								<Button variant="link" as-child>
+									<RouterLink :to="state">
+										{{ state.split('/')[2] }}
+									</RouterLink>
+								</Button>
+							</TableCell>
+						</TableRow>
+					</TableBody>
+				</Table>
 			</CardContent>
 		</Card>
 	</div>

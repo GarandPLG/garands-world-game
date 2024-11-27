@@ -91,6 +91,15 @@ declare global {
   const Separator: typeof import('../components/ui/separator/index')['Separator']
   const StatesFormOptions: typeof import('../types/pb-types')['StatesFormOptions']
   const Switch: typeof import('../components/ui/switch/index')['Switch']
+  const Table: typeof import('../components/ui/table/index')['Table']
+  const TableBody: typeof import('../components/ui/table/index')['TableBody']
+  const TableCaption: typeof import('../components/ui/table/index')['TableCaption']
+  const TableCell: typeof import('../components/ui/table/index')['TableCell']
+  const TableEmpty: typeof import('../components/ui/table/index')['TableEmpty']
+  const TableFooter: typeof import('../components/ui/table/index')['TableFooter']
+  const TableHead: typeof import('../components/ui/table/index')['TableHead']
+  const TableHeader: typeof import('../components/ui/table/index')['TableHeader']
+  const TableRow: typeof import('../components/ui/table/index')['TableRow']
   const Tabs: typeof import('../components/ui/tabs/index')['Tabs']
   const TabsContent: typeof import('../components/ui/tabs/index')['TabsContent']
   const TabsList: typeof import('../components/ui/tabs/index')['TabsList']
@@ -542,6 +551,15 @@ declare module 'vue' {
     readonly Separator: UnwrapRef<typeof import('../components/ui/separator/index')['Separator']>
     readonly StatesFormOptions: UnwrapRef<typeof import('../types/pb-types')['StatesFormOptions']>
     readonly Switch: UnwrapRef<typeof import('../components/ui/switch/index')['Switch']>
+    readonly Table: UnwrapRef<typeof import('../components/ui/table/index')['Table']>
+    readonly TableBody: UnwrapRef<typeof import('../components/ui/table/index')['TableBody']>
+    readonly TableCaption: UnwrapRef<typeof import('../components/ui/table/index')['TableCaption']>
+    readonly TableCell: UnwrapRef<typeof import('../components/ui/table/index')['TableCell']>
+    readonly TableEmpty: UnwrapRef<typeof import('../components/ui/table/index')['TableEmpty']>
+    readonly TableFooter: UnwrapRef<typeof import('../components/ui/table/index')['TableFooter']>
+    readonly TableHead: UnwrapRef<typeof import('../components/ui/table/index')['TableHead']>
+    readonly TableHeader: UnwrapRef<typeof import('../components/ui/table/index')['TableHeader']>
+    readonly TableRow: UnwrapRef<typeof import('../components/ui/table/index')['TableRow']>
     readonly Tabs: UnwrapRef<typeof import('../components/ui/tabs/index')['Tabs']>
     readonly TabsContent: UnwrapRef<typeof import('../components/ui/tabs/index')['TabsContent']>
     readonly TabsList: UnwrapRef<typeof import('../components/ui/tabs/index')['TabsList']>

@@ -13,17 +13,20 @@ const props = defineProps<{
 const pb = usePocketBase();
 const { toast } = useToast();
 
-const { cd, fetchDataForTurnEndTab } = usePBDataFetch();
+const { fetchTurnsData, fetchStatesData } = cacheFullListResponsesStore();
 
-await fetchDataForTurnEndTab();
+const cd = storeToRefs(cacheFullListResponsesStore());
 
-const turns = ref(cd.turnsData.slice().reverse());
-const turn = ref(turns[0]);
+if (!cd.turnsData.value.length) await fetchTurnsData();
+if (!cd.statesData.value.length) await fetchStatesData();
+
+const turns = ref(cd.turnsData.value.slice().reverse());
+const turn = ref(turns.value[0]);
 
 if (!turn.value) {
 	try {
 		turn.value = await pb.collection('turns').create({ value: 0 });
-		turns.value = cd.turnsData.slice().reverse();
+		turns.value = cd.turnsData.value.slice().reverse();
 	} catch (error) {
 		toast({
 			title: 'Błąd przy tworzeniu tury zerowej!',
@@ -33,7 +36,9 @@ if (!turn.value) {
 	}
 }
 
-const statesFromPreviousTurn = cd.statesData.filter(state => state.turn === turns.value[1].id);
+const statesFromPreviousTurn = cd.statesData.value.filter(
+	state => state.turn === turns.value[1].id
+);
 
 const formSchema = toTypedSchema(
 	// FIXME: Naprawić walidację zod'a dla pól plikowych
@@ -126,7 +131,7 @@ const CellsCSVFilesForms = [
 const { handleSubmit } = useForm({
 	validationSchema: formSchema,
 	initialValues: {
-		turn: turn.value
+		turn: turn.value.value
 	}
 });
 
@@ -214,7 +219,7 @@ const onSubmit = handleSubmit(async values => {
 			.collection('religions')
 			.create({
 				name: religionsData[i].Name,
-				turn: turn.id,
+				turn: turn.value.id,
 				color: religionsData[i].Color,
 				cells: religionsCellsFinalData[religionsData[i].Name],
 				type: religionsData[i].Type,
@@ -246,7 +251,7 @@ const onSubmit = handleSubmit(async values => {
 			.collection('cultures')
 			.create({
 				name: culturesData[i].Name,
-				turn: turn.id,
+				turn: turn.value.id,
 				color: culturesData[i].Color,
 				cells: culturesData[i].Cells,
 				type: culturesData[i].Type,
@@ -281,7 +286,7 @@ const onSubmit = handleSubmit(async values => {
 			.collection('states')
 			.create({
 				user: user,
-				turn: turn.id,
+				turn: turn.value.id,
 				name: statesData[i].State,
 				nameFull: statesData[i]['Full Name'],
 				form: statesData[i].Form,
@@ -319,7 +324,7 @@ const onSubmit = handleSubmit(async values => {
 		const response = await pb
 			.collection('provinces')
 			.create({
-				turn: turn.id,
+				turn: turn.value.id,
 				name: provincesData[i].Province,
 				nameFull: provincesData[i]['Full Name'],
 				state: statesResponses[provincesData[i].State],
@@ -353,7 +358,7 @@ const onSubmit = handleSubmit(async values => {
 		await pb
 			.collection('burgs')
 			.create({
-				turn: turn.id,
+				turn: turn.value.id,
 				name: burgsData[i].Burg,
 				province: provincesResponses[burgsData[i].Province],
 				state: statesResponses[burgsData[i].State],
@@ -389,7 +394,7 @@ const onSubmit = handleSubmit(async values => {
 
 	startTime = new Date().getTime();
 	try {
-		turn.value = await pb.collection('turns').create({ value: turn.value + 1 });
+		turn.value = await pb.collection('turns').create({ value: turn.value.value + 1 });
 	} catch (error) {
 		toast({
 			title: `Błąd przy tworzeniu następnej tury!`,
@@ -456,17 +461,7 @@ async function parseCSVFile(file: File) {
 	}
 }
 
-function createCSVForm(
-	name: string,
-	label: string,
-	gif: string,
-	title: string
-): {
-	name: string;
-	label: string;
-	gif: string;
-	title: string;
-} {
+function createCSVForm(name: string, label: string, gif: string, title: string) {
 	return {
 		name,
 		label,
