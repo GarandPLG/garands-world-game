@@ -11,25 +11,40 @@ const cd = storeToRefs(cacheFullListResponsesStore());
 if (!cd.turnsData.value.length) await fetchTurnsData();
 if (!cd.statesData.value.length) await fetchStatesData();
 
-const turns = [...cd.turnsData.value].slice(0, -1);
+const turns = [...cd.turnsData.value].slice(1);
 
-const reportsData = cd.statesData.value
-	.filter(state => state.name !== 'Neutrals')
-	.map(state => {
-		const matchingTurn = turns.find(turn => state.turn === turn.id);
-		return matchingTurn ? `reports/${matchingTurn.value}/${state.name}` : null;
-	})
-	.filter(Boolean)
-	.reverse();
+console.log(turns);
+
+const states = [
+	...new Set(
+		cd.statesData.value.filter(state => state.name !== 'Neutrals').map(state => state.name)
+	)
+];
+
+const reportsData: string[] = [];
+for (let i = 0; i < states.length; i++) {
+	for (let j = turns.length - 1; j >= 0; j--) {
+		reportsData.push(`${turns[j].value}/${states[i]}`);
+	}
+}
 
 const groupedReportsData = reportsData.reduce((acc, str) => {
-	const key = str.split('/')[2];
+	const key = str.split('/')[1];
 	acc[key] = acc[key] || [];
 	acc[key].push(str);
 	return acc;
 }, {});
 
-const reports = Object.values(groupedReportsData).reverse();
+// const reportsData = cd.statesData.value
+// 	.filter(state => state.name !== 'Neutrals')
+// 	.map(state => {
+// 		const matchingTurn = turns.find(turn => state.turn === turn.id);
+// 		return matchingTurn ? `${matchingTurn.value}/${state.name}` : null;
+// 	})
+// 	.filter(Boolean)
+// 	.reverse();
+
+const reports = Object.values(groupedReportsData);
 </script>
 
 <template>
@@ -57,8 +72,8 @@ const reports = Object.values(groupedReportsData).reverse();
 						<TableRow v-for="(states, index) in reports" :key="index">
 							<TableCell v-for="state in states" :key="state" class="text-center">
 								<Button variant="link" as-child>
-									<RouterLink :to="state">
-										{{ state.split('/')[2] }}
+									<RouterLink :to="`reports/${state}`">
+										{{ state.split('/')[1] }}
 									</RouterLink>
 								</Button>
 							</TableCell>

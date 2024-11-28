@@ -29,12 +29,17 @@ COPY --from=build /build/pocketbase/pb_hooks ./pb_hooks
 ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
 
 RUN unzip /tmp/pb.zip -d ./ \
-    && rm -rf ./CHANGELOG.md ./LICENSE.md /tmp/pb.zip \
+    && rm -rf \ 
+        ./CHANGELOG.md \
+        ./LICENSE.md \
+        /tmp/pb.zip \
+        /build \
     && mkdir -p pb_data \
     && chmod +x ./pocketbase \
     && adduser -D pocketbase \
-    && chown -R pocketbase:pocketbase /app \
-    && rm -rf /build
+    && chown -R pocketbase:pocketbase /app
+
+USER pocketbase
 
 EXPOSE 8090
 
@@ -43,4 +48,4 @@ CMD ["./pocketbase", "serve", "--http", "0.0.0.0:8090", "--dir", "./pb_data", "-
 # TODO: Nginx wewnątrz dockera, żeby serwować pocketbase.
 # TODO: Zwiększyć jakiś limit https://pocketbase.io/docs/going-to-production/
 
-# docker run --rm --name wg -p 8888:8090 -v wg_volume:/app/pb_data dpr.garandplg.com/garandplg/garands-world-game:latest
+# docker run --rm --name wg -p 8090:8090 -v wg_volume:/app/pb_data dpr.garandplg.com/garandplg/garands-world-game:latest
