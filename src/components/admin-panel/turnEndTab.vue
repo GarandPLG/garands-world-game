@@ -44,42 +44,18 @@ const formSchema = toTypedSchema(
 	// FIXME: Naprawić walidację zod'a dla pól plikowych
 	z.object({
 		turn: z.number(),
-		statesCSV: z
-			.instanceof(File)
-			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		burgsCSV: z
-			.instanceof(File)
-			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		culturesCSV: z
-			.instanceof(File)
-			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		religionsCSV: z
-			.instanceof(File)
-			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		provincesCSV: z
-			.instanceof(File)
-			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		relationsCSV: z
-			.instanceof(File)
-			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		statesByNumberOfCellsGroupedByBiomeCSV: z
-			.instanceof(File)
-			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		statesByNumberOfCellsGroupedByReligionsCSV: z
-			.instanceof(File)
-			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		statesByNumberOfCellsGroupedByCulturesCSV: z
-			.instanceof(File)
-			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		religionsByNumberOfCellsCSV: z
-			.instanceof(File)
-			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		provincesByNumberOfCellsCSV: z
-			.instanceof(File)
-			.refine(file => file.type === 'text/csv', 'Tylko pliki CSV są dozwolone'),
-		map: z
-			.instanceof(File)
-			.refine(file => file.name.endsWith('.map'), 'Tylko pliki z rozszerzeniem .map są dozwolone')
+		statesCSV: z.any().refine((file: File) => file?.length !== 0, "File is required").refine(file => checkFileType(file), 'Tylko pliki CSV są dozwolone'),
+		burgsCSV: z.instanceof(File),
+		culturesCSV: z.instanceof(File),
+		religionsCSV: z.instanceof(File),
+		provincesCSV: z.instanceof(File),
+		relationsCSV: z.instanceof(File),
+		statesByNumberOfCellsGroupedByBiomeCSV: z.instanceof(File),
+		statesByNumberOfCellsGroupedByReligionsCSV: z.instanceof(File),
+		statesByNumberOfCellsGroupedByCulturesCSV: z.instanceof(File),
+		religionsByNumberOfCellsCSV: z.instanceof(File),
+		provincesByNumberOfCellsCSV: z.instanceof(File),
+		map: z.instanceof(File)
 	})
 );
 
@@ -416,7 +392,7 @@ const onSubmit = handleSubmit(async values => {
 	await pb
 		.collection('maps')
 		.create({
-			turn: turn.id,
+			turn: turn.value.id,
 			name: values.map.name.split(/ (?=\d{4}-\d{2}-\d{2}-\d{2}-\d{2})/)[0],
 			file: values.map
 		})
@@ -440,6 +416,14 @@ const onSubmit = handleSubmit(async values => {
 		description: `Zakończono turę w czasie: ${((endTimeAll - startTimeAll) / 1000).toFixed(3)} s`
 	});
 });
+
+function checkFileType(file: File) {
+    if (file?.name) {
+        const fileType = file.name.split(".").pop();
+        if (fileType === "csv") return true;
+    }
+    return false;
+}
 
 async function parseCSVFile(file: File) {
 	try {

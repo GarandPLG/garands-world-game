@@ -42,7 +42,7 @@ Projekt wykorzystuje nowoczesny stack technologiczny:
 2. Zainstaluj wymagane moduły za pomocą `bun install`.
 3. Uruchom projekt:
    - Jeśli korzystasz z **nix** lub **nixOS**, uruchom projekt za pomocą `nix-shell`.
-   - W przypadku systemu **bash**, skorzystaj ze skryptu `./run.sh`.
+   - W przypadku systemu **bash**, skorzystaj ze skryptu `./start-dev.sh`.
    - Jeśli napotkasz problemy, pobierz plik **PocketBase**, umieść go w folderze `/pocketbase` i
      uruchom ręcznie dwa procesy:
      - Serwer PocketBase z odpowiednimi ustawieniami.
