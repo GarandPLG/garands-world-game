@@ -13,8 +13,6 @@ if (!cd.statesData.value.length) await fetchStatesData();
 
 const turns = [...cd.turnsData.value].slice(1);
 
-console.log(turns);
-
 const states = [
 	...new Set(
 		cd.statesData.value.filter(state => state.name !== 'Neutrals').map(state => state.name)
@@ -34,15 +32,6 @@ const groupedReportsData = reportsData.reduce((acc, str) => {
 	acc[key].push(str);
 	return acc;
 }, {});
-
-// const reportsData = cd.statesData.value
-// 	.filter(state => state.name !== 'Neutrals')
-// 	.map(state => {
-// 		const matchingTurn = turns.find(turn => state.turn === turn.id);
-// 		return matchingTurn ? `${matchingTurn.value}/${state.name}` : null;
-// 	})
-// 	.filter(Boolean)
-// 	.reverse();
 
 const reports = Object.values(groupedReportsData);
 </script>

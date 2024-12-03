@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { FormField } from '@/components/ui/form';
+import { ELEMENT_NODE, parse, render, walk } from '@michaelhthomas/fluxhtml';
 import { parse as parseCSV } from '@std/csv';
-import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
-import * as z from 'zod';
 
 const props = defineProps<{
 	title: string;
@@ -38,25 +37,6 @@ if (!turn.value) {
 
 const statesFromPreviousTurn = cd.statesData.value.filter(
 	state => state.turn === turns.value[1].id
-);
-
-const formSchema = toTypedSchema(
-	// FIXME: Naprawić walidację zod'a dla pól plikowych
-	z.object({
-		turn: z.number(),
-		statesCSV: z.any().refine((file: File) => file?.length !== 0, "File is required").refine(file => checkFileType(file), 'Tylko pliki CSV są dozwolone'),
-		burgsCSV: z.instanceof(File),
-		culturesCSV: z.instanceof(File),
-		religionsCSV: z.instanceof(File),
-		provincesCSV: z.instanceof(File),
-		relationsCSV: z.instanceof(File),
-		statesByNumberOfCellsGroupedByBiomeCSV: z.instanceof(File),
-		statesByNumberOfCellsGroupedByReligionsCSV: z.instanceof(File),
-		statesByNumberOfCellsGroupedByCulturesCSV: z.instanceof(File),
-		religionsByNumberOfCellsCSV: z.instanceof(File),
-		provincesByNumberOfCellsCSV: z.instanceof(File),
-		map: z.instanceof(File)
-	})
 );
 
 const CSVFilesForms = [
@@ -105,13 +85,23 @@ const CellsCSVFilesForms = [
 ];
 
 const { handleSubmit } = useForm({
-	validationSchema: formSchema,
+	validationSchema: turnEndFormSchema,
 	initialValues: {
 		turn: turn.value.value
 	}
 });
 
+const svgMaps = {
+	state: new Map<string, string>(),
+	province: new Map<string, string>(),
+	burg: new Map<string, string>()
+};
+
 const onSubmit = handleSubmit(async values => {
+	svgMaps.state.clear();
+	svgMaps.province.clear();
+	svgMaps.burg.clear();
+
 	const statesData = await parseCSVFile(values.statesCSV);
 	const burgsData = await parseCSVFile(values.burgsCSV);
 	const culturesData = await parseCSVFile(values.culturesCSV);
@@ -141,15 +131,13 @@ const onSubmit = handleSubmit(async values => {
 		!statesByNumberOfCellsGroupedByReligionsData ||
 		!statesByNumberOfCellsGroupedByCulturesData ||
 		!religionsByNumberOfCellsData ||
-		!provincesByNumberOfCellsData
+		!provincesByNumberOfCellsData ||
+		!values.emblemsHTML
 	)
 		return;
 
-	const statesResponses: Record<string, string> = {};
-	const provincesResponses: Record<string, string> = {};
-	const religionsResponses: Record<string, string> = {};
-	const culturesResponses: Record<string, string> = {};
-
+	// TODO: uprościć ten pierdolnik
+	// =============================================================================
 	const relationsFinalData = relationsData.reduce((acc, relation) => {
 		const state = relation[''];
 		const { ['']: _1, [state]: _2, ...rest } = relation;
@@ -187,187 +175,148 @@ const onSubmit = handleSubmit(async values => {
 		acc[current.Name] = current.Value;
 		return acc;
 	}, {});
+	// =============================================================================
 
 	const startTimeAll = new Date().getTime();
-	let startTime = new Date().getTime();
-	for (let i = 0; i < religionsData.length; i++) {
-		const response = await pb
-			.collection('religions')
-			.create({
-				name: religionsData[i].Name,
-				turn: turn.value.id,
-				color: religionsData[i].Color,
-				cells: religionsCellsFinalData[religionsData[i].Name],
-				type: religionsData[i].Type,
-				form: religionsData[i].Form,
-				supremeDeity: religionsData[i]['Supreme Deity'],
-				population: parseInt(religionsData[i].Believers)
-			})
-			.catch(error => {
-				toast({
-					title: `Błąd przy tworzeniu religii ${religionsData[i].Name}!`,
-					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
-				});
-				if (error instanceof Error) throw error;
-			});
 
-		religionsResponses[response.name] = response.id;
+	let startTime = new Date().getTime();
+
+	try {
+		const fileContent = await readFileAsync(values.emblemsHTML);
+		const ast = parse(fileContent as string);
+
+		await walk(ast, async node => {
+			if (node.type === ELEMENT_NODE && node.name === 'figure' && node.attributes.id) {
+				const id = node.attributes.id;
+				if (id.includes('state')) await extractSVG(node, 'state');
+				else if (id.includes('province')) await extractSVG(node, 'province');
+				else if (id.includes('burg')) await extractSVG(node, 'burg');
+			}
+		});
+	} catch (error) {
+		toast({
+			title: 'Błąd parsowaniu pliku HTML Emblemów!',
+			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+		});
+		if (error instanceof Error) throw error;
 	}
 
 	let endTime = new Date().getTime();
 
 	toast({
-		title: 'Religie zostały dodane',
-		description: `Dodano ${religionsData.length} religii w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
+		title: 'Emblemy zostały przepracowane',
+		description: `Przepracowano ${svgMaps.burg.size + svgMaps.province.size + svgMaps.state.size} emblemów w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
 	});
 
-	startTime = new Date().getTime();
-	for (let i = 0; i < culturesData.length; i++) {
-		const response = await pb
-			.collection('cultures')
-			.create({
-				name: culturesData[i].Name,
-				turn: turn.value.id,
-				color: culturesData[i].Color,
-				cells: culturesData[i].Cells,
-				type: culturesData[i].Type,
-				population: parseInt(culturesData[i].Population),
-				namesbase: culturesData[i].Namesbase
-			})
-			.catch(error => {
-				toast({
-					title: `Błąd przy tworzeniu kultury ${culturesData[i].Name}!`,
-					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
-				});
-				if (error instanceof Error) throw error;
-			});
+	const religionsResponses = await useProcessEndTurnCollectionsData(
+		'religions',
+		religionsData,
+		religion => ({
+			name: religion.Name,
+			turn: turn.value.id,
+			color: religion.Color,
+			cells: religionsCellsFinalData[religion.Name],
+			type: religion.Type,
+			form: religion.Form,
+			supremeDeity: religion['Supreme Deity'],
+			population: parseInt(religion.Believers)
+		}),
+		'Religie'
+	);
 
-		culturesResponses[response.name] = response.id;
-	}
-	endTime = new Date().getTime();
+	const culturesResponses = await useProcessEndTurnCollectionsData(
+		'cultures',
+		culturesData,
+		culture => ({
+			name: culture.Name,
+			turn: turn.value.id,
+			color: culture.Color,
+			cells: culture.Cells,
+			type: culture.Type,
+			population: parseInt(culture.Population),
+			namesbase: culture.Namesbase
+		}),
+		'Kultury'
+	);
 
-	toast({
-		title: 'Kultury zostały dodane',
-		description: `Dodano ${culturesData.length} kultur w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
-	});
+	const statesResponses = await useProcessEndTurnCollectionsData(
+		'states',
+		statesData,
+		state => {
+			const stateFromPreviousTurn = statesFromPreviousTurn.find(s => s.name === state.State);
+			const user = stateFromPreviousTurn?.user || null;
 
-	startTime = new Date().getTime();
-	for (let i = 0; i < statesData.length; i++) {
-		const stateFromPreviousTurn = statesFromPreviousTurn.find(
-			state => state.name === statesData[i].State
-		);
-		const user = stateFromPreviousTurn?.user ? stateFromPreviousTurn.user : null;
-
-		const response = await pb
-			.collection('states')
-			.create({
+			return {
 				user: user,
 				turn: turn.value.id,
-				name: statesData[i].State,
-				nameFull: statesData[i]['Full Name'],
-				form: statesData[i].Form,
-				color: statesData[i].Color,
-				cells: parseInt(statesData[i].Cells),
-				burgs: parseInt(statesData[i].Burgs),
-				urbanPopulation: parseInt(statesData[i]['Urban Population']),
-				ruralPopulation: parseInt(statesData[i]['Rural Population']),
-				capital: statesData[i].Capital,
-				culture: culturesResponses[statesData[i].Culture],
-				culturesCells: statesByNumberOfCellsGroupedByCulturesFinalData[statesData[i].State],
-				religionsCells: statesByNumberOfCellsGroupedByReligionsFinalData[statesData[i].State],
-				biomesCells: statesByNumberOfCellsGroupedByBiomeFinalData[statesData[i].State],
-				relations: relationsFinalData[statesData[i].State]
-			})
-			.catch(error => {
-				toast({
-					title: `Błąd przy tworzeniu państwa ${statesData[i].State}!`,
-					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
-				});
-				if (error instanceof Error) throw error;
-			});
+				name: state.State,
+				nameFull: state['Full Name'],
+				form: state.Form,
+				color: state.Color,
+				cells: parseInt(state.Cells),
+				burgs: parseInt(state.Burgs),
+				urbanPopulation: parseInt(state['Urban Population']),
+				ruralPopulation: parseInt(state['Rural Population']),
+				capital: state.Capital,
+				culture: culturesResponses[state.Culture],
+				culturesCells: statesByNumberOfCellsGroupedByCulturesFinalData[state.State],
+				religionsCells: statesByNumberOfCellsGroupedByReligionsFinalData[state.State],
+				biomesCells: statesByNumberOfCellsGroupedByBiomeFinalData[state.State],
+				relations: relationsFinalData[state.State],
+				emblemSVG: svgMaps.state.get(state['Full Name'])
+			};
+		},
+		'Państwa'
+	);
 
-		statesResponses[response.name] = response.id;
-	}
-	endTime = new Date().getTime();
+	const provincesResponses = await useProcessEndTurnCollectionsData(
+		'provinces',
+		provincesData,
+		province => ({
+			turn: turn.value.id,
+			name: province.Province,
+			nameFull: province['Full Name'],
+			state: statesResponses[province.State],
+			color: province.Color,
+			cells: parseInt(provincesCellsFinalData[province.Province]),
+			burgs: parseInt(province.Burgs),
+			ruralPopulation: parseInt(province['Rural Population']),
+			urbanPopulation: parseInt(province['Urban Population']),
+			capital: province.Capital,
+			form: province.Form,
+			emblemSVG: svgMaps.province.get(province['Full Name'])
+		}),
+		'Prowincje'
+	);
 
-	toast({
-		title: 'Państwa zostały dodane',
-		description: `Dodano ${statesData.length} państw w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
-	});
-
-	startTime = new Date().getTime();
-	for (let i = 0; i < provincesData.length; i++) {
-		const response = await pb
-			.collection('provinces')
-			.create({
-				turn: turn.value.id,
-				name: provincesData[i].Province,
-				nameFull: provincesData[i]['Full Name'],
-				state: statesResponses[provincesData[i].State],
-				color: provincesData[i].Color,
-				cells: parseInt(provincesCellsFinalData[provincesData[i].Province]),
-				burgs: parseInt(provincesData[i].Burgs),
-				ruralPopulation: parseInt(provincesData[i]['Rural Population']),
-				urbanPopulation: parseInt(provincesData[i]['Urban Population']),
-				capital: provincesData[i].Capital,
-				form: provincesData[i].Form
-			})
-			.catch(error => {
-				toast({
-					title: `Błąd przy tworzeniu prowincji ${provincesData[i].Province}!`,
-					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
-				});
-				if (error instanceof Error) throw error;
-			});
-
-		provincesResponses[response.name] = response.id;
-	}
-	endTime = new Date().getTime();
-
-	toast({
-		title: 'Prowincje zostały dodane',
-		description: `Dodano ${provincesData.length} prowincji w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
-	});
-
-	startTime = new Date().getTime();
-	for (let i = 0; i < burgsData.length; i++) {
-		await pb
-			.collection('burgs')
-			.create({
-				turn: turn.value.id,
-				name: burgsData[i].Burg,
-				province: provincesResponses[burgsData[i].Province],
-				state: statesResponses[burgsData[i].State],
-				culture: culturesResponses[burgsData[i].Culture],
-				religion: religionsResponses[burgsData[i].Religion],
-				population: parseInt(burgsData[i].Population),
-				isCapital: burgsData[i].Capital === 'capital' ? true : false,
-				isPort: burgsData[i].Port === 'port' ? true : false,
-				isCitadel: burgsData[i].Citadel === 'citadel' ? true : false,
-				isWalls: burgsData[i].Walls === 'walls' ? true : false,
-				isPlaza: burgsData[i].Plaza === 'plaza' ? true : false,
-				isTemple: burgsData[i].Temple === 'temple' ? true : false,
-				isShantyTown: burgsData[i]['Shanty Town'] === 'shanty town' ? true : false,
-				emblem: burgsData[i].Emblem,
-				cityGeneratorLink: burgsData[i]['City Generator Link']
-			})
-			.catch(error => {
-				toast({
-					title: `Błąd przy tworzeniu miasta ${burgsData[i].Burg}!`,
-					description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
-				});
-				if (error instanceof Error) throw error;
-			});
-	}
-	endTime = new Date().getTime();
-
-	toast({
-		title: 'Miasta zostały dodane',
-		description: `Dodano ${burgsData.length} miast w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
-	});
+	await useProcessEndTurnCollectionsData(
+		'burgs',
+		burgsData,
+		burg => ({
+			turn: turn.value.id,
+			name: burg.Burg,
+			province: provincesResponses[burg.Province],
+			state: statesResponses[burg.State],
+			culture: culturesResponses[burg.Culture],
+			religion: religionsResponses[burg.Religion],
+			population: parseInt(burg.Population),
+			isCapital: burg.Capital === 'capital',
+			isPort: burg.Port === 'port',
+			isCitadel: burg.Citadel === 'citadel',
+			isWalls: burg.Walls === 'walls',
+			isPlaza: burg.Plaza === 'plaza',
+			isTemple: burg.Temple === 'temple',
+			isShantyTown: burg['Shanty Town'] === 'shanty town',
+			cityGeneratorLink: burg['City Generator Link'],
+			emblemSVG: svgMaps.burg.get(burg.Burg)
+		}),
+		'Miasta'
+	);
 
 	// FIXME: Poprawić drawio, żeby znowu odwzorowywał obecną bazę danych
 
+	// TODO: uprościć ten pierdolnik 2
+	// =============================================================================
 	startTime = new Date().getTime();
 	try {
 		turn.value = await pb.collection('turns').create({ value: turn.value.value + 1 });
@@ -410,6 +359,7 @@ const onSubmit = handleSubmit(async values => {
 		title: 'Mapa i nowa tura zostały dodane!',
 		description: `Dodano mapę i nową turę w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
 	});
+	// =============================================================================
 
 	toast({
 		title: 'Udało się zakończyć turę!',
@@ -417,13 +367,7 @@ const onSubmit = handleSubmit(async values => {
 	});
 });
 
-function checkFileType(file: File) {
-    if (file?.name) {
-        const fileType = file.name.split(".").pop();
-        if (fileType === "csv") return true;
-    }
-    return false;
-}
+const checkFileType = (file: File, type = 'csv'): boolean => file?.name.endsWith(`.${type}`);
 
 async function parseCSVFile(file: File) {
 	try {
@@ -454,6 +398,24 @@ function createCSVForm(name: string, label: string, gif: string, title: string) 
 			return `${title} ${this.label}`;
 		}
 	};
+}
+
+async function extractSVG(node: any, type: keyof typeof svgMaps) {
+	const fullName: string =
+		type === 'burg'
+			? node.children[0].children[0]?.value
+			: node.children[0].children[0].children[0]?.value;
+	const svg = await render(type === 'burg' ? node.children[1] : node.children[0].children[1]);
+	if (fullName) svgMaps[type].set(fullName, svg);
+}
+
+async function readFileAsync(file: File) {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result);
+		reader.onerror = () => reject(reader.error);
+		reader.readAsText(file);
+	});
 }
 </script>
 
@@ -582,6 +544,39 @@ function createCSVForm(name: string, label: string, gif: string, title: string) 
 							</FormItem>
 						</FormField>
 					</div>
+
+					<Separator class="my-9" />
+
+					<FormField v-slot="{ componentField }" name="emblemsHTML">
+						<FormItem>
+							<FormLabel>Plik HTML Emblemów</FormLabel>
+
+							<FormControl>
+								<Input type="file" placeholder="" v-bind="componentField" />
+							</FormControl>
+
+							<FormDescription>
+								<Dialog>
+									<DialogTrigger> Gdzie można znaleźć ten plik? </DialogTrigger>
+
+									<DialogContent>
+										<DialogHeader>
+											<DialogTitle class="mb-2"> Plik HTML Emblemów </DialogTitle>
+
+											<DialogDescription>
+												<img
+													src="@/assets/turnEndGifs/get-map-save-csv.gif"
+													alt="get-map-save-csv"
+												/>
+											</DialogDescription>
+										</DialogHeader>
+									</DialogContent>
+								</Dialog>
+							</FormDescription>
+
+							<FormMessage />
+						</FormItem>
+					</FormField>
 
 					<Separator class="my-9" />
 

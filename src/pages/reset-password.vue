@@ -3,9 +3,7 @@ useHead({
 	title: "Garand's WG | Resetowanie hasła"
 });
 
-import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
-import * as z from 'zod';
 
 import { FormField } from '@/components/ui/form';
 
@@ -17,11 +15,7 @@ const { currentUser } = storeToRefs(listenCurrentUserStore());
 if (currentUser.value) router.push('/');
 
 const { handleSubmit } = useForm({
-	validationSchema: toTypedSchema(
-		z.object({
-			email: z.string().email()
-		})
-	)
+	validationSchema: resetPasswordFormSchema
 });
 
 const onSubmit = handleSubmit(async values => {

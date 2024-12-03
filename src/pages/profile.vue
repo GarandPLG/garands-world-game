@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
-import * as z from 'zod';
 
 import { FormField } from '@/components/ui/form';
 
@@ -19,15 +17,7 @@ useHead({
 });
 
 const { handleSubmit } = useForm({
-	validationSchema: toTypedSchema(
-		z.object({
-			username: z.string().min(2).max(50).default(currentUser.value!.username),
-			email: z.string().email().default(currentUser.value!.email),
-			oldPassword: z.string().min(10).max(72),
-			password: z.string().min(10).max(72).optional(),
-			passwordConfirm: z.string().min(10).max(72).optional()
-		})
-	)
+	validationSchema: profileFormSchema
 });
 
 const onSubmit = handleSubmit(async values => {

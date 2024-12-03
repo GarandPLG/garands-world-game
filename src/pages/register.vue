@@ -3,9 +3,7 @@ useHead({
 	title: "Garand's WG | Rejestracja"
 });
 
-import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
-import * as z from 'zod';
 
 import { FormField } from '@/components/ui/form';
 
@@ -17,14 +15,7 @@ const { currentUser } = storeToRefs(listenCurrentUserStore());
 if (currentUser.value) router.push('/');
 
 const { handleSubmit } = useForm({
-	validationSchema: toTypedSchema(
-		z.object({
-			username: z.string().min(2).max(50),
-			email: z.string().email(),
-			password: z.string().min(8).max(71),
-			passwordConfirm: z.string().min(8).max(71)
-		})
-	)
+	validationSchema: registerFormSchema
 });
 
 const onSubmit = handleSubmit(async values => {

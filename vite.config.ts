@@ -37,12 +37,12 @@ export default defineConfig({
 				unheadVueComposablesImports
 			],
 			dirs: [
-				'./composables',
-				'./stores',
-				'./components/ui/**/*.ts',
-				'./data',
-				'./types',
-				'./auto-types'
+				'./composables/**',
+				'./stores/**',
+				'./components/ui/**',
+				'./data/**',
+				'./types/**',
+				'./auto-types/**'
 			],
 			dts: './auto-types/auto-imports.d.ts',
 			vueTemplate: true,

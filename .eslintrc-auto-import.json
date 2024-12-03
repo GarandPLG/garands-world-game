@@ -480,6 +480,13 @@
     "TableFooter": true,
     "TableHead": true,
     "TableHeader": true,
-    "TableRow": true
+    "TableRow": true,
+    "turnEndFormSchema": true,
+    "loginFormSchema": true,
+    "registerFormSchema": true,
+    "profileFormSchema": true,
+    "resetPasswordFormSchema": true,
+    "useTurnEndCollectionLoop": true,
+    "useProcessEndTurnCollectionsData": true
   }
 }

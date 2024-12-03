@@ -51,7 +51,7 @@ declare global {
   const DropdownMenuSubTrigger: typeof import('../components/ui/dropdown-menu/index')['DropdownMenuSubTrigger']
   const DropdownMenuTrigger: typeof import('../components/ui/dropdown-menu/index')['DropdownMenuTrigger']
   const EffectScope: typeof import('vue')['EffectScope']
-  const FORM_ITEM_INJECTION_KEY: typeof import('../components/ui/form/index')['FORM_ITEM_INJECTION_KEY']
+  const FORM_ITEM_INJECTION_KEY: typeof import('../components/ui/form/injectionKeys')['FORM_ITEM_INJECTION_KEY']
   const Form: typeof import('../components/ui/form/index')['Form']
   const FormControl: typeof import('../components/ui/form/index')['FormControl']
   const FormDescription: typeof import('../components/ui/form/index')['FormDescription']
@@ -125,7 +125,6 @@ declare global {
   const cacheFullListResponsesStore: typeof import('../stores/cacheFullListResponsesStore')['cacheFullListResponsesStore']
   const chai: typeof import('vitest')['chai']
   const chartsCategories: typeof import('../data/chartsConfig')['chartsCategories']
-  const chartsConfig: typeof import('../data/chartsConfig')['chartsConfig']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
   const computedEager: typeof import('@vueuse/core')['computedEager']
@@ -177,6 +176,7 @@ declare global {
   const isTokenExpired: typeof import('pocketbase')['isTokenExpired']
   const it: typeof import('vitest')['it']
   const listenCurrentUserStore: typeof import('../stores/listenCurrentUseStore')['listenCurrentUserStore']
+  const loginFormSchema: typeof import('../data/toTypedSchemas/loginFormSchema')['loginFormSchema']
   const makeDestructurable: typeof import('@vueuse/core')['makeDestructurable']
   const mapActions: typeof import('pinia')['mapActions']
   const mapGetters: typeof import('pinia')['mapGetters']
@@ -208,6 +208,7 @@ declare global {
   const onUpdated: typeof import('vue')['onUpdated']
   const onWatcherCleanup: typeof import('vue')['onWatcherCleanup']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
+  const profileFormSchema: typeof import('../data/toTypedSchemas/profileFormSchema')['profileFormSchema']
   const provide: typeof import('vue')['provide']
   const provideLocal: typeof import('@vueuse/core')['provideLocal']
   const reactify: typeof import('@vueuse/core')['reactify']
@@ -223,6 +224,8 @@ declare global {
   const refDefault: typeof import('@vueuse/core')['refDefault']
   const refThrottled: typeof import('@vueuse/core')['refThrottled']
   const refWithControl: typeof import('@vueuse/core')['refWithControl']
+  const registerFormSchema: typeof import('../data/toTypedSchemas/registerFormSchema')['registerFormSchema']
+  const resetPasswordFormSchema: typeof import('../data/toTypedSchemas/reserPasswordTypedSchema')['resetPasswordFormSchema']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
@@ -252,6 +255,7 @@ declare global {
   const tryOnMounted: typeof import('@vueuse/core')['tryOnMounted']
   const tryOnScopeDispose: typeof import('@vueuse/core')['tryOnScopeDispose']
   const tryOnUnmounted: typeof import('@vueuse/core')['tryOnUnmounted']
+  const turnEndFormSchema: typeof import('../data/toTypedSchemas/turnEndFormSchema')['turnEndFormSchema']
   const unref: typeof import('vue')['unref']
   const unrefElement: typeof import('@vueuse/core')['unrefElement']
   const until: typeof import('@vueuse/core')['until']
@@ -372,8 +376,8 @@ declare global {
   const usePreferredLanguages: typeof import('@vueuse/core')['usePreferredLanguages']
   const usePreferredReducedMotion: typeof import('@vueuse/core')['usePreferredReducedMotion']
   const usePrevious: typeof import('@vueuse/core')['usePrevious']
+  const useProcessEndTurnCollectionsData: typeof import('../composables/useProcessEndTurnCollectionsData')['default']
   const useRafFn: typeof import('@vueuse/core')['useRafFn']
-  const useRedis: typeof import('../composables/useRedis')['default']
   const useRefHistory: typeof import('@vueuse/core')['useRefHistory']
   const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
   const useRoute: typeof import('vue-router')['useRoute']
@@ -512,7 +516,7 @@ declare module 'vue' {
     readonly DropdownMenuSubTrigger: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenuSubTrigger']>
     readonly DropdownMenuTrigger: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenuTrigger']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
-    readonly FORM_ITEM_INJECTION_KEY: UnwrapRef<typeof import('../components/ui/form/index')['FORM_ITEM_INJECTION_KEY']>
+    readonly FORM_ITEM_INJECTION_KEY: UnwrapRef<typeof import('../components/ui/form/injectionKeys')['FORM_ITEM_INJECTION_KEY']>
     readonly Form: UnwrapRef<typeof import('../components/ui/form/index')['Form']>
     readonly FormControl: UnwrapRef<typeof import('../components/ui/form/index')['FormControl']>
     readonly FormDescription: UnwrapRef<typeof import('../components/ui/form/index')['FormDescription']>
@@ -637,6 +641,7 @@ declare module 'vue' {
     readonly isTokenExpired: UnwrapRef<typeof import('pocketbase')['isTokenExpired']>
     readonly it: UnwrapRef<typeof import('vitest')['it']>
     readonly listenCurrentUserStore: UnwrapRef<typeof import('../stores/listenCurrentUseStore')['listenCurrentUserStore']>
+    readonly loginFormSchema: UnwrapRef<typeof import('../data/toTypedSchemas/loginFormSchema')['loginFormSchema']>
     readonly makeDestructurable: UnwrapRef<typeof import('@vueuse/core')['makeDestructurable']>
     readonly mapActions: UnwrapRef<typeof import('pinia')['mapActions']>
     readonly mapGetters: UnwrapRef<typeof import('pinia')['mapGetters']>
@@ -668,6 +673,7 @@ declare module 'vue' {
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly onWatcherCleanup: UnwrapRef<typeof import('vue')['onWatcherCleanup']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
+    readonly profileFormSchema: UnwrapRef<typeof import('../data/toTypedSchemas/profileFormSchema')['profileFormSchema']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
     readonly provideLocal: UnwrapRef<typeof import('@vueuse/core')['provideLocal']>
     readonly reactify: UnwrapRef<typeof import('@vueuse/core')['reactify']>
@@ -683,6 +689,8 @@ declare module 'vue' {
     readonly refDefault: UnwrapRef<typeof import('@vueuse/core')['refDefault']>
     readonly refThrottled: UnwrapRef<typeof import('@vueuse/core')['refThrottled']>
     readonly refWithControl: UnwrapRef<typeof import('@vueuse/core')['refWithControl']>
+    readonly registerFormSchema: UnwrapRef<typeof import('../data/toTypedSchemas/registerFormSchema')['registerFormSchema']>
+    readonly resetPasswordFormSchema: UnwrapRef<typeof import('../data/toTypedSchemas/reserPasswordTypedSchema')['resetPasswordFormSchema']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
@@ -712,6 +720,7 @@ declare module 'vue' {
     readonly tryOnMounted: UnwrapRef<typeof import('@vueuse/core')['tryOnMounted']>
     readonly tryOnScopeDispose: UnwrapRef<typeof import('@vueuse/core')['tryOnScopeDispose']>
     readonly tryOnUnmounted: UnwrapRef<typeof import('@vueuse/core')['tryOnUnmounted']>
+    readonly turnEndFormSchema: UnwrapRef<typeof import('../data/toTypedSchemas/turnEndFormSchema')['turnEndFormSchema']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
@@ -832,6 +841,7 @@ declare module 'vue' {
     readonly usePreferredLanguages: UnwrapRef<typeof import('@vueuse/core')['usePreferredLanguages']>
     readonly usePreferredReducedMotion: UnwrapRef<typeof import('@vueuse/core')['usePreferredReducedMotion']>
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
+    readonly useProcessEndTurnCollectionsData: UnwrapRef<typeof import('../composables/useProcessEndTurnCollectionsData')['default']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
