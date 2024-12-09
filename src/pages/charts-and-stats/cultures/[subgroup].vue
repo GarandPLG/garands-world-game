@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
 import type { DataForChart } from '@/types/chartsTypes';
+import type { BurgsResponse, CulturesResponse, TurnsResponse } from '@/types/pb-types';
 
 useHead({
 	title: `Garand's WG | Wykresy i statystyki | Kultury`
@@ -14,13 +15,23 @@ const chartsSubcategories = computed(
 	() => chartsCategories.filter(category => category.name === group.value)[0].labels
 );
 
-const { fetchTurnsData, fetchCulturesData, fetchBurgsData } = cacheFullListResponsesStore();
+const turnsData = ref<TurnsResponse<unknown>[]>(
+	await useCachedData('turnsDataCharts', 'turns', 1800, {
+		fields: ['id,value']
+	})
+);
 
-const cd = storeToRefs(cacheFullListResponsesStore());
+const culturesData = ref<CulturesResponse<unknown>[]>(
+	await useCachedData('culturesDataCharts', 'cultures', 1800, {
+		fields: ['id,color,turn,name,cells,population']
+	})
+);
 
-if (!cd.turnsData.value.length) await fetchTurnsData();
-if (!cd.culturesData.value.length) await fetchCulturesData();
-if (!cd.burgsData.value.length) await fetchBurgsData();
+const burgsData = ref<BurgsResponse<unknown, unknown>[]>(
+	await useCachedData('burgsDataCharts', 'burgs', 1800, {
+		fields: ['id,name,state,turn,population,culture']
+	})
+);
 
 const dataForCharts = computed<DataForChart>(() => ({
 	group: group.value,
@@ -29,15 +40,22 @@ const dataForCharts = computed<DataForChart>(() => ({
 	chart: dFCh[group.value].charts[subgroup.value]
 }));
 
-const culturesDataItem = cd.culturesData.value.filter(
-	item => item.turn === cd.turnsData.value[cd.turnsData.value.length - 2].id
+const culturesDataItem = culturesData.value.filter(
+	item => item.turn === turnsData.value[turnsData.value.length - 2].id
 );
 
 dataForCharts.value.config.categories = culturesDataItem.map(item => item.name);
 
 dataForCharts.value.config.colors = culturesDataItem.map(item => item.color);
 
-const { generateChartContent } = useChartData(cd, dataForCharts);
+const { generateChartContent } = useChartData(
+	{
+		turnsData: turnsData.value,
+		burgsData: burgsData.value,
+		culturesData: culturesData.value
+	},
+	dataForCharts
+);
 
 generateChartContent();
 

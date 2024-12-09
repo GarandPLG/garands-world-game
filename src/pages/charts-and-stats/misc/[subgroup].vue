@@ -14,12 +14,17 @@ const chartsSubcategories = computed(
 	() => chartsCategories.filter(category => category.name === group.value)[0].labels
 );
 
-const { fetchTurnsData, fetchBurgsData } = cacheFullListResponsesStore();
+const turnsData = ref<TurnsResponse<unknown>[]>(
+	await useCachedData('turnsDataCharts', 'turns', 1800, {
+		fields: ['id,value']
+	})
+);
 
-const cd = storeToRefs(cacheFullListResponsesStore());
-
-if (!cd.turnsData.value.length) await fetchTurnsData();
-if (!cd.burgsData.value.length) await fetchBurgsData();
+const burgsData = ref<BurgsResponse<unknown, unknown>[]>(
+	await useCachedData('miscDataCharts', 'burgs', 1800, {
+		fields: ['id,turn,isCapital,isPort,isCitadel,isWalls,isPlaza,isTemple,isShantyTown']
+	})
+);
 
 const dataForCharts = computed<DataForChart>(() => ({
 	group: group.value,
@@ -28,7 +33,13 @@ const dataForCharts = computed<DataForChart>(() => ({
 	chart: dFCh[group.value].charts[subgroup.value]
 }));
 
-const { generateChartContent } = useChartData(cd, dataForCharts);
+const { generateChartContent } = useChartData(
+	{
+		turnsData: turnsData.value,
+		burgsData: burgsData.value
+	},
+	dataForCharts
+);
 
 generateChartContent();
 

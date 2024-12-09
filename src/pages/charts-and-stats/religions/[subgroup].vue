@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
 import type { DataForChart } from '@/types/chartsTypes';
+import type { BurgsResponse, ReligionsResponse, TurnsResponse } from '@/types/pb-types';
 
 useHead({
 	title: `Garand's WG | Wykresy i statystyki | Religie`
@@ -14,13 +15,23 @@ const chartsSubcategories = computed(
 	() => chartsCategories.filter(category => category.name === group.value)[0].labels
 );
 
-const { fetchTurnsData, fetchReligionsData, fetchBurgsData } = cacheFullListResponsesStore();
+const turnsData = ref<TurnsResponse<unknown>[]>(
+	await useCachedData('turnsDataCharts', 'turns', 1800, {
+		fields: ['id,value']
+	})
+);
 
-const cd = storeToRefs(cacheFullListResponsesStore());
+const religionsData = ref<ReligionsResponse<unknown>[]>(
+	await useCachedData('religionsDataCharts', 'religions', 1800, {
+		fields: ['id,turn,name,color,cells,population']
+	})
+);
 
-if (!cd.turnsData.value.length) await fetchTurnsData();
-if (!cd.religionsData.value.length) await fetchReligionsData();
-if (!cd.burgsData.value.length) await fetchBurgsData();
+const burgsData = ref<BurgsResponse<unknown, unknown>[]>(
+	await useCachedData('burgsDataCharts', 'burgs', 1800, {
+		fields: ['id,name,state,turn,population,culture,religion']
+	})
+);
 
 const dataForCharts = computed<DataForChart>(() => ({
 	group: group.value,
@@ -29,15 +40,22 @@ const dataForCharts = computed<DataForChart>(() => ({
 	chart: dFCh[group.value].charts[subgroup.value]
 }));
 
-const religionsDataItem = cd.religionsData.value.filter(
-	item => item.turn === cd.turnsData.value[cd.turnsData.value.length - 2].id
+const religionsDataItem = religionsData.value.filter(
+	item => item.turn === turnsData.value[turnsData.value.length - 2].id
 );
 
 dataForCharts.value.config.categories = religionsDataItem.map(item => item.name);
 
 dataForCharts.value.config.colors = religionsDataItem.map(item => item.color);
 
-const { generateChartContent } = useChartData(cd, dataForCharts);
+const { generateChartContent } = useChartData(
+	{
+		turnsData: turnsData.value,
+		burgsData: burgsData.value,
+		religionsData: religionsData.value
+	},
+	dataForCharts
+);
 
 generateChartContent();
 

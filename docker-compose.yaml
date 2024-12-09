@@ -15,7 +15,33 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  redis-api:
+    image: dpr.garandplg.com/garandplg/gwg-redis-api:latest
+    container_name: redis-api
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    networks:
+      - garands-wg
+    depends_on:
+      - redis-stack
+  redis-stack:
+    image: redis/redis-stack:latest
+    container_name: redis-stack
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    networks:
+      - garands-wg
+    volumes:
+      - redis-data:/data
 
 networks:
   garands-wg:
     name: garands-wg
+    driver: bridge
+
+
+volumes:
+  redis-data:

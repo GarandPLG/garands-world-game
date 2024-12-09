@@ -487,6 +487,8 @@
     "profileFormSchema": true,
     "resetPasswordFormSchema": true,
     "useTurnEndCollectionLoop": true,
-    "useProcessEndTurnCollectionsData": true
+    "useProcessEndTurnCollectionsData": true,
+    "useRedis": true,
+    "useCachedData": true
   }
 }

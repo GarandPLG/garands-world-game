@@ -51,7 +51,7 @@ declare global {
   const DropdownMenuSubTrigger: typeof import('../components/ui/dropdown-menu/index')['DropdownMenuSubTrigger']
   const DropdownMenuTrigger: typeof import('../components/ui/dropdown-menu/index')['DropdownMenuTrigger']
   const EffectScope: typeof import('vue')['EffectScope']
-  const FORM_ITEM_INJECTION_KEY: typeof import('../components/ui/form/injectionKeys')['FORM_ITEM_INJECTION_KEY']
+  const FORM_ITEM_INJECTION_KEY: typeof import('../components/ui/form/index')['FORM_ITEM_INJECTION_KEY']
   const Form: typeof import('../components/ui/form/index')['Form']
   const FormControl: typeof import('../components/ui/form/index')['FormControl']
   const FormDescription: typeof import('../components/ui/form/index')['FormDescription']
@@ -283,6 +283,7 @@ declare global {
   const useBroadcastChannel: typeof import('@vueuse/core')['useBroadcastChannel']
   const useBrowserLocation: typeof import('@vueuse/core')['useBrowserLocation']
   const useCached: typeof import('@vueuse/core')['useCached']
+  const useCachedData: typeof import('../composables/useCachedData')['useCachedData']
   const useChartData: typeof import('../composables/useChartData')['useChartData']
   const useChartDataFetch: typeof import('../composables/useChartDataFetch')['useChartDataFetch']
   const useClipboard: typeof import('@vueuse/core')['useClipboard']
@@ -378,6 +379,7 @@ declare global {
   const usePrevious: typeof import('@vueuse/core')['usePrevious']
   const useProcessEndTurnCollectionsData: typeof import('../composables/useProcessEndTurnCollectionsData')['default']
   const useRafFn: typeof import('@vueuse/core')['useRafFn']
+  const useRedis: typeof import('../composables/useRedis')['useRedis']
   const useRefHistory: typeof import('@vueuse/core')['useRefHistory']
   const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
   const useRoute: typeof import('vue-router')['useRoute']
@@ -516,7 +518,7 @@ declare module 'vue' {
     readonly DropdownMenuSubTrigger: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenuSubTrigger']>
     readonly DropdownMenuTrigger: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenuTrigger']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
-    readonly FORM_ITEM_INJECTION_KEY: UnwrapRef<typeof import('../components/ui/form/injectionKeys')['FORM_ITEM_INJECTION_KEY']>
+    readonly FORM_ITEM_INJECTION_KEY: UnwrapRef<typeof import('../components/ui/form/index')['FORM_ITEM_INJECTION_KEY']>
     readonly Form: UnwrapRef<typeof import('../components/ui/form/index')['Form']>
     readonly FormControl: UnwrapRef<typeof import('../components/ui/form/index')['FormControl']>
     readonly FormDescription: UnwrapRef<typeof import('../components/ui/form/index')['FormDescription']>
@@ -748,8 +750,8 @@ declare module 'vue' {
     readonly useBroadcastChannel: UnwrapRef<typeof import('@vueuse/core')['useBroadcastChannel']>
     readonly useBrowserLocation: UnwrapRef<typeof import('@vueuse/core')['useBrowserLocation']>
     readonly useCached: UnwrapRef<typeof import('@vueuse/core')['useCached']>
+    readonly useCachedData: UnwrapRef<typeof import('../composables/useCachedData')['useCachedData']>
     readonly useChartData: UnwrapRef<typeof import('../composables/useChartData')['useChartData']>
-    readonly useChartDataFetch: UnwrapRef<typeof import('../composables/useChartDataFetch')['useChartDataFetch']>
     readonly useClipboard: UnwrapRef<typeof import('@vueuse/core')['useClipboard']>
     readonly useClipboardItems: UnwrapRef<typeof import('@vueuse/core')['useClipboardItems']>
     readonly useCloned: UnwrapRef<typeof import('@vueuse/core')['useCloned']>
@@ -825,7 +827,6 @@ declare module 'vue' {
     readonly useObjectUrl: UnwrapRef<typeof import('@vueuse/core')['useObjectUrl']>
     readonly useOffsetPagination: UnwrapRef<typeof import('@vueuse/core')['useOffsetPagination']>
     readonly useOnline: UnwrapRef<typeof import('@vueuse/core')['useOnline']>
-    readonly usePBDataFetch: UnwrapRef<typeof import('../composables/usePBDataFetch')['usePBDataFetch']>
     readonly usePageLeave: UnwrapRef<typeof import('@vueuse/core')['usePageLeave']>
     readonly useParallax: UnwrapRef<typeof import('@vueuse/core')['useParallax']>
     readonly useParentElement: UnwrapRef<typeof import('@vueuse/core')['useParentElement']>
@@ -843,6 +844,7 @@ declare module 'vue' {
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
     readonly useProcessEndTurnCollectionsData: UnwrapRef<typeof import('../composables/useProcessEndTurnCollectionsData')['default']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
+    readonly useRedis: UnwrapRef<typeof import('../composables/useRedis')['useRedis']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>

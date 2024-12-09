@@ -1,22 +1,32 @@
 <script lang="ts" setup>
+import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
+
 const props = defineProps<{
 	title: string;
 	description: string;
 }>();
 
-const { fetchTurnsData, fetchStatesData } = cacheFullListResponsesStore();
+const redis = useRedis();
+const pb = usePocketBase();
+const { toast } = useToast();
 
-const cd = storeToRefs(cacheFullListResponsesStore());
+const turnsData = ref<TurnsResponse<unknown>[]>(
+	await useCachedData('turnsDataPreviewReport', 'turns', 1800, {
+		fields: ['value']
+	})
+);
 
-if (!cd.turnsData.value.length) await fetchTurnsData();
-if (!cd.statesData.value.length) await fetchStatesData();
+const statesData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
+	await useCachedData('statesDataPreviewReport', 'states', 1800, {
+		fields: ['name']
+	})
+);
 
-const turns = [...cd.turnsData.value].slice(1);
+const turns = [...turnsData.value].slice(1);
 
+// TODO: Może dałoby się to uprościć
 const states = [
-	...new Set(
-		cd.statesData.value.filter(state => state.name !== 'Neutrals').map(state => state.name)
-	)
+	...new Set(statesData.value.filter(state => state.name !== 'Neutrals').map(state => state.name))
 ];
 
 const reportsData: string[] = [];

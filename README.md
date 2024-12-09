@@ -33,6 +33,7 @@ Projekt wykorzystuje nowoczesny stack technologiczny:
 - **TailwindCSS** – narzędzie do stylizacji.
 - **Vite** – szybszy bundler.
 - **PocketBase** – backend do zarządzania danymi.
+- **Redis** – szybka pamięć podręczna i magazyn klucz-wartość.
 - **Schadcn-vue** – zestaw komponentów UI.
 - **TypeScript** – typowanie dla lepszej czytelności kodu.
 
@@ -40,7 +41,11 @@ Projekt wykorzystuje nowoczesny stack technologiczny:
 
 1. Zainstaluj **Bun** jako runtime JavaScriptu.
 2. Zainstaluj wymagane moduły za pomocą `bun install`.
-3. Uruchom projekt:
+3. Uruchom Redis:
+   - Przejdź do folderu `redis`: `cd redis`.
+   - Zbuduj obraz API na podstawie Dockerfile: `docker build . -t dpr.garandplg.com/garandplg/gwg-redis-api:latest`.
+   - Uruchom Redis za pomocą Docker Compose: `docker-compose up -d`.
+4. Uruchom projekt:
    - Jeśli korzystasz z **nix** lub **nixOS**, uruchom projekt za pomocą `nix-shell`.
    - W przypadku systemu **bash**, skorzystaj ze skryptu `./start-dev.sh`.
    - Jeśli napotkasz problemy, pobierz plik **PocketBase**, umieść go w folderze `/pocketbase` i
@@ -62,6 +67,7 @@ W wersji produkcyjnej:
 
 - **Bun** w wersji co najmniej `1.1.34`.
 - **PocketBase** w wersji co najmniej `0.22.26`.
+- **Docker** i **Docker Compose** w najnowszej stabilnej wersji.
 
 ## ⚖️ Licencja
 

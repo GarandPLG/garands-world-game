@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { FormField } from '@/components/ui/form';
+import type { StatesResponse } from '@/types/pb-types';
 import { ELEMENT_NODE, parse, render, walk } from '@michaelhthomas/fluxhtml';
 import { parse as parseCSV } from '@std/csv';
 import { useForm } from 'vee-validate';
@@ -11,33 +12,24 @@ const props = defineProps<{
 
 const pb = usePocketBase();
 const { toast } = useToast();
+const redis = useRedis();
 
-const { fetchTurnsData, fetchStatesData } = cacheFullListResponsesStore();
+const turnsData = ref<TurnsResponse<unknown>[]>(
+	await useCachedData('turnsDataTurnEnd', 'turns', 1800, {
+		fields: ['id,value']
+	})
+);
 
-const cd = storeToRefs(cacheFullListResponsesStore());
+const statesData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
+	await useCachedData('statesDataTurnEnd', 'states', 1800, {
+		fields: ['turn']
+	})
+);
 
-if (!cd.turnsData.value.length) await fetchTurnsData();
-if (!cd.statesData.value.length) await fetchStatesData();
-
-const turns = ref(cd.turnsData.value.slice().reverse());
+const turns = ref(turnsData.value.slice().reverse());
 const turn = ref(turns.value[0]);
 
-if (!turn.value) {
-	try {
-		turn.value = await pb.collection('turns').create({ value: 0 });
-		turns.value = cd.turnsData.value.slice().reverse();
-	} catch (error) {
-		toast({
-			title: 'Błąd przy tworzeniu tury zerowej!',
-			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
-		});
-		if (error instanceof Error) throw error;
-	}
-}
-
-const statesFromPreviousTurn = cd.statesData.value.filter(
-	state => state.turn === turns.value[1].id
-);
+const statesFromPreviousTurn = statesData.value.filter(state => state.turn === turns.value[1].id);
 
 const CSVFilesForms = [
 	createCSVForm('statesCSV', 'Państw', 'get-states-csv', 'Plik CSV'),
@@ -320,6 +312,7 @@ const onSubmit = handleSubmit(async values => {
 	startTime = new Date().getTime();
 	try {
 		turn.value = await pb.collection('turns').create({ value: turn.value.value + 1 });
+		await redis.del('turnsDataTurnEnd');
 	} catch (error) {
 		toast({
 			title: `Błąd przy tworzeniu następnej tury!`,
@@ -330,6 +323,7 @@ const onSubmit = handleSubmit(async values => {
 
 	try {
 		turns.value = await pb.collection('turns').getFullList({ sort: '-value' });
+		await redis.del('turnsDataTurnEnd');
 	} catch (error) {
 		toast({
 			title: `Błąd przy tworzeniu nowej listy tur!`,
@@ -366,8 +360,6 @@ const onSubmit = handleSubmit(async values => {
 		description: `Zakończono turę w czasie: ${((endTimeAll - startTimeAll) / 1000).toFixed(3)} s`
 	});
 });
-
-const checkFileType = (file: File, type = 'csv'): boolean => file?.name.endsWith(`.${type}`);
 
 async function parseCSVFile(file: File) {
 	try {

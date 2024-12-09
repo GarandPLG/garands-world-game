@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
 import type { DataForChart } from '@/types/chartsTypes';
+import type { ProvincesResponse, StatesResponse, TurnsResponse } from '@/types/pb-types';
 
 useHead({
 	title: `Garand's WG | Wykresy i statystyki | Państwa`
@@ -9,19 +10,28 @@ useHead({
 const route = useRoute();
 const group = ref('states');
 const subgroup = computed<string>(() => route.params.subgroup);
-const pb = usePocketBase();
 
 const chartsSubcategories = computed(
 	() => chartsCategories.filter(category => category.name === group.value)[0].labels
 );
 
-const { fetchTurnsData, fetchStatesData, fetchProvincesData } = cacheFullListResponsesStore();
+const turnsData = ref<TurnsResponse<unknown>[]>(
+	await useCachedData('turnsDataCharts', 'turns', 1800, {
+		fields: ['id,value']
+	})
+);
 
-const cd = storeToRefs(cacheFullListResponsesStore());
+const statesData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
+	await useCachedData('statesDataCharts', 'states', 1800, {
+		fields: ['id,color,turn,name,color,burgs,cells,ruralPopulation,urbanPopulation']
+	})
+);
 
-if (!cd.turnsData.value.length) await fetchTurnsData();
-if (!cd.statesData.value.length) await fetchStatesData();
-if (subgroup.value === 'provinces' && !cd.provincesData.value.length) await fetchProvincesData();
+const provincesData = ref<ProvincesResponse<unknown>[]>(
+	await useCachedData('provincesDataCharts', 'provinces', 1800, {
+		fields: ['id,turn,name,color,burgs,cells,ruralPopulation,urbanPopulation,state']
+	})
+);
 
 const dataForCharts = computed<DataForChart>(() => ({
 	group: group.value,
@@ -30,15 +40,22 @@ const dataForCharts = computed<DataForChart>(() => ({
 	chart: dFCh[group.value].charts[subgroup.value]
 }));
 
-const statesDataItem = cd.statesData.value.filter(
-	item => item.turn === cd.turnsData.value[cd.turnsData.value.length - 2].id
+const statesDataItem = statesData.value.filter(
+	item => item.turn === turnsData.value[turnsData.value.length - 2].id
 );
 
 dataForCharts.value.config.categories = statesDataItem.map(item => item.name);
 
 dataForCharts.value.config.colors = statesDataItem.map(item => item.color);
 
-const { generateChartContent } = useChartData(cd, dataForCharts);
+const { generateChartContent } = useChartData(
+	{
+		turnsData: turnsData.value,
+		statesData: statesData.value,
+		provincesData: provincesData.value
+	},
+	dataForCharts
+);
 
 generateChartContent();
 
@@ -48,94 +65,7 @@ const chartData = computed(() => {
 	return dataForCharts.value.chart;
 });
 
-// const turnsSubscription = await pb.collection('turns').subscribe('*', e => {
-// 	switch (e.action) {
-// 		case 'create':
-// 			cd.turnsData.value.push(e.record);
-// 			cacheData('turnsData', cd.turnsData.value);
-// 			break;
-
-// 		case 'update':
-// 			cd.turnsData.value = cd.turnsData.value.map(turn => {
-// 				if (turn.id === e.record.id) return e.record;
-// 				return turn;
-// 			});
-// 			cacheData('turnsData', cd.turnsData.value);
-// 			break;
-
-// 		case 'delete':
-// 			cd.turnsData.value = cd.turnsData.value.filter(turn => turn.id !== e.record.id);
-// 			cacheData('turnsData', cd.turnsData.value);
-// 			break;
-// 	}
-// });
-
-// const statesSubscription = await pb.collection('states').subscribe('*', e => {
-// 	switch (e.action) {
-// 		case 'create':
-// 			cd.statesData.value.push(e.record);
-// 			cacheData('statesData', cd.statesData.value);
-// 			break;
-
-// 		case 'update':
-// 			cd.statesData.value = cd.statesData.value.map(state => {
-// 				if (state.id === e.record.id) return e.record;
-// 				return state;
-// 			});
-// 			cacheData('statesData', cd.statesData.value);
-// 			break;
-
-// 		case 'delete':
-// 			cd.statesData.value = cd.statesData.value.filter(state => state.id !== e.record.id);
-// 			cacheData('statesData', cd.statesData.value);
-// 			break;
-// 	}
-// });
-
-// let provincesSubscription: UnsubscribeFunc;
-// if (subgroup.value === 'provinces') {
-// 	provincesSubscription = await pb.collection('provinces').subscribe('*', e => {
-// 		switch (e.action) {
-// 			case 'create':
-// 				cd.provincesData.value.push(e.record);
-// 				cacheData('provincesData', cd.provincesData.value);
-// 				break;
-
-// 			case 'update':
-// 				cd.provincesData.value = cd.provincesData.value.map(province => {
-// 					if (province.id === e.record.id) return e.record;
-// 					return province;
-// 				});
-// 				cacheData('provincesData', cd.provincesData.value);
-// 				break;
-
-// 			case 'delete':
-// 				cd.provincesData.value = cd.provincesData.value.filter(
-// 					province => province.id !== e.record.id
-// 				);
-// 				cacheData('provincesData', cd.provincesData.value);
-// 				break;
-// 		}
-// 	});
-// }
-// onUnmounted(() => {
-// 	turnsSubscription();
-// 	statesSubscription();
-// 	if (subgroup.value === 'provinces') provincesSubscription();
-// });
-
-// watch(
-// 	[cd.turnsData, cd.statesData, cd.provincesData, cd.burgsData, cd.culturesData, cd.religionsData],
-// 	() => {
-// 		dataForCharts.value.chart = [];
-// 		generateChartContent();
-// 	},
-// 	{ deep: true }
-// );
-
 watch([subgroup], async () => {
-	if (subgroup.value === 'provinces' && !cd.provincesData.value.length) await fetchProvincesData();
-
 	dataForCharts.value.chart = [];
 	generateChartContent();
 });

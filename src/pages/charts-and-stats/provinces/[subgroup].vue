@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
 import type { DataForChart } from '@/types/chartsTypes';
+import type { BurgsResponse, ProvincesResponse, TurnsResponse } from '@/types/pb-types';
 
 useHead({
 	title: `Garand's WG | Wykresy i statystyki | Prowincje`
@@ -14,12 +15,23 @@ const chartsSubcategories = computed(
 	() => chartsCategories.filter(category => category.name === group.value)[0].labels
 );
 
-const { fetchTurnsData, fetchProvincesData } = cacheFullListResponsesStore();
+const turnsData = ref<TurnsResponse<unknown>[]>(
+	await useCachedData('turnsDataCharts', 'turns', 1800, {
+		fields: ['id,value']
+	})
+);
 
-const cd = storeToRefs(cacheFullListResponsesStore());
+const provincesData = ref<ProvincesResponse<unknown>[]>(
+	await useCachedData('provincesDataCharts', 'provinces', 1800, {
+		fields: ['id,turn,name,color,burgs,cells,ruralPopulation,urbanPopulation,state']
+	})
+);
 
-if (!cd.turnsData.value.length) await fetchTurnsData();
-if (!cd.provincesData.value.length) await fetchProvincesData();
+const burgsData = ref<BurgsResponse<unknown, unknown>[]>(
+	await useCachedData('burgsDataCharts', 'burgs', 1800, {
+		fields: ['id,name,state,turn,population,culture,religion']
+	})
+);
 
 const dataForCharts = computed<DataForChart>(() => ({
 	group: group.value,
@@ -28,15 +40,22 @@ const dataForCharts = computed<DataForChart>(() => ({
 	chart: dFCh[group.value].charts[subgroup.value]
 }));
 
-const provincesDataItem = cd.provincesData.value.filter(
-	item => item.turn === cd.turnsData.value[cd.turnsData.value.length - 2].id
+const provincesDataItem = provincesData.value.filter(
+	item => item.turn === turnsData.value[turnsData.value.length - 2].id
 );
 
 dataForCharts.value.config.categories = provincesDataItem.map(item => item.name);
 
 dataForCharts.value.config.colors = provincesDataItem.map(item => item.color);
 
-const { generateChartContent } = useChartData(cd, dataForCharts);
+const { generateChartContent } = useChartData(
+	{
+		turnsData: turnsData.value,
+		provincesData: provincesData.value,
+		burgsData: burgsData.value
+	},
+	dataForCharts
+);
 
 generateChartContent();
 

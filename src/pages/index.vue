@@ -3,17 +3,15 @@ import { Icon } from '@iconify/vue';
 useHead({
 	title: "Garand's WG"
 });
-// const pb = usePocketBase();
-const { toast } = useToast();
 </script>
 
 <template>
 	<div class="mt-6 flex h-screen flex-col items-center justify-center">
-		<h1 class="mb-4 text-3xl font-bold"
-			>Witaj na <span class="text-primary">Garandowym WG</span>!</h1
-		>
+		<h1 class="mb-4 text-3xl font-bold">
+			Witaj na <span class="text-primary">Garandowym WG</span>!
+		</h1>
 
-		<p class="mb-4 text-sm">Wersja: <span class="text-primary">0.0.22 Indev</span></p>
+		<p class="mb-4 text-sm">Wersja: <span class="text-primary">0.0.23 Indev</span></p>
 
 		<a
 			href="https://discord.gg/vhBmFVpR3w"

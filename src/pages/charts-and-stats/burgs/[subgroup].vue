@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
 import type { DataForChart } from '@/types/chartsTypes';
+import type { BurgsResponse, StatesResponse, TurnsResponse } from '@/types/pb-types';
 
 useHead({
 	title: `Garand's WG | Wykresy i statystyki | Miasta`
@@ -14,13 +15,23 @@ const chartsSubcategories = computed(
 	() => chartsCategories.filter(category => category.name === group.value)[0].labels
 );
 
-const { fetchTurnsData, fetchStatesData, fetchBurgsData } = cacheFullListResponsesStore();
+const turnsData = ref<TurnsResponse<unknown>[]>(
+	await useCachedData('turnsDataCharts', 'turns', 1800, {
+		fields: ['id,value']
+	})
+);
 
-const cd = storeToRefs(cacheFullListResponsesStore());
+const statesData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
+	await useCachedData('statesDataCharts', 'states', 1800, {
+		fields: ['id,color,turn,name,color,burgs,cells,ruralPopulation,urbanPopulation']
+	})
+);
 
-if (!cd.turnsData.value.length) await fetchTurnsData();
-if (!cd.statesData.value.length) await fetchStatesData();
-if (!cd.burgsData.value.length) await fetchBurgsData();
+const burgsData = ref<BurgsResponse<unknown, unknown>[]>(
+	await useCachedData('burgsDataCharts', 'burgs', 1800, {
+		fields: ['id,name,state,turn,population,culture']
+	})
+);
 
 const dataForCharts = computed<DataForChart>(() => ({
 	group: group.value,
@@ -29,17 +40,24 @@ const dataForCharts = computed<DataForChart>(() => ({
 	chart: dFCh[group.value].charts[subgroup.value]
 }));
 
-const burgsDataItem = cd.burgsData.value.filter(
-	item => item.turn === cd.turnsData.value[cd.turnsData.value.length - 2].id
+const burgsDataItem = burgsData.value.filter(
+	item => item.turn === turnsData.value[turnsData.value.length - 2].id
 );
 
 dataForCharts.value.config.categories = burgsDataItem.map(item => item.name);
 
 dataForCharts.value.config.colors = burgsDataItem.map(item => {
-	return cd.statesData.value.find(state => item.state === state.id)?.color || '#000';
+	return statesData.value.find(state => item.state === state.id)?.color || '#000';
 });
 
-const { generateChartContent } = useChartData(cd, dataForCharts);
+const { generateChartContent } = useChartData(
+	{
+		turnsData: turnsData.value,
+		statesData: statesData.value,
+		burgsData: burgsData.value
+	},
+	dataForCharts
+);
 
 generateChartContent();
 
