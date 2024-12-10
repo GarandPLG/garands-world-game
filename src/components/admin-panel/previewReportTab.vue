@@ -6,19 +6,25 @@ const props = defineProps<{
 	description: string;
 }>();
 
-const redis = useRedis();
-const pb = usePocketBase();
-const { toast } = useToast();
-
 const turnsData = ref<TurnsResponse<unknown>[]>(
-	await useCachedData('turnsDataPreviewReport', 'turns', 1800, {
-		fields: ['value']
+	await useCachedData({
+		key: 'turnsDataPreviewReport',
+		collection: 'turns',
+		ttl: 1800,
+		requestArgs: {
+			fields: ['value']
+		}
 	})
 );
 
 const statesData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
-	await useCachedData('statesDataPreviewReport', 'states', 1800, {
-		fields: ['name']
+	await useCachedData({
+		key: 'statesDataPreviewReport',
+		collection: 'states',
+		ttl: 1800,
+		requestArgs: {
+			fields: ['name']
+		}
 	})
 );
 

@@ -15,14 +15,25 @@ const chartsSubcategories = computed(
 );
 
 const turnsData = ref<TurnsResponse<unknown>[]>(
-	await useCachedData('turnsDataCharts', 'turns', 1800, {
-		fields: ['id,value']
+	await useCachedData({
+		key: 'turnsDataCharts',
+		collection: 'turns',
+		ttl: 1800,
+		func: 'getFullList',
+		requestArgs: {
+			fields: ['id,value']
+		}
 	})
 );
 
 const burgsData = ref<BurgsResponse<unknown, unknown>[]>(
-	await useCachedData('miscDataCharts', 'burgs', 1800, {
-		fields: ['id,turn,isCapital,isPort,isCitadel,isWalls,isPlaza,isTemple,isShantyTown']
+	await useCachedData({
+		key: 'miscDataCharts',
+		collection: 'burgs',
+		ttl: 1800,
+		requestArgs: {
+			fields: ['id,turn,isCapital,isPort,isCitadel,isWalls,isPlaza,isTemple,isShantyTown']
+		}
 	})
 );
 

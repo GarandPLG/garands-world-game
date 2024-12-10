@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { FormField } from '@/components/ui/form';
-import type { StatesResponse } from '@/types/pb-types';
+import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
 import { ELEMENT_NODE, parse, render, walk } from '@michaelhthomas/fluxhtml';
 import { parse as parseCSV } from '@std/csv';
 import { useForm } from 'vee-validate';
@@ -15,14 +15,24 @@ const { toast } = useToast();
 const redis = useRedis();
 
 const turnsData = ref<TurnsResponse<unknown>[]>(
-	await useCachedData('turnsDataTurnEnd', 'turns', 1800, {
-		fields: ['id,value']
+	await useCachedData({
+		key: 'turnsDataTurnEnd',
+		collection: 'turns',
+		ttl: 1800,
+		requestArgs: {
+			fields: ['id,value']
+		}
 	})
 );
 
 const statesData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
-	await useCachedData('statesDataTurnEnd', 'states', 1800, {
-		fields: ['turn']
+	await useCachedData({
+		key: 'statesDataTurnEnd',
+		collection: 'states',
+		ttl: 1800,
+		requestArgs: {
+			fields: ['turn']
+		}
 	})
 );
 

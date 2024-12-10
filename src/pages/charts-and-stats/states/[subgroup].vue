@@ -16,20 +16,36 @@ const chartsSubcategories = computed(
 );
 
 const turnsData = ref<TurnsResponse<unknown>[]>(
-	await useCachedData('turnsDataCharts', 'turns', 1800, {
-		fields: ['id,value']
+	await useCachedData({
+		key: 'turnsDataCharts',
+		collection: 'turns',
+		ttl: 1800,
+		func: 'getFullList',
+		requestArgs: {
+			fields: ['id,value']
+		}
 	})
 );
 
 const statesData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
-	await useCachedData('statesDataCharts', 'states', 1800, {
-		fields: ['id,color,turn,name,color,burgs,cells,ruralPopulation,urbanPopulation']
+	await useCachedData({
+		key: 'statesDataCharts',
+		collection: 'states',
+		ttl: 1800,
+		requestArgs: {
+			fields: ['id,color,turn,name,color,burgs,cells,ruralPopulation,urbanPopulation']
+		}
 	})
 );
 
 const provincesData = ref<ProvincesResponse<unknown>[]>(
-	await useCachedData('provincesDataCharts', 'provinces', 1800, {
-		fields: ['id,turn,name,color,burgs,cells,ruralPopulation,urbanPopulation,state']
+	await useCachedData({
+		key: 'provincesDataCharts',
+		collection: 'provinces',
+		ttl: 1800,
+		requestArgs: {
+			fields: ['id,turn,name,color,burgs,cells,ruralPopulation,urbanPopulation,state']
+		}
 	})
 );
 

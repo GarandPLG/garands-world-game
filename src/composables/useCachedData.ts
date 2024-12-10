@@ -1,23 +1,57 @@
-export async function useCachedData(
-	key: string,
-	collection: string,
-	ttl?: number,
-	requestArgs?: Object
-): Promise<any[]> {
+import type { ListResult, RecordModel } from 'pocketbase';
+
+export async function useCachedData({
+	key,
+	collection,
+	ttl,
+	func = 'getFullList',
+	requestArgs,
+	recordId,
+	pagination = [1, 50],
+	filter
+}: {
+	key: string;
+	collection: string;
+	ttl?: number;
+	func?: string;
+	requestArgs?: Object;
+	recordId?: string;
+	pagination?: number[];
+	filter?: string;
+}): Promise<any[] | any> {
 	const redis = useRedis();
 	const pb = usePocketBase();
 	const { toast } = useToast();
 
-	let data = [];
-
+	let response: RecordModel[] | ListResult<RecordModel> = [];
 	const cache: { value: any[] | null; type: string | null } = await redis.get(key);
 
 	if (!cache.value) {
 		try {
-			const response = await pb.collection(collection).getFullList(requestArgs);
+			switch (func) {
+				case 'getFullList':
+					response = await pb.collection(collection).getFullList(requestArgs);
+					break;
+
+				case 'getFirstListItem':
+					if (!filter) return [];
+					response = await pb.collection(collection).getFirstListItem(filter, requestArgs);
+					break;
+
+				case 'getList':
+					if (!pagination[0] || !pagination[1]) return [];
+					response = await pb
+						.collection(collection)
+						.getList(pagination[0], pagination[1], requestArgs);
+					break;
+
+				case 'getOne':
+					if (!recordId) return [];
+					response = await pb.collection(collection).getOne(recordId, requestArgs);
+					break;
+			}
 
 			await redis.set(key, response, ttl, 'list');
-			data = response;
 		} catch (error) {
 			toast({
 				title: 'Błąd przy pobieraniu danych!',
@@ -26,7 +60,7 @@ export async function useCachedData(
 
 			if (error instanceof Error) throw error;
 		}
-	} else data = cache.value;
+	} else response = cache.value;
 
-	return data;
+	return response;
 }
