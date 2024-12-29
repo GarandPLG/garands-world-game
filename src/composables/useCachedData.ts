@@ -31,11 +31,15 @@ export async function useCachedData({
 			switch (func) {
 				case 'getFullList':
 					response = await pb.collection(collection).getFullList(requestArgs);
+
+					await redis.set(key, response, ttl, 'list');
 					break;
 
 				case 'getFirstListItem':
 					if (!filter) return [];
 					response = await pb.collection(collection).getFirstListItem(filter, requestArgs);
+
+					await redis.set(key, response, ttl);
 					break;
 
 				case 'getList':
@@ -43,15 +47,17 @@ export async function useCachedData({
 					response = await pb
 						.collection(collection)
 						.getList(pagination[0], pagination[1], requestArgs);
+
+					await redis.set(key, response, ttl, 'list');
 					break;
 
 				case 'getOne':
 					if (!recordId) return [];
 					response = await pb.collection(collection).getOne(recordId, requestArgs);
+
+					await redis.set(key, response, ttl);
 					break;
 			}
-
-			await redis.set(key, response, ttl, 'list');
 		} catch (error) {
 			toast({
 				title: 'Błąd przy pobieraniu danych!',

@@ -7,6 +7,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdministrationReport: typeof import('./../components/report/administrationReport.vue')['default']
+    BuildingsReport: typeof import('./../components/report/buildingsReport.vue')['default']
     Button: typeof import('./../components/ui/button/Button.vue')['default']
     Card: typeof import('./../components/ui/card/Card.vue')['default']
     CardContent: typeof import('./../components/ui/card/CardContent.vue')['default']
@@ -29,6 +31,7 @@ declare module 'vue' {
     DialogScrollContent: typeof import('./../components/ui/dialog/DialogScrollContent.vue')['default']
     DialogTitle: typeof import('./../components/ui/dialog/DialogTitle.vue')['default']
     DialogTrigger: typeof import('./../components/ui/dialog/DialogTrigger.vue')['default']
+    DiplomacyReport: typeof import('./../components/report/diplomacyReport.vue')['default']
     DropdownMenu: typeof import('./../components/ui/dropdown-menu/DropdownMenu.vue')['default']
     DropdownMenuCheckboxItem: typeof import('./../components/ui/dropdown-menu/DropdownMenuCheckboxItem.vue')['default']
     DropdownMenuContent: typeof import('./../components/ui/dropdown-menu/DropdownMenuContent.vue')['default']
@@ -43,14 +46,17 @@ declare module 'vue' {
     DropdownMenuSubContent: typeof import('./../components/ui/dropdown-menu/DropdownMenuSubContent.vue')['default']
     DropdownMenuSubTrigger: typeof import('./../components/ui/dropdown-menu/DropdownMenuSubTrigger.vue')['default']
     DropdownMenuTrigger: typeof import('./../components/ui/dropdown-menu/DropdownMenuTrigger.vue')['default']
+    FinanceReport: typeof import('./../components/report/financeReport.vue')['default']
     FormControl: typeof import('./../components/ui/form/FormControl.vue')['default']
     FormDescription: typeof import('./../components/ui/form/FormDescription.vue')['default']
     FormItem: typeof import('./../components/ui/form/FormItem.vue')['default']
     FormLabel: typeof import('./../components/ui/form/FormLabel.vue')['default']
     FormMessage: typeof import('./../components/ui/form/FormMessage.vue')['default']
+    GroupOfFlags: typeof import('./../components/report/diplomacy/groupOfFlags.vue')['default']
     Input: typeof import('./../components/ui/input/Input.vue')['default']
     Label: typeof import('./../components/ui/label/Label.vue')['default']
     LineChart: typeof import('./../components/ui/chart-line/LineChart.vue')['default']
+    MilitaryReport: typeof import('./../components/report/militaryReport.vue')['default']
     NavigationBar: typeof import('./../components/NavigationBar.vue')['default']
     NavigationMenu: typeof import('./../components/ui/navigation-menu/NavigationMenu.vue')['default']
     NavigationMenuContent: typeof import('./../components/ui/navigation-menu/NavigationMenuContent.vue')['default']
@@ -68,6 +74,7 @@ declare module 'vue' {
     Popover: typeof import('./../components/ui/popover/Popover.vue')['default']
     PopoverContent: typeof import('./../components/ui/popover/PopoverContent.vue')['default']
     PopoverTrigger: typeof import('./../components/ui/popover/PopoverTrigger.vue')['default']
+    PopulationReport: typeof import('./../components/report/populationReport.vue')['default']
     PreviewReportTab: typeof import('./../components/admin-panel/previewReportTab.vue')['default']
     Progress: typeof import('./../components/ui/progress/Progress.vue')['default']
     RadioGroup: typeof import('./../components/ui/radio-group/RadioGroup.vue')['default']
@@ -77,6 +84,7 @@ declare module 'vue' {
     ScrollArea: typeof import('./../components/ui/scroll-area/ScrollArea.vue')['default']
     ScrollBar: typeof import('./../components/ui/scroll-area/ScrollBar.vue')['default']
     Separator: typeof import('./../components/ui/separator/Separator.vue')['default']
+    SummaryReport: typeof import('./../components/report/summaryReport.vue')['default']
     Switch: typeof import('./../components/ui/switch/Switch.vue')['default']
     Table: typeof import('./../components/ui/table/Table.vue')['default']
     TableBody: typeof import('./../components/ui/table/TableBody.vue')['default']
@@ -100,6 +108,7 @@ declare module 'vue' {
     ToastProvider: typeof import('./../components/ui/toast/ToastProvider.vue')['default']
     ToastTitle: typeof import('./../components/ui/toast/ToastTitle.vue')['default']
     ToastViewport: typeof import('./../components/ui/toast/ToastViewport.vue')['default']
+    TradeReport: typeof import('./../components/report/tradeReport.vue')['default']
     TurnEndTab: typeof import('./../components/admin-panel/turnEndTab.vue')['default']
   }
 }

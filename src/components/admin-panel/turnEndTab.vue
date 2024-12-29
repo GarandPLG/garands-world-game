@@ -322,7 +322,6 @@ const onSubmit = handleSubmit(async values => {
 	startTime = new Date().getTime();
 	try {
 		turn.value = await pb.collection('turns').create({ value: turn.value.value + 1 });
-		await redis.del('turnsDataTurnEnd');
 	} catch (error) {
 		toast({
 			title: `Błąd przy tworzeniu następnej tury!`,
@@ -333,7 +332,6 @@ const onSubmit = handleSubmit(async values => {
 
 	try {
 		turns.value = await pb.collection('turns').getFullList({ sort: '-value' });
-		await redis.del('turnsDataTurnEnd');
 	} catch (error) {
 		toast({
 			title: `Błąd przy tworzeniu nowej listy tur!`,
@@ -364,6 +362,20 @@ const onSubmit = handleSubmit(async values => {
 		description: `Dodano mapę i nową turę w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
 	});
 	// =============================================================================
+
+	redis.del('statesDataCharts');
+	redis.del('provincesDataCharts');
+	redis.del('burgsDataCharts');
+	redis.del('culturesDataCharts');
+	redis.del('religionsDataCharts');
+	redis.del('turnsDataCharts');
+	redis.del('miscDataCharts');
+
+	redis.del('statesDataPreviewReport');
+	redis.del('turnsDataPreviewReport');
+
+	redis.del('turnsDataTurnEnd');
+	redis.del('statesDataTurnEnd');
 
 	toast({
 		title: 'Udało się zakończyć turę!',

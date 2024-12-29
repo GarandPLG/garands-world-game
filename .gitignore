@@ -38,3 +38,5 @@ slim.report.json
 !/pocketbase/pb_hooks/ # Jeśli chcesz śledzić hooki
 
 /pocketbase/pocketbase
+
+redis/data
