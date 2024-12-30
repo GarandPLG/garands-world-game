@@ -65,7 +65,7 @@ W wersji produkcyjnej:
 
 ## 📋 Wymagania
 
-- **Bun** w wersji co najmniej `1.1.34`.
+- **Bun** w wersji co najmniej `1.1.42`.
 - **PocketBase** w wersji co najmniej `0.22.26`.
 - **Docker** i **Docker Compose** w najnowszej stabilnej wersji.
 

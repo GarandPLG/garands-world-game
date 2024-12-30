@@ -52,6 +52,8 @@ const maps: { [key: string]: Map } = pbMaps.reduce((acc, map: Map) => {
 	return acc;
 }, {});
 
+const defaultMap = computed(() => Object.keys(maps)[Object.keys(maps).length - 1]);
+
 const pb_origin = import.meta.env.PROD ? 'http://localhost:8090' : 'http://localhost:5173/pb';
 </script>
 
@@ -61,10 +63,7 @@ const pb_origin = import.meta.env.PROD ? 'http://localhost:8090' : 'http://local
 			FPS: {{ fps }}
 		</p>
 
-		<Tabs
-			:default-value="maps[Object.keys(maps)[0]].name"
-			class="flex w-full flex-col items-center justify-center"
-		>
+		<Tabs :default-value="defaultMap" class="flex w-full flex-col items-center justify-center">
 			<TabsList class="w-full items-center justify-center">
 				<TabsTrigger v-for="(map, key) in maps" :key="key" :value="key">
 					{{ key }}

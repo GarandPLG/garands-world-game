@@ -6,6 +6,7 @@ import _ from 'lodash';
 interface Flag {
 	name: string;
 	emblemSVG: string;
+	color: string;
 }
 
 interface GroupedRelations {
@@ -30,7 +31,7 @@ const flags: Flag[] = await useCachedData({
 	ttl: 1800,
 	requestArgs: {
 		filter: `turn = "${props.turn.id}" && name != "${props.state.name}" && name != "Neutrals"`,
-		fields: ['name,emblemSVG']
+		fields: ['name,emblemSVG,color']
 	}
 });
 
@@ -53,8 +54,8 @@ const groupedRelations: GroupedRelations = _.pickBy(
 
 const relationsTab = [
 	{ key: 'Vassal', label: 'Jesteś wasalem kraju' },
-	{ key: 'Rival', label: 'Jesteś rywalem kraju' },
 	{ key: 'Enemy', label: 'Jesteś w stanie wojny z' },
+	{ key: 'Rival', label: 'Jesteś rywalem kraju' },
 	{ key: 'Ally', label: 'Jesteś w sojuszu z' },
 	{ key: 'Suzerain', label: 'Jesteś suzerenem nad' },
 	{ key: 'Friendly', label: 'Jesteś w przyjaznych relacjach z' },

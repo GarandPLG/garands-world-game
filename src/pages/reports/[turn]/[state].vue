@@ -7,7 +7,7 @@ import MilitaryReport from '@/components/report/militaryReport.vue';
 import PopulationReport from '@/components/report/populationReport.vue';
 import SummaryReport from '@/components/report/summaryReport.vue';
 import TradeReport from '@/components/report/tradeReport.vue';
-import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
+import type { CulturesResponse, StatesResponse, TurnsResponse } from '@/types/pb-types';
 import type { AuthModel } from 'pocketbase';
 import type { Component } from 'vue';
 
@@ -41,6 +41,7 @@ useHead({
 
 const turnData = ref<TurnsResponse<unknown>>();
 const stateData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>>();
+const cultureData = ref<CulturesResponse<unknown>>();
 
 if (!user.value) router.push('/');
 else {
@@ -65,11 +66,34 @@ else {
 		filter: computed(() => {
 			const baseQuery = `name = "${state.value}" && turn = "${turnData.value.id}"`;
 			return isUserNotAdmin ? `${baseQuery} && user = "${isUserNotAdmin}"` : baseQuery;
-		}).value
+		}).value,
+		requestArgs: {
+			fields: ['name,nameFull,emblemSVG,color,culture,relations']
+		}
 	});
 
 	if (!stateData.value) throw new Error('Nie znaleziono kraju');
+
+	cultureData.value = await useCachedData({
+		key: `reportCultureTechnologyGroup|${turn.value + 1}|${state.value}|${isUserNotAdmin ? user.value : 'Administration'}`,
+		collection: 'cultures',
+		ttl: 1800,
+		func: 'getFirstListItem',
+		filter: computed(() => {
+			const baseQuery = `turn = "${turnData.value.id}" && id = "${stateData.value.culture}"`;
+			return isUserNotAdmin ? `${baseQuery} && user = "${isUserNotAdmin}"` : baseQuery;
+		}).value,
+		requestArgs: {
+			fields: ['namesbase']
+		}
+	});
+
+	if (!stateData.value) throw new Error('Nie znaleziono kultury');
 }
+
+const technologyGroup = ref<string>(
+	['Orc', 'Elven'].includes(cultureData.value.namesbase) ? cultureData.value.namesbase : 'Human'
+);
 
 const tabs = new Map<string, ReportTabs>([
 	[
@@ -137,8 +161,6 @@ const tabs = new Map<string, ReportTabs>([
 		}
 	]
 ]);
-
-console.log(stateData.value);
 </script>
 
 <template>
@@ -157,11 +179,11 @@ console.log(stateData.value);
 				class="h-screen w-full flex-col items-center justify-center"
 			>
 				<Card>
-					<CardHeader>
-						<CardTitle class="flex">
+					<CardHeader class="mb-[-0.6rem]">
+						<CardTitle class="flex items-center justify-center">
 							<figure v-html="value.props.state.emblemSVG" class="my-[-3rem]"></figure>
 
-							<div>
+							<div class="mt-[-0.5rem]">
 								<p>
 									{{ value.props.state.nameFull }}
 									(
@@ -185,6 +207,11 @@ console.log(stateData.value);
 								<p>
 									Stolica:
 									<span class="text-primary">{{ value.props.state.capital }}</span>
+								</p>
+
+								<p>
+									Grupa technologii:
+									<span class="text-primary">{{ technologyGroup }}</span>
 								</p>
 							</div>
 						</CardTitle>
