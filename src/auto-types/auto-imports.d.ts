@@ -6,6 +6,10 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const Accordion: typeof import('../components/ui/accordion/index')['Accordion']
+  const AccordionContent: typeof import('../components/ui/accordion/index')['AccordionContent']
+  const AccordionItem: typeof import('../components/ui/accordion/index')['AccordionItem']
+  const AccordionTrigger: typeof import('../components/ui/accordion/index')['AccordionTrigger']
   const AdminService: typeof import('pocketbase')['AdminService']
   const AsyncAuthStore: typeof import('pocketbase')['AsyncAuthStore']
   const BaseAuthStore: typeof import('pocketbase')['BaseAuthStore']
@@ -35,6 +39,7 @@ declare global {
   const DialogScrollContent: typeof import('../components/ui/dialog/index')['DialogScrollContent']
   const DialogTitle: typeof import('../components/ui/dialog/index')['DialogTitle']
   const DialogTrigger: typeof import('../components/ui/dialog/index')['DialogTrigger']
+  const DonutChart: typeof import('../components/ui/chart-donut/index')['DonutChart']
   const DropdownMenu: typeof import('../components/ui/dropdown-menu/index')['DropdownMenu']
   const DropdownMenuCheckboxItem: typeof import('../components/ui/dropdown-menu/index')['DropdownMenuCheckboxItem']
   const DropdownMenuContent: typeof import('../components/ui/dropdown-menu/index')['DropdownMenuContent']
@@ -122,7 +127,6 @@ declare global {
   const beforeAll: typeof import('vitest')['beforeAll']
   const beforeEach: typeof import('vitest')['beforeEach']
   const buttonVariants: typeof import('../components/ui/button/index')['buttonVariants']
-  const cacheFullListResponsesStore: typeof import('../stores/cacheFullListResponsesStore')['cacheFullListResponsesStore']
   const chai: typeof import('vitest')['chai']
   const chartsCategories: typeof import('../data/chartsConfig')['chartsCategories']
   const computed: typeof import('vue')['computed']
@@ -285,7 +289,6 @@ declare global {
   const useCached: typeof import('@vueuse/core')['useCached']
   const useCachedData: typeof import('../composables/useCachedData')['useCachedData']
   const useChartData: typeof import('../composables/useChartData')['useChartData']
-  const useChartDataFetch: typeof import('../composables/useChartDataFetch')['useChartDataFetch']
   const useClipboard: typeof import('@vueuse/core')['useClipboard']
   const useClipboardItems: typeof import('@vueuse/core')['useClipboardItems']
   const useCloned: typeof import('@vueuse/core')['useCloned']
@@ -361,7 +364,6 @@ declare global {
   const useObjectUrl: typeof import('@vueuse/core')['useObjectUrl']
   const useOffsetPagination: typeof import('@vueuse/core')['useOffsetPagination']
   const useOnline: typeof import('@vueuse/core')['useOnline']
-  const usePBDataFetch: typeof import('../composables/usePBDataFetch')['usePBDataFetch']
   const usePageLeave: typeof import('@vueuse/core')['usePageLeave']
   const useParallax: typeof import('@vueuse/core')['useParallax']
   const useParentElement: typeof import('@vueuse/core')['useParentElement']
@@ -473,6 +475,10 @@ import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
+    readonly Accordion: UnwrapRef<typeof import('../components/ui/accordion/index')['Accordion']>
+    readonly AccordionContent: UnwrapRef<typeof import('../components/ui/accordion/index')['AccordionContent']>
+    readonly AccordionItem: UnwrapRef<typeof import('../components/ui/accordion/index')['AccordionItem']>
+    readonly AccordionTrigger: UnwrapRef<typeof import('../components/ui/accordion/index')['AccordionTrigger']>
     readonly AdminService: UnwrapRef<typeof import('pocketbase')['AdminService']>
     readonly AsyncAuthStore: UnwrapRef<typeof import('pocketbase')['AsyncAuthStore']>
     readonly BaseAuthStore: UnwrapRef<typeof import('pocketbase')['BaseAuthStore']>
@@ -502,6 +508,7 @@ declare module 'vue' {
     readonly DialogScrollContent: UnwrapRef<typeof import('../components/ui/dialog/index')['DialogScrollContent']>
     readonly DialogTitle: UnwrapRef<typeof import('../components/ui/dialog/index')['DialogTitle']>
     readonly DialogTrigger: UnwrapRef<typeof import('../components/ui/dialog/index')['DialogTrigger']>
+    readonly DonutChart: UnwrapRef<typeof import('../components/ui/chart-donut/index')['DonutChart']>
     readonly DropdownMenu: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenu']>
     readonly DropdownMenuCheckboxItem: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenuCheckboxItem']>
     readonly DropdownMenuContent: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenuContent']>

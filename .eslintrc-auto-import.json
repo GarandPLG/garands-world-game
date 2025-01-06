@@ -489,6 +489,12 @@
     "useTurnEndCollectionLoop": true,
     "useProcessEndTurnCollectionsData": true,
     "useRedis": true,
-    "useCachedData": true
+    "useCachedData": true,
+    "Accordion": true,
+    "AccordionContent": true,
+    "AccordionItem": true,
+    "AccordionTrigger": true,
+    "DonutChart": true,
+    "useAdministrationChartData": true
   }
 }

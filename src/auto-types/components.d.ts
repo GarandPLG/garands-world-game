@@ -7,6 +7,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Accordion: typeof import('./../components/ui/accordion/Accordion.vue')['default']
+    AccordionContent: typeof import('./../components/ui/accordion/AccordionContent.vue')['default']
+    AccordionItem: typeof import('./../components/ui/accordion/AccordionItem.vue')['default']
+    AccordionTrigger: typeof import('./../components/ui/accordion/AccordionTrigger.vue')['default']
+    AdministrationAccordion: typeof import('./../components/report/administration/administrationAccordion.vue')['default']
+    AdministrationBurgCard: typeof import('./../components/report/administration/administrationBurgCard.vue')['default']
+    AdministrationProvincesCard: typeof import('./../components/report/administration/administrationProvincesCard.vue')['default']
     AdministrationReport: typeof import('./../components/report/administrationReport.vue')['default']
     BuildingsReport: typeof import('./../components/report/buildingsReport.vue')['default']
     Button: typeof import('./../components/ui/button/Button.vue')['default']
@@ -16,7 +23,6 @@ declare module 'vue' {
     CardFooter: typeof import('./../components/ui/card/CardFooter.vue')['default']
     CardHeader: typeof import('./../components/ui/card/CardHeader.vue')['default']
     CardTitle: typeof import('./../components/ui/card/CardTitle.vue')['default']
-    ChartComponent: typeof import('./../components/charts-and-stats/chartComponent.vue')['default']
     ChartCrosshair: typeof import('./../components/ui/chart/ChartCrosshair.vue')['default']
     ChartLegend: typeof import('./../components/ui/chart/ChartLegend.vue')['default']
     ChartSingleTooltip: typeof import('./../components/ui/chart/ChartSingleTooltip.vue')['default']
@@ -32,6 +38,7 @@ declare module 'vue' {
     DialogTitle: typeof import('./../components/ui/dialog/DialogTitle.vue')['default']
     DialogTrigger: typeof import('./../components/ui/dialog/DialogTrigger.vue')['default']
     DiplomacyReport: typeof import('./../components/report/diplomacyReport.vue')['default']
+    DonutChart: typeof import('./../components/ui/chart-donut/DonutChart.vue')['default']
     DropdownMenu: typeof import('./../components/ui/dropdown-menu/DropdownMenu.vue')['default']
     DropdownMenuCheckboxItem: typeof import('./../components/ui/dropdown-menu/DropdownMenuCheckboxItem.vue')['default']
     DropdownMenuContent: typeof import('./../components/ui/dropdown-menu/DropdownMenuContent.vue')['default']

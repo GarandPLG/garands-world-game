@@ -11,6 +11,11 @@ import type { CulturesResponse, StatesResponse, TurnsResponse } from '@/types/pb
 import type { AuthModel } from 'pocketbase';
 import type { Component } from 'vue';
 
+type RouteParams = {
+	turn: number;
+	state: string;
+};
+
 interface ReportTabs {
 	name: string;
 	component: Component;
@@ -25,8 +30,8 @@ const router = useRouter();
 
 const { currentUser } = storeToRefs(listenCurrentUserStore());
 
-const turn = computed<string>(() => route.params.turn - 1);
-const state = computed<string>(() => route.params.state);
+const turn = computed<string>(() => (route.params as RouteParams).turn - 1);
+const state = computed<string>(() => (route.params as RouteParams).state);
 const user = computed<AuthModel | null>(() =>
 	currentUser.value ? `"${currentUser.value?.id}"` : null
 );
@@ -59,7 +64,7 @@ else {
 	if (!turnData.value) throw new Error('Nie znaleziono tury');
 
 	stateData.value = await useCachedData({
-		key: `reportState|${turn.value + 1}|${state.value}|${isUserNotAdmin ? user.value : 'Administration'}`,
+		key: `reportState-${turn.value + 1}-${state.value}-${isUserNotAdmin ? user.value : 'Administration'}`,
 		collection: 'states',
 		ttl: 1800,
 		func: 'getFirstListItem',
@@ -68,14 +73,16 @@ else {
 			return isUserNotAdmin ? `${baseQuery} && user = "${isUserNotAdmin}"` : baseQuery;
 		}).value,
 		requestArgs: {
-			fields: ['name,nameFull,emblemSVG,color,culture,relations']
+			fields: [
+				'id,name,nameFull,emblemSVG,color,culture,relations,biomesCells,culturesCells,religionsCells,capital'
+			]
 		}
 	});
 
 	if (!stateData.value) throw new Error('Nie znaleziono kraju');
 
 	cultureData.value = await useCachedData({
-		key: `reportCultureTechnologyGroup|${turn.value + 1}|${state.value}|${isUserNotAdmin ? user.value : 'Administration'}`,
+		key: `reportCultureTechnologyGroup-${turn.value + 1}-${state.value}-${isUserNotAdmin ? user.value : 'Administration'}`,
 		collection: 'cultures',
 		ttl: 1800,
 		func: 'getFirstListItem',
@@ -91,8 +98,22 @@ else {
 	if (!stateData.value) throw new Error('Nie znaleziono kultury');
 }
 
+const cultureToTechnologyGroup = {
+	Orc: 'Orkish',
+	Goblin: 'Orkish',
+	Elven: 'Elfish',
+	'Dark Elven': 'Elfish',
+	Dwarven: 'Dwarven',
+	Giant: 'Giants',
+	Draconic: 'Draconic',
+	Arachnid: 'Arachnid',
+	Serpents: 'Serpents'
+};
+
 const technologyGroup = ref<string>(
-	['Orc', 'Elven'].includes(cultureData.value.namesbase) ? cultureData.value.namesbase : 'Human'
+	cultureData.value.namesbase in cultureToTechnologyGroup
+		? cultureToTechnologyGroup[cultureData.value.namesbase]
+		: 'Human'
 );
 
 const tabs = new Map<string, ReportTabs>([
@@ -194,7 +215,7 @@ const tabs = new Map<string, ReportTabs>([
 								</p>
 
 								<p>
-									Tura: <span class="text-primary">{{ turnData.value + 1 }}</span>
+									Tura: <span class="text-primary">{{ (turnData?.value ?? 0) + 1 }}</span>
 								</p>
 
 								<p>
