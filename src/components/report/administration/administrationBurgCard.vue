@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { BurgsResponse, CulturesResponse, ReligionsResponse } from '@/types/pb-types';
+import { Icon } from '@iconify/vue';
 
 const props = defineProps<{
 	burg: BurgsResponse<unknown>;
@@ -42,53 +43,60 @@ const props = defineProps<{
 				</p>
 
 				<div class="mt-2 grid h-full w-full grid-cols-7 gap-1 rounded-md border p-0.5">
-					<div
-						class="h-full w-full text-center text-lg hover:rounded-md hover:border"
-						:class="props.burg.isCapital ? 'text-primary' : ''"
-					>
-						Ca
+					<div class="h-full w-full p-1 text-center text-lg hover:p-1.5">
+						<Icon
+							icon="material-symbols:award-star"
+							:class="props.burg.isCapital ? 'text-primary' : 'text-muted-foreground'"
+							class="h-full w-full"
+						/>
 					</div>
 
-					<div
-						class="h-full w-full text-center text-lg hover:rounded-md hover:border"
-						:class="props.burg.isPort ? 'text-primary' : ''"
-					>
-						Po
+					<div class="h-full w-full p-1 text-center text-lg hover:p-1.5">
+						<Icon
+							icon="material-symbols:anchor"
+							:class="props.burg.isPort ? 'text-primary' : 'text-muted-foreground'"
+							class="h-full w-full"
+						/>
 					</div>
 
-					<div
-						class="h-full w-full text-center text-lg hover:rounded-md hover:border"
-						:class="props.burg.isCitadel ? 'text-primary' : ''"
-					>
-						Ct
+					<div class="h-full w-full p-1 text-center text-lg hover:p-1.5">
+						<Icon
+							icon="game-icons:white-tower"
+							:class="props.burg.isCitadel ? 'text-primary' : 'text-muted-foreground'"
+							class="h-full w-full"
+						/>
 					</div>
 
-					<div
-						class="h-full w-full text-center text-lg hover:rounded-md hover:border"
-						:class="props.burg.isWalls ? 'text-primary' : ''"
-					>
-						Wa
+					<div class="h-full w-full p-1 text-center text-lg hover:p-1.5">
+						<Icon
+							icon="game-icons:defensive-wall"
+							:class="props.burg.isWalls ? 'text-primary' : 'text-muted-foreground'"
+							class="h-full w-full"
+						/>
 					</div>
 
-					<div
-						class="h-full w-full text-center text-lg hover:rounded-md hover:border"
-						:class="props.burg.isPlaza ? 'text-primary' : ''"
-					>
-						Pl
+					<div class="h-full w-full p-1 text-center text-lg hover:p-1.5">
+						<Icon
+							icon="lsicon:marketplace-outline"
+							:class="props.burg.isPlaza ? 'text-primary' : 'text-muted-foreground'"
+							class="h-full w-full"
+						/>
 					</div>
 
-					<div
-						class="h-full w-full text-center text-lg hover:rounded-md hover:border"
-						:class="props.burg.isTemple ? 'text-primary' : ''"
-					>
-						Te
+					<div class="h-full w-full p-1 text-center text-lg hover:p-1.5">
+						<Icon
+							icon="tdesign:temple-filled"
+							:class="props.burg.isTemple ? 'text-primary' : 'text-muted-foreground'"
+							class="h-full w-full"
+						/>
 					</div>
 
-					<div
-						class="h-full w-full text-center text-lg hover:rounded-md hover:border"
-						:class="props.burg.isShantyTown ? 'text-primary' : ''"
-					>
-						ST
+					<div class="h-full w-full p-1 text-center text-lg hover:p-1.5">
+						<Icon
+							icon="game-icons:camping-tent"
+							:class="props.burg.isShantyTown ? 'text-primary' : 'text-muted-foreground'"
+							class="h-full w-full"
+						/>
 					</div>
 				</div>
 			</div>

@@ -56,7 +56,7 @@ declare global {
   const DropdownMenuSubTrigger: typeof import('../components/ui/dropdown-menu/index')['DropdownMenuSubTrigger']
   const DropdownMenuTrigger: typeof import('../components/ui/dropdown-menu/index')['DropdownMenuTrigger']
   const EffectScope: typeof import('vue')['EffectScope']
-  const FORM_ITEM_INJECTION_KEY: typeof import('../components/ui/form/index')['FORM_ITEM_INJECTION_KEY']
+  const FORM_ITEM_INJECTION_KEY: typeof import('../components/ui/form/injectionKeys')['FORM_ITEM_INJECTION_KEY']
   const Form: typeof import('../components/ui/form/index')['Form']
   const FormControl: typeof import('../components/ui/form/index')['FormControl']
   const FormDescription: typeof import('../components/ui/form/index')['FormDescription']
@@ -525,7 +525,7 @@ declare module 'vue' {
     readonly DropdownMenuSubTrigger: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenuSubTrigger']>
     readonly DropdownMenuTrigger: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenuTrigger']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
-    readonly FORM_ITEM_INJECTION_KEY: UnwrapRef<typeof import('../components/ui/form/index')['FORM_ITEM_INJECTION_KEY']>
+    readonly FORM_ITEM_INJECTION_KEY: UnwrapRef<typeof import('../components/ui/form/injectionKeys')['FORM_ITEM_INJECTION_KEY']>
     readonly Form: UnwrapRef<typeof import('../components/ui/form/index')['Form']>
     readonly FormControl: UnwrapRef<typeof import('../components/ui/form/index')['FormControl']>
     readonly FormDescription: UnwrapRef<typeof import('../components/ui/form/index')['FormDescription']>

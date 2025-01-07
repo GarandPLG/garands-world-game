@@ -18,7 +18,7 @@ const provinces = props.accordionItems.find(item => item.type === 'provinces')?.
 const burgs = props.accordionItems.find(item => item.type === 'burgs')?.content ?? [];
 
 const cultureNames = await useCachedData({
-	key: 'cultureNames',
+	key: `cultureNames-${props.turn.value + 1}`,
 	collection: 'cultures',
 	ttl: 1800,
 	requestArgs: {
@@ -28,7 +28,7 @@ const cultureNames = await useCachedData({
 });
 
 const religionNames = await useCachedData({
-	key: 'religionNames',
+	key: `religionNames-${props.turn.value + 1}`,
 	collection: 'religions',
 	ttl: 1800,
 	requestArgs: {
@@ -42,9 +42,9 @@ const religionNames = await useCachedData({
 	<Accordion type="single" class="w-full" collapsible>
 		<AccordionItem v-for="item in props.accordionItems" :key="item.title" :value="item.title">
 			<AccordionTrigger class="items-center justify-center space-x-1">
-				<h3 class="text-lg font-bold text-primary">{{ item.title }}</h3>
+				<h3 class="text-lg font-bold text-primary"> {{ item.title }} </h3>
 
-				<p> ( {{ item.len }} )</p>
+				<p> ( {{ item.len }} ) </p>
 			</AccordionTrigger>
 
 			<AccordionContent v-if="item.type === 'provinces'">
