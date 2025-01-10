@@ -68,22 +68,19 @@ const accordionItems = [
 		title: 'Biomy',
 		content: biomesChartData,
 		len: biomesChartData.length,
-		type: 'chart',
-		chartType: 'pie'
+		type: 'chart'
 	},
 	{
 		title: 'Religie',
 		content: religionsChartData,
 		len: religionsChartData.length,
-		type: 'chart',
-		chartType: 'pie'
+		type: 'chart'
 	},
 	{
 		title: 'Kultury',
 		content: culturesChartData,
 		len: culturesChartData.length,
-		type: 'chart',
-		chartType: 'pie'
+		type: 'chart'
 	}
 ];
 
@@ -97,10 +94,10 @@ function prepareChartData(content: object) {
 
 <template>
 	<div class="grid grid-cols-12 gap-3">
-		<div class="col-span-5 rounded-md border p-2">
+		<div class="col-span-4 rounded-md border p-2">
 			<AdministrationAccordion :accordionItems="accordionItems" :turn="props.turn" />
 		</div>
 
-		<div class="col-span-7 rounded-md border p-2">Zawartość</div>
+		<div class="col-span-8 rounded-md border p-2">Zawartość</div>
 	</div>
 </template>
