@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
 import type { DataForChart } from '@/types/chartsTypes';
 import type { BurgsResponse, ProvincesResponse, TurnsResponse } from '@/types/pb-types';
 
@@ -137,13 +136,11 @@ watch([subgroup], async () => {
 			<Separator />
 
 			<CardContent class="space-y-2 overflow-x-auto py-6">
-				<LineChart
+				<ChartLineWithPagination
 					:categories="dataForCharts.config.categories"
-					index="turn"
+					:index="'turn'"
 					:colors="dataForCharts.config.colors"
 					:data="chartData"
-					class="mb-3 mt-6 h-[800px]"
-					:custom-tooltip="customChartTooltip"
 				/>
 			</CardContent>
 		</Card>

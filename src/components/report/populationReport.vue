@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 // TODO: Populacja
-import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
 import type { BurgsResponse, StatesResponse, TurnsResponse } from '@/types/pb-types';
 import type { AuthModel } from 'pocketbase';
 
@@ -56,13 +55,13 @@ const burgs = ref<BurgsResponse<unknown>[]>(
 	})
 );
 
-const tab = [];
+const burgsTab = [];
 for (let i = 0; i < turnRecords.value.length - 1; i++) {
 	const turn = turnRecords.value[i];
 	console.log(turn.value);
 	const burgsInTurn = burgs.value.filter(burg => burg.turn === turn.id);
 
-	tab.push({
+	burgsTab.push({
 		turn: turn.value,
 		...burgsInTurn.reduce((acc, curr) => {
 			acc[curr.name] = curr.population;
@@ -71,24 +70,43 @@ for (let i = 0; i < turnRecords.value.length - 1; i++) {
 	});
 }
 
-console.log(tab);
-
-// console.log(props.state.id);
-// console.log(burgs.value);
-// console.log(turnRecords.value);
+const burgsTabCategories = Object.keys(burgsTab[burgsTab.length - 1]).filter(key => key !== 'turn');
 </script>
 
 <template>
 	<div>
 		<div class="h-[500px]"> content </div>
 
-		<LineChart
-			:data="tab"
-			index="turn"
-			:categories="Object.keys(tab[tab.length - 1]).filter(key => key !== 'turn')"
-			class="mb-3 mt-6 h-[500px] w-full"
-			:show-legend="false"
-			:custom-tooltip="customChartTooltip"
-		/>
+		<Accordion type="single" class="w-full" collapsible>
+			<AccordionItem value="provinces">
+				<AccordionTrigger class="items-center justify-center space-x-1">
+					<h3 class="text-lg font-bold text-primary"> </h3>
+
+					<p> ( ) </p>
+				</AccordionTrigger>
+
+				<AccordionContent>
+					<div class="m-2 p-2"> </div>
+				</AccordionContent>
+			</AccordionItem>
+
+			<AccordionItem value="burgs">
+				<AccordionTrigger class="items-center justify-center space-x-1">
+					<h3 class="text-lg font-bold text-primary"> Miasta </h3>
+
+					<p> ( {{ burgsTabCategories.length }} ) </p>
+				</AccordionTrigger>
+
+				<AccordionContent>
+					<div class="m-2 p-2">
+						<ChartLineWithPagination
+							:categories="burgsTabCategories"
+							:data="burgsTab"
+							:index="'turn'"
+						/>
+					</div>
+				</AccordionContent>
+			</AccordionItem>
+		</Accordion>
 	</div>
 </template>

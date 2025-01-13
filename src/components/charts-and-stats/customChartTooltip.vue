@@ -9,33 +9,14 @@ const props = defineProps<{
 }>();
 
 props.data.sort((a, b) => b.value - a.value);
-
-// const paginatedData = ref(props.data.slice(0, 70));
-// const pagination = ref([paginatedData.value]);
-
-// if (props.data.length > 70) {
-// 	for (let i = 70; i < props.data.length; i += 70) {
-// 		pagination.value.push(props.data.slice(i, i + 70));
-// 	}
-// }
-
-// const selectedPagination = ref(0);
 </script>
 
 <template>
-	<Card class="text-sm opacity-75">
+	<Card class="text-sm">
 		<CardHeader v-if="title" class="border-b p-3">
 			<CardTitle> <span class="text-primary">Tura</span>: {{ title }} </CardTitle>
-			<!-- <CardDescription v-if="pagination.length > 1">
-				Strona {{ selectedPagination + 1 }} / {{ pagination.length }}
-			</CardDescription> -->
 		</CardHeader>
 		<CardContent class="flex min-w-[180px] flex-col gap-1 p-3">
-			<!-- <div
-				v-if="pagination[selectedPagination]"
-				:key="selectedPagination"
-				class="grid max-w-[1300px] grid-cols-5 gap-3"
-			> -->
 			<div class="grid max-w-[1300px] grid-cols-5 gap-3">
 				<div
 					v-for="(item, key) in data"
