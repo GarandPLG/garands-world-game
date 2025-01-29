@@ -8,7 +8,7 @@ const props = defineProps<{
 	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
 }>();
 
-const pb = usePocketBase();
+console.log(props.turn.value);
 
 const { currentUser } = storeToRefs(listenCurrentUserStore());
 
@@ -38,6 +38,7 @@ const turnRecords = ref<TurnsResponse<unknown>[]>(
 		collection: 'turns',
 		ttl: 1800,
 		requestArgs: {
+			filter: `value <= ${props.turn.value + 1}`,
 			fields: ['id,value']
 		}
 	})
@@ -58,7 +59,6 @@ const burgs = ref<BurgsResponse<unknown>[]>(
 const burgsTab = [];
 for (let i = 0; i < turnRecords.value.length - 1; i++) {
 	const turn = turnRecords.value[i];
-	console.log(turn.value);
 	const burgsInTurn = burgs.value.filter(burg => burg.turn === turn.id);
 
 	burgsTab.push({

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
+// import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
 import { Button } from '@/components/ui/button';
 import {
 	Pagination,
@@ -11,28 +11,30 @@ import type { ChartData } from '@/types/chartsTypes';
 
 const props = defineProps<{
 	data: ChartData[];
-	categories?: string[];
-	colors: string[];
+	categories: string[];
+	colors?: string[];
 	index: string;
 }>();
 
-// props.data.sort((a, b) => b.value - a.value);
+const sortedData = computed(() =>
+	props.data.map(obj => Object.fromEntries(Object.entries(obj).sort((a, b) => b[1] - a[1])))
+);
 
-const itemsPerPage = 50;
+const itemsPerPage = 25;
+
+console.log(itemsPerPage);
 
 const totalPages =
 	Math.ceil(Object.keys(props.data[props.data.length - 1]).length / itemsPerPage) * 10;
 const currentPage = ref(1);
 
-console.log(totalPages);
-
 const paginatedData = computed(() => {
 	const start = (currentPage.value - 1) * itemsPerPage;
 	const end = start + itemsPerPage;
-	const keys = Object.keys(props.data[0]).filter(key => key !== 'turn');
+	const keys = Object.keys(sortedData.value[0]).filter(key => key !== 'turn');
 	const paginatedKeys = keys.slice(start, end);
 
-	return props.data.map(item => {
+	return sortedData.value.map(item => {
 		const paginatedItem: ChartData = { turn: item.turn };
 		paginatedKeys.forEach(key => {
 			paginatedItem[key] = item[key];
@@ -69,6 +71,8 @@ const changePage = (page: number) => {
 			:default-page="1"
 		>
 			<PaginationList v-slot="{ items }" class="flex items-center gap-1">
+				<PaginationPrev @click="changePage(currentPage - 1)" />
+
 				<template v-for="(item, index) in items">
 					<PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
 						<Button
@@ -82,6 +86,8 @@ const changePage = (page: number) => {
 
 					<PaginationEllipsis v-else :key="item.type" :index="index" />
 				</template>
+
+				<PaginationNext @click="changePage(currentPage + 1)" />
 			</PaginationList>
 		</Pagination>
 
@@ -90,9 +96,9 @@ const changePage = (page: number) => {
 			:index="props.index"
 			:colors="props.colors"
 			:data="paginatedData"
-			class="mb-3 mt-6 h-[800px]"
+			class="mb-3 mt-6 h-[600px]"
 			:show-legend="false"
-			:custom-tooltip="customChartTooltip"
 		/>
+		<!-- :custom-tooltip="customChartTooltip" -->
 	</div>
 </template>
