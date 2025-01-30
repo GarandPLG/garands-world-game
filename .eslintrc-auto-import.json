@@ -506,6 +506,7 @@
     "PaginationList": true,
     "PaginationListItem": true,
     "PaginationNext": true,
-    "PaginationPrev": true
+    "PaginationPrev": true,
+    "useFetchPopulationReport": true
   }
 }

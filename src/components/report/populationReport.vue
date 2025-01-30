@@ -1,109 +1,128 @@
 <script lang="ts" setup>
 // TODO: Populacja
-import type { BurgsResponse, StatesResponse, TurnsResponse } from '@/types/pb-types';
-import type { AuthModel } from 'pocketbase';
+import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
 
 const props = defineProps<{
 	turn: TurnsResponse<unknown>;
 	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
 }>();
 
-console.log(props.turn.value);
-
 const { currentUser } = storeToRefs(listenCurrentUserStore());
 
-const user = computed<AuthModel | null>(() =>
-	currentUser.value ? `"${currentUser.value?.id}"` : null
-);
-const isUserNotAdmin =
-	currentUser.value?.role === 'moderator' || currentUser.value?.role === 'admin'
-		? null
-		: user.value;
+const user = currentUser.value?.id ? `"${currentUser.value.id}"` : null;
+const isUserNotAdmin = !['moderator', 'admin'].includes(currentUser.value?.role) ? user : null;
 
-const stateRecords = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
-	await useCachedData({
-		key: `reportPopulationStateRecordsIDs-${props.turn.value + 1}-${props.state.name}-${isUserNotAdmin ? user.value : 'Administration'}`,
-		collection: 'states',
-		ttl: 1800,
-		requestArgs: {
-			filter: `name = "${props.state.name}"`,
-			fields: ['id']
-		}
-	})
+const { turnRecords, burgs, provinces } = await useFetchPopulationReport(
+	props.turn,
+	props.state,
+	isUserNotAdmin,
+	user
 );
 
-const turnRecords = ref<TurnsResponse<unknown>[]>(
-	await useCachedData({
-		key: `reportPopulationTurnRecords-${props.turn.value + 1}-${props.state.name}-${isUserNotAdmin ? user.value : 'Administration'}`,
-		collection: 'turns',
-		ttl: 1800,
-		requestArgs: {
-			filter: `value <= ${props.turn.value + 1}`,
-			fields: ['id,value']
-		}
-	})
-);
-
-const burgs = ref<BurgsResponse<unknown>[]>(
-	await useCachedData({
-		key: `reportPopulationBurgs-${props.turn.value + 1}-${props.state.name}-${isUserNotAdmin ? user.value : 'Administration'}`,
-		collection: 'burgs',
-		ttl: 1800,
-		requestArgs: {
-			filter: stateRecords.value.map(state => `(state~'${state.id}')`).join('||'),
-			fields: ['id,name,population,turn']
-		}
-	})
-);
-
-const burgsTab = [];
-for (let i = 0; i < turnRecords.value.length - 1; i++) {
-	const turn = turnRecords.value[i];
-	const burgsInTurn = burgs.value.filter(burg => burg.turn === turn.id);
-
-	burgsTab.push({
+const createDataTab = (data: any[], field: string) =>
+	turnRecords.value.slice(0, -1).map(turn => ({
 		turn: turn.value,
-		...burgsInTurn.reduce((acc, curr) => {
-			acc[curr.name] = curr.population;
-			return acc;
-		}, {})
-	});
-}
+		...data
+			.filter(item => item.turn === turn.id)
+			.reduce(
+				(acc: object, item: any) => ({
+					...acc,
+					[item.name]: item[field]
+				}),
+				{}
+			)
+	}));
 
-const burgsTabCategories = Object.keys(burgsTab[burgsTab.length - 1]).filter(key => key !== 'turn');
+const burgsTab = createDataTab(burgs.value, 'population');
+const burgsTabCategories: string[] = Object.keys(burgsTab[burgsTab.length - 1]).filter(
+	key => key !== 'turn'
+);
+
+const provincesColorsTab = createDataTab(provinces.value, 'color');
+const provincesRuralPopulationsTab = createDataTab(provinces.value, 'ruralPopulation');
+const provincesUrbanPopulationsTab = createDataTab(provinces.value, 'urbanPopulation');
+
+const lastRecord = provincesColorsTab[provincesColorsTab.length - 1];
+const provincesCategories = Object.keys(lastRecord).filter(key => key !== 'turn');
+const provincesColors = Object.values(lastRecord).filter(value => typeof value !== 'number');
+
+const tabs = [
+	{
+		name: 'Populacja wiejska',
+		value: 'ruralPopulation',
+		tab: provincesRuralPopulationsTab
+	},
+	{
+		name: 'Populacja Miejska',
+		value: 'urbanPopulation',
+		tab: provincesUrbanPopulationsTab
+	}
+];
+
+const sections = [
+	{
+		value: 'provinces',
+		title: 'Prowincje',
+		count: provincesCategories.length,
+		type: 'provinces'
+	},
+	{
+		value: 'burgs',
+		title: 'Miasta',
+		count: burgsTabCategories.length,
+		type: 'burgs'
+	}
+];
 </script>
 
 <template>
 	<div>
-		<div class="h-[500px]"> content </div>
+		<div class="h-[500px]">placeholder content</div>
 
 		<Accordion type="single" class="w-full" collapsible>
-			<AccordionItem value="provinces">
+			<AccordionItem v-for="section in sections" :key="section.value" :value="section.value">
 				<AccordionTrigger class="items-center justify-center space-x-1">
-					<h3 class="text-lg font-bold text-primary"> </h3>
+					<h3 class="text-lg font-bold text-primary"> {{ section.title }} </h3>
 
-					<p> ( ) </p>
+					<p>({{ section.count }})</p>
 				</AccordionTrigger>
 
 				<AccordionContent>
-					<div class="m-2 p-2"> </div>
-				</AccordionContent>
-			</AccordionItem>
+					<div
+						class="m-2 p-2"
+						:class="{
+							'flex flex-col items-center justify-center': section.type === 'provinces'
+						}"
+					>
+						<template v-if="section.type === 'provinces'">
+							<Tabs
+								default-value="ruralPopulation"
+								class="flex w-full flex-col items-center justify-center"
+							>
+								<TabsList class="mb-2">
+									<TabsTrigger v-for="tab in tabs" :key="tab.value" :value="tab.value">
+										{{ tab.name }}
+									</TabsTrigger>
+								</TabsList>
 
-			<AccordionItem value="burgs">
-				<AccordionTrigger class="items-center justify-center space-x-1">
-					<h3 class="text-lg font-bold text-primary"> Miasta </h3>
+								<TabsContent v-for="tab in tabs" :key="tab.value" :value="tab.value" class="w-full">
+									<ChartLineWithPagination
+										:categories="provincesCategories"
+										:index="'turn'"
+										:colors="provincesColors"
+										:data="tab.tab"
+									/>
+								</TabsContent>
+							</Tabs>
+						</template>
 
-					<p> ( {{ burgsTabCategories.length }} ) </p>
-				</AccordionTrigger>
-
-				<AccordionContent>
-					<div class="m-2 p-2">
-						<ChartLineWithPagination
-							:categories="burgsTabCategories"
-							:data="burgsTab"
-							:index="'turn'"
-						/>
+						<template v-else>
+							<ChartLineWithPagination
+								:categories="burgsTabCategories"
+								:data="burgsTab"
+								:index="'turn'"
+							/>
+						</template>
 					</div>
 				</AccordionContent>
 			</AccordionItem>

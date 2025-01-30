@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-// import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
-import { Button } from '@/components/ui/button';
+import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
+import { Button }         from '@/components/ui/button';
 import {
 	Pagination,
 	PaginationEllipsis,
@@ -22,8 +22,6 @@ const sortedData = computed(() =>
 
 const itemsPerPage = 25;
 
-console.log(itemsPerPage);
-
 const totalPages =
 	Math.ceil(Object.keys(props.data[props.data.length - 1]).length / itemsPerPage) * 10;
 const currentPage = ref(1);
@@ -42,18 +40,6 @@ const paginatedData = computed(() => {
 		return paginatedItem;
 	});
 });
-
-// const paginatedCategories = computed(() => {
-// 	const start = (currentPage.value - 1) * itemsPerPage;
-// 	const end = start + itemsPerPage;
-// 	return props.categories.slice(start, end);
-// });
-
-// const paginatedColors = computed(() => {
-// 	const start = (currentPage.value - 1) * itemsPerPage;
-// 	const end = start + itemsPerPage;
-// 	return props.colors.slice(start, end);
-// });
 
 const changePage = (page: number) => {
 	currentPage.value = page;
@@ -98,7 +84,7 @@ const changePage = (page: number) => {
 			:data="paginatedData"
 			class="mb-3 mt-6 h-[600px]"
 			:show-legend="false"
+			:custom-tooltip="customChartTooltip"
 		/>
-		<!-- :custom-tooltip="customChartTooltip" -->
 	</div>
 </template>
