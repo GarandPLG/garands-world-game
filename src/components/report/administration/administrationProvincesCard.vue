@@ -36,22 +36,26 @@ const props = defineProps<{ province: ProvincesResponse<unknown> }>();
 
 				<p class="text-base">
 					Populacja wiejska:
-					<span class="text-primary">{{ props.province.ruralPopulation }}</span>
+					<span class="text-primary">{{
+						props.province.ruralPopulation.toLocaleString('en-US')
+					}}</span>
 				</p>
 
 				<p class="text-base">
 					Populacja miejska:
-					<span class="text-primary">{{ props.province.urbanPopulation }}</span>
+					<span class="text-primary">{{
+						props.province.urbanPopulation.toLocaleString('en-US')
+					}}</span>
 				</p>
 
 				<p class="text-base">
 					Ilość miast:
-					<span class="text-primary">{{ props.province.burgs }}</span>
+					<span class="text-primary">{{ props.province.burgs.toLocaleString('en-US') }}</span>
 				</p>
 
 				<p class="text-base">
 					Ilość kratek:
-					<span class="text-primary">{{ props.province.cells }}</span>
+					<span class="text-primary">{{ props.province.cells.toLocaleString('en-US') }}</span>
 				</p>
 			</div>
 		</div>

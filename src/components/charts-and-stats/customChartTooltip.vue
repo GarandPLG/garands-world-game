@@ -10,13 +10,13 @@ defineProps<{
 </script>
 
 <template>
-	<Card class="text-sm opacity-90">
-		<CardHeader v-if="title" class="border-b p-3">
+	<Card class="text-sm opacity-75">
+		<CardHeader v-if="title" class="border-b p-3 opacity-100">
 			<CardTitle>
 				Tura: <span class="text-primary"> {{ title }} </span>
 			</CardTitle>
 		</CardHeader>
-		<CardContent class="flex min-w-[180px] flex-col gap-1 p-3">
+		<CardContent class="flex min-w-[180px] flex-col gap-1 p-3 opacity-100">
 			<div v-for="(item, key) in data" :key="key" class="flex justify-between">
 				<div class="flex items-center">
 					<span class="mr-2 h-2.5 w-2.5">
@@ -31,7 +31,7 @@ defineProps<{
 					</span>
 					<span>{{ item.name }}</span>
 				</div>
-				<span class="ml-4 font-semibold">{{ item.value }}</span>
+				<span class="ml-4 font-semibold">{{ item.value.toLocaleString('en-US') }}</span>
 			</div>
 		</CardContent>
 	</Card>

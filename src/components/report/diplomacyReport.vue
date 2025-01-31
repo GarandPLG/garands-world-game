@@ -25,8 +25,10 @@ const props = defineProps<{
 	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
 }>();
 
+const { currentUser } = storeToRefs(listenCurrentUserStore());
+
 const flags: Flag[] = await useCachedData({
-	key: `reportFlags-${props.turn.value + 1}-${props.state.name}`,
+	key: `${props.state.name}-${props.turn.value + 1}-${!['moderator', 'admin'].includes(currentUser.value?.role) ? currentUser.value?.id : 'Administration'} -- reportDiplomacyFlags`,
 	collection: 'states',
 	ttl: 1800,
 	requestArgs: {

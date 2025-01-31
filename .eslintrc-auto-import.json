@@ -507,6 +507,7 @@
     "PaginationListItem": true,
     "PaginationNext": true,
     "PaginationPrev": true,
-    "useFetchPopulationReport": true
+    "useFetchPopulationReport": true,
+    "useFetchAdministrationReport": true
   }
 }

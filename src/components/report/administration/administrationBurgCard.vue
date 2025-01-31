@@ -25,7 +25,7 @@ const props = defineProps<{
 			<div class="mr-3 mt-[-0.6rem] flex w-full flex-col">
 				<p class="text-base">
 					Populacja:
-					<span class="text-primary">{{ props.burg.population }}</span>
+					<span class="text-primary">{{ props.burg.population.toLocaleString('en-US') }}</span>
 				</p>
 
 				<p class="text-base">

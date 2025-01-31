@@ -6,7 +6,6 @@ import type {
 	StatesResponse,
 	TurnsResponse
 } from '@/types/pb-types';
-import type { AuthModel } from 'pocketbase';
 
 const props = defineProps<{
 	turn: TurnsResponse<unknown>;
@@ -15,36 +14,11 @@ const props = defineProps<{
 
 const { currentUser } = storeToRefs(listenCurrentUserStore());
 
-const user = computed<AuthModel | null>(() =>
-	currentUser.value ? `"${currentUser.value?.id}"` : null
-);
-const isUserNotAdmin =
-	currentUser.value?.role === 'moderator' || currentUser.value?.role === 'admin'
-		? null
-		: user.value;
-
-const provincesData = ref<ProvincesResponse<unknown>[]>(
-	await useCachedData({
-		key: `reportProvinces-${props.turn.value + 1}-${props.state.name}-${isUserNotAdmin ? user.value : 'Administration'}`,
-		collection: 'provinces',
-		ttl: 1800,
-		requestArgs: {
-			filter: `turn = "${props.turn.id}" && state = "${props.state.id}"`
-			// fields: ['id,name']
-		}
-	})
-);
-
-const burgsData = ref<BurgsResponse<unknown>[]>(
-	await useCachedData({
-		key: `reportBurgs-${props.turn.value + 1}-${props.state.name}-${isUserNotAdmin ? user.value : 'Administration'}`,
-		collection: 'burgs',
-		ttl: 1800,
-		requestArgs: {
-			filter: `turn = "${props.turn.id}" && state = "${props.state.id}"`
-			// fields: ['id,name,population']
-		}
-	})
+const { provincesData, burgsData } = await useFetchAdministrationReport(
+	props.turn,
+	props.state,
+	!['moderator', 'admin'].includes(currentUser.value?.role),
+	currentUser.value?.id ? `"${currentUser.value.id}"` : null
 );
 
 const biomesChartData = prepareChartData(props.state.biomesCells as object);
@@ -95,7 +69,11 @@ function prepareChartData(content: object) {
 <template>
 	<div class="grid grid-cols-12 gap-3">
 		<div class="col-span-4 rounded-md border p-2">
-			<AdministrationAccordion :accordionItems="accordionItems" :turn="props.turn" />
+			<AdministrationAccordion
+				:accordionItems="accordionItems"
+				:turn="props.turn"
+				:state="props.state"
+			/>
 		</div>
 
 		<div class="col-span-8 rounded-md border p-2">Zawartość</div>

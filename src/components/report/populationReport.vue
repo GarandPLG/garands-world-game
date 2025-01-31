@@ -9,14 +9,11 @@ const props = defineProps<{
 
 const { currentUser } = storeToRefs(listenCurrentUserStore());
 
-const user = currentUser.value?.id ? `"${currentUser.value.id}"` : null;
-const isUserNotAdmin = !['moderator', 'admin'].includes(currentUser.value?.role) ? user : null;
-
 const { turnRecords, burgs, provinces } = await useFetchPopulationReport(
 	props.turn,
 	props.state,
-	isUserNotAdmin,
-	user
+	!['moderator', 'admin'].includes(currentUser.value?.role),
+	currentUser.value?.id ? `"${currentUser.value.id}"` : null
 );
 
 const createDataTab = (data: any[], field: string) =>
@@ -44,7 +41,9 @@ const provincesUrbanPopulationsTab = createDataTab(provinces.value, 'urbanPopula
 
 const lastRecord = provincesColorsTab[provincesColorsTab.length - 1];
 const provincesCategories = Object.keys(lastRecord).filter(key => key !== 'turn');
-const provincesColors = Object.values(lastRecord).filter(value => typeof value !== 'number');
+const provincesColors: string[] = Object.values(lastRecord).filter(
+	value => typeof value !== 'number'
+);
 
 const tabs = [
 	{
@@ -79,53 +78,15 @@ const sections = [
 	<div>
 		<div class="h-[500px]">placeholder content</div>
 
-		<Accordion type="single" class="w-full" collapsible>
-			<AccordionItem v-for="section in sections" :key="section.value" :value="section.value">
-				<AccordionTrigger class="items-center justify-center space-x-1">
-					<h3 class="text-lg font-bold text-primary"> {{ section.title }} </h3>
+		<Separator class="my-2" />
 
-					<p>({{ section.count }})</p>
-				</AccordionTrigger>
-
-				<AccordionContent>
-					<div
-						class="m-2 p-2"
-						:class="{
-							'flex flex-col items-center justify-center': section.type === 'provinces'
-						}"
-					>
-						<template v-if="section.type === 'provinces'">
-							<Tabs
-								default-value="ruralPopulation"
-								class="flex w-full flex-col items-center justify-center"
-							>
-								<TabsList class="mb-2">
-									<TabsTrigger v-for="tab in tabs" :key="tab.value" :value="tab.value">
-										{{ tab.name }}
-									</TabsTrigger>
-								</TabsList>
-
-								<TabsContent v-for="tab in tabs" :key="tab.value" :value="tab.value" class="w-full">
-									<ChartLineWithPagination
-										:categories="provincesCategories"
-										:index="'turn'"
-										:colors="provincesColors"
-										:data="tab.tab"
-									/>
-								</TabsContent>
-							</Tabs>
-						</template>
-
-						<template v-else>
-							<ChartLineWithPagination
-								:categories="burgsTabCategories"
-								:data="burgsTab"
-								:index="'turn'"
-							/>
-						</template>
-					</div>
-				</AccordionContent>
-			</AccordionItem>
-		</Accordion>
+		<PopulationAccordion
+			:sections="sections"
+			:tabs="tabs"
+			:provincesCategories="provincesCategories"
+			:provincesColors="provincesColors"
+			:burgsTabCategories="burgsTabCategories"
+			:burgsTab="burgsTab"
+		/>
 	</div>
 </template>

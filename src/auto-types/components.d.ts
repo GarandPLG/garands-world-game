@@ -87,6 +87,7 @@ declare module 'vue' {
     Popover: typeof import('./../components/ui/popover/Popover.vue')['default']
     PopoverContent: typeof import('./../components/ui/popover/PopoverContent.vue')['default']
     PopoverTrigger: typeof import('./../components/ui/popover/PopoverTrigger.vue')['default']
+    PopulationAccordion: typeof import('./../components/report/population/populationAccordion.vue')['default']
     PopulationReport: typeof import('./../components/report/populationReport.vue')['default']
     PreviewReportTab: typeof import('./../components/admin-panel/previewReportTab.vue')['default']
     Progress: typeof import('./../components/ui/progress/Progress.vue')['default']

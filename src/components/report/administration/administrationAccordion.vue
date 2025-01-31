@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { TurnsResponse } from '@/types/pb-types';
+import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
 
 interface AccordionItem {
 	title: string;
@@ -10,31 +10,14 @@ interface AccordionItem {
 
 const props = defineProps<{
 	turn: TurnsResponse<unknown>;
+	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
 	accordionItems: AccordionItem[];
 }>();
 
 const provinces = props.accordionItems.find(item => item.type === 'provinces')?.content ?? [];
 const burgs = props.accordionItems.find(item => item.type === 'burgs')?.content ?? [];
 
-const cultureNames = await useCachedData({
-	key: `cultureNames-${props.turn.value + 1}`,
-	collection: 'cultures',
-	ttl: 1800,
-	requestArgs: {
-		filter: `turn = "${props.turn.id}"`,
-		fields: ['id,name']
-	}
-});
-
-const religionNames = await useCachedData({
-	key: `religionNames-${props.turn.value + 1}`,
-	collection: 'religions',
-	ttl: 1800,
-	requestArgs: {
-		filter: `turn = "${props.turn.id}"`,
-		fields: ['id,name']
-	}
-});
+const { cultureNames, religionNames } = await useFetchAdministrationReport(props.turn, props.state);
 </script>
 
 <template>
