@@ -1,29 +1,70 @@
 <script lang="ts" setup>
-defineProps<{
-	sections: {
-		value: string;
-		title: string;
-		count: number;
-		type: string;
-	}[];
-	tabs: {
-		name: string;
-		value: string;
-		tab: {
-			turn: number;
-		}[];
-	}[];
-	provincesCategories: string[];
-	provincesColors: string[];
-	burgsTabCategories: string[];
-	burgsTab: {
-		turn: number;
-	}[];
+import type { BurgsResponse, ProvincesResponse, TurnsResponse } from '@/types/pb-types';
+
+const props = defineProps<{
+	turnRecords: TurnsResponse<unknown>[];
+	burgs: BurgsResponse<unknown>[];
+	provinces: ProvincesResponse<unknown>[];
 }>();
+
+const createDataTab = (data: any[], field: string) =>
+	props.turnRecords.slice(0, -1).map(turn => ({
+		turn: turn.value,
+		...data
+			.filter(item => item.turn === turn.id)
+			.reduce(
+				(acc: object, item: any) => ({
+					...acc,
+					[item.name]: item[field]
+				}),
+				{}
+			)
+	}));
+
+const burgsTab = createDataTab(props.burgs, 'population');
+const burgsTabCategories: string[] = Object.keys(burgsTab[burgsTab.length - 1]).filter(
+	key => key !== 'turn'
+);
+
+const provincesColorsTab = createDataTab(props.provinces, 'color');
+const provincesRuralPopulationsTab = createDataTab(props.provinces, 'ruralPopulation');
+const provincesUrbanPopulationsTab = createDataTab(props.provinces, 'urbanPopulation');
+
+const lastRecord = provincesColorsTab[provincesColorsTab.length - 1];
+const provincesCategories = Object.keys(lastRecord).filter(key => key !== 'turn');
+const provincesColors = Object.values(lastRecord).filter(value => typeof value !== 'number');
+
+const tabs = [
+	{
+		name: 'Populacja wiejska',
+		value: 'ruralPopulation',
+		tab: provincesRuralPopulationsTab
+	},
+	{
+		name: 'Populacja Miejska',
+		value: 'urbanPopulation',
+		tab: provincesUrbanPopulationsTab
+	}
+];
+
+const sections = [
+	{
+		value: 'provinces',
+		title: 'Prowincje',
+		count: provincesCategories.length,
+		type: 'provinces'
+	},
+	{
+		value: 'burgs',
+		title: 'Miasta',
+		count: burgsTabCategories.length,
+		type: 'burgs'
+	}
+];
 </script>
 
 <template>
-	<Accordion type="single" class="w-full" collapsible>
+	<Accordion type="single" class="w-full" collapsible :default-value="sections[0].value">
 		<AccordionItem v-for="section in sections" :key="section.value" :value="section.value">
 			<AccordionTrigger class="items-center justify-center space-x-1">
 				<h3 class="text-lg font-bold text-primary"> {{ section.title }} </h3>

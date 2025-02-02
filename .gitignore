@@ -40,3 +40,6 @@ slim.report.json
 /pocketbase/pocketbase
 
 redis/data
+
+commit.txt
+git-diff.txt

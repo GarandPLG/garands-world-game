@@ -32,13 +32,11 @@ const { currentUser } = storeToRefs(listenCurrentUserStore());
 
 const turn = computed<string>(() => (route.params as RouteParams).turn - 1);
 const state = computed<string>(() => (route.params as RouteParams).state);
+
 const user = computed<AuthModel | null>(() =>
-	currentUser.value ? `"${currentUser.value?.id}"` : null
+	currentUser.value?.id ? `"${currentUser.value.id}"` : null
 );
-const isUserNotAdmin =
-	currentUser.value?.role === 'moderator' || currentUser.value?.role === 'admin'
-		? null
-		: user.value;
+const isUserNotAdmin = !['moderator', 'admin'].includes(currentUser.value?.role);
 
 useHead({
 	title: `Garand's WG | Raport | Tura ${turn.value} | ${state.value}`
@@ -51,7 +49,7 @@ const cultureData = ref<CulturesResponse<unknown>>();
 if (!user.value) router.push('/');
 else {
 	turnData.value = await useCachedData({
-		key: `reportTurn-${turn.value + 1}`,
+		key: `${state.value}-${turn.value + 1} -- reportTurn`,
 		collection: 'turns',
 		ttl: 1800,
 		func: 'getFirstListItem',
@@ -64,7 +62,7 @@ else {
 	if (!turnData.value) throw new Error('Nie znaleziono tury');
 
 	stateData.value = await useCachedData({
-		key: `reportState-${turn.value + 1}-${state.value}-${isUserNotAdmin ? user.value : 'Administration'}`,
+		key: `${state.value}-${turn.value + 1}-${isUserNotAdmin ? user.value : 'Administration'} -- reportState`,
 		collection: 'states',
 		ttl: 1800,
 		func: 'getFirstListItem',
@@ -74,7 +72,7 @@ else {
 		}).value,
 		requestArgs: {
 			fields: [
-				'id,name,nameFull,emblemSVG,color,culture,relations,biomesCells,culturesCells,religionsCells,capital'
+				'id,name,nameFull,emblemSVG,color,culture,relations,biomesCells,culturesCells,religionsCells,capital,ruralPopulation,urbanPopulation'
 			]
 		}
 	});
@@ -82,7 +80,7 @@ else {
 	if (!stateData.value) throw new Error('Nie znaleziono kraju');
 
 	cultureData.value = await useCachedData({
-		key: `reportCultureTechnologyGroup-${turn.value + 1}-${state.value}-${isUserNotAdmin ? user.value : 'Administration'}`,
+		key: `${state.value}-${turn.value + 1}-${isUserNotAdmin ? user.value : 'Administration'} -- reportCultureTechnologyGroup`,
 		collection: 'cultures',
 		ttl: 1800,
 		func: 'getFirstListItem',

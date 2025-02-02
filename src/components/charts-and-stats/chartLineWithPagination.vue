@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import customChartTooltip from '@/components/charts-and-stats/customChartTooltip.vue';
-import { Button }         from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
 	Pagination,
 	PaginationEllipsis,
@@ -85,6 +85,11 @@ const changePage = (page: number) => {
 			class="mb-3 mt-6 h-[600px]"
 			:show-legend="false"
 			:custom-tooltip="customChartTooltip"
+			:y-formatter="
+				(tick, i) => {
+					return `${tick.toLocaleString('en-US')}`;
+				}
+			"
 		/>
 	</div>
 </template>

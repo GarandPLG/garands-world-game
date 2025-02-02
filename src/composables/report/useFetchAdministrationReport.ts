@@ -40,7 +40,7 @@ export default async function (
 	);
 
 	const cultureNames = await useCachedData({
-		key: `${turn.value + 1} -- cultureNames`,
+		key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- cultureNames`,
 		collection: 'cultures',
 		ttl: 1800,
 		requestArgs: {
@@ -50,7 +50,7 @@ export default async function (
 	});
 
 	const religionNames = await useCachedData({
-		key: `${turn.value + 1} -- religionNames`,
+		key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- religionNames`,
 		collection: 'religions',
 		ttl: 1800,
 		requestArgs: {
