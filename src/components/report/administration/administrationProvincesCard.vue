@@ -5,7 +5,7 @@ const props = defineProps<{ province: ProvincesResponse<unknown> }>();
 </script>
 
 <template>
-	<div class="flex h-[165px] w-[500px] flex-col gap-2 rounded-md border">
+	<div class="flex h-[165px] w-[450px] flex-col gap-2 rounded-md border">
 		<div class="flex items-center justify-center">
 			<span class="mr-2 h-3 w-3" v-if="props.province.color">
 				<svg width="100%" height="100%" viewBox="0 0 30 30">
@@ -36,26 +36,22 @@ const props = defineProps<{ province: ProvincesResponse<unknown> }>();
 
 				<p class="text-base">
 					Populacja wiejska:
-					<span class="text-primary">{{
-						props.province.ruralPopulation.toLocaleString('en-US')
-					}}</span>
+					<span class="text-primary">{{ useFormatNumber(props.province.ruralPopulation) }}</span>
 				</p>
 
 				<p class="text-base">
 					Populacja miejska:
-					<span class="text-primary">{{
-						props.province.urbanPopulation.toLocaleString('en-US')
-					}}</span>
+					<span class="text-primary">{{ useFormatNumber(props.province.urbanPopulation) }}</span>
 				</p>
 
 				<p class="text-base">
 					Ilość miast:
-					<span class="text-primary">{{ props.province.burgs.toLocaleString('en-US') }}</span>
+					<span class="text-primary">{{ useFormatNumber(props.province.burgs) }}</span>
 				</p>
 
 				<p class="text-base">
 					Ilość kratek:
-					<span class="text-primary">{{ props.province.cells.toLocaleString('en-US') }}</span>
+					<span class="text-primary">{{ useFormatNumber(props.province.cells) }}</span>
 				</p>
 			</div>
 		</div>

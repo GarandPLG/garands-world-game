@@ -25,10 +25,10 @@ const props = defineProps<{
 	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
 }>();
 
-const { currentUser } = storeToRefs(listenCurrentUserStore());
+const { redisKeyPrefix } = useRedisKeyPrefix(props.state.name, props.turn.value);
 
 const flags: Flag[] = await useCachedData({
-	key: `${props.state.name}-${props.turn.value + 1}-${!['moderator', 'admin'].includes(currentUser.value?.role) ? currentUser.value?.id : 'Administration'} -- reportDiplomacyFlags`,
+	key: `${redisKeyPrefix} -- reportDiplomacyFlags`,
 	collection: 'states',
 	ttl: 1800,
 	requestArgs: {

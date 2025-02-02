@@ -33,14 +33,16 @@ const { currentUser } = storeToRefs(listenCurrentUserStore());
 const turn = computed<string>(() => (route.params as RouteParams).turn - 1);
 const state = computed<string>(() => (route.params as RouteParams).state);
 
+useHead({
+	title: `Garand's WG | Raport | Tura ${turn.value} | ${state.value}`
+});
+
 const user = computed<AuthModel | null>(() =>
 	currentUser.value?.id ? `"${currentUser.value.id}"` : null
 );
 const isUserNotAdmin = !['moderator', 'admin'].includes(currentUser.value?.role);
 
-useHead({
-	title: `Garand's WG | Raport | Tura ${turn.value} | ${state.value}`
-});
+const { redisKeyPrefix } = useRedisKeyPrefix(state.value, turn.value);
 
 const turnData = ref<TurnsResponse<unknown>>();
 const stateData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>>();
@@ -49,7 +51,7 @@ const cultureData = ref<CulturesResponse<unknown>>();
 if (!user.value) router.push('/');
 else {
 	turnData.value = await useCachedData({
-		key: `${state.value}-${turn.value + 1} -- reportTurn`,
+		key: `${redisKeyPrefix} -- reportTurn`,
 		collection: 'turns',
 		ttl: 1800,
 		func: 'getFirstListItem',
@@ -62,7 +64,7 @@ else {
 	if (!turnData.value) throw new Error('Nie znaleziono tury');
 
 	stateData.value = await useCachedData({
-		key: `${state.value}-${turn.value + 1}-${isUserNotAdmin ? user.value : 'Administration'} -- reportState`,
+		key: `${redisKeyPrefix} -- reportState`,
 		collection: 'states',
 		ttl: 1800,
 		func: 'getFirstListItem',
@@ -72,7 +74,7 @@ else {
 		}).value,
 		requestArgs: {
 			fields: [
-				'id,name,nameFull,emblemSVG,color,culture,relations,biomesCells,culturesCells,religionsCells,capital,ruralPopulation,urbanPopulation'
+				'id,name,nameFull,emblemSVG,cells,color,culture,relations,biomesCells,culturesCells,religionsCells,capital,ruralPopulation,urbanPopulation'
 			]
 		}
 	});
@@ -80,7 +82,7 @@ else {
 	if (!stateData.value) throw new Error('Nie znaleziono kraju');
 
 	cultureData.value = await useCachedData({
-		key: `${state.value}-${turn.value + 1}-${isUserNotAdmin ? user.value : 'Administration'} -- reportCultureTechnologyGroup`,
+		key: `${redisKeyPrefix} -- reportCultureTechnologyGroup`,
 		collection: 'cultures',
 		ttl: 1800,
 		func: 'getFirstListItem',

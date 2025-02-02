@@ -13,6 +13,7 @@ declare module 'vue' {
     AccordionTrigger: typeof import('./../components/ui/accordion/AccordionTrigger.vue')['default']
     AdministrationAccordion: typeof import('./../components/report/administration/administrationAccordion.vue')['default']
     AdministrationBurgCard: typeof import('./../components/report/administration/administrationBurgCard.vue')['default']
+    AdministrationDetails: typeof import('./../components/report/administration/administrationDetails.vue')['default']
     AdministrationProvincesCard: typeof import('./../components/report/administration/administrationProvincesCard.vue')['default']
     AdministrationReport: typeof import('./../components/report/administrationReport.vue')['default']
     BuildingsReport: typeof import('./../components/report/buildingsReport.vue')['default']

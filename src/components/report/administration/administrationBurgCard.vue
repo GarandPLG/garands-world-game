@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import type { BurgsResponse, CulturesResponse, ReligionsResponse } from '@/types/pb-types';
+import type { BurgsResponse, StatesResponse, TurnsResponse } from '@/types/pb-types';
 import { Icon } from '@iconify/vue';
 
 const props = defineProps<{
 	burg: BurgsResponse<unknown>;
-	cultures: CulturesResponse<unknown>[];
-	religions: ReligionsResponse<unknown>[];
+	turn: TurnsResponse<unknown>;
+	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
 }>();
+
+const { cultureNames, religionNames } = await useFetchAdministrationReport(props.turn, props.state);
 </script>
 
 <template>
@@ -25,20 +27,20 @@ const props = defineProps<{
 			<div class="mr-3 mt-[-0.6rem] flex w-full flex-col">
 				<p class="text-base">
 					Populacja:
-					<span class="text-primary">{{ props.burg.population.toLocaleString('en-US') }}</span>
+					<span class="text-primary">{{ useFormatNumber(props.burg.population) }}</span>
 				</p>
 
 				<p class="text-base">
 					Kultura:
 					<span class="text-primary">
-						{{ props.cultures.find(culture => culture.id === props.burg.culture)?.name }}
+						{{ cultureNames.find(culture => culture.id === props.burg.culture)?.name }}
 					</span>
 				</p>
 
 				<p class="text-base">
 					Religia:
 					<span class="text-primary">
-						{{ props.religions.find(religion => religion.id === props.burg.religion)?.name }}
+						{{ religionNames.find(religion => religion.id === props.burg.religion)?.name }}
 					</span>
 				</p>
 

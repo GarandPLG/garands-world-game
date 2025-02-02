@@ -16,12 +16,15 @@ const props = defineProps<{
 
 const provinces = props.accordionItems.find(item => item.type === 'provinces')?.content ?? [];
 const burgs = props.accordionItems.find(item => item.type === 'burgs')?.content ?? [];
-
-const { cultureNames, religionNames } = await useFetchAdministrationReport(props.turn, props.state);
 </script>
 
 <template>
-	<Accordion type="single" class="w-full" collapsible>
+	<Accordion
+		type="single"
+		class="w-full p-2"
+		collapsible
+		:default-value="props.accordionItems[0].title"
+	>
 		<AccordionItem v-for="item in props.accordionItems" :key="item.title" :value="item.title">
 			<AccordionTrigger class="items-center justify-center space-x-1">
 				<h3 class="text-lg font-bold text-primary"> {{ item.title }} </h3>
@@ -48,8 +51,8 @@ const { cultureNames, religionNames } = await useFetchAdministrationReport(props
 							v-for="burg in burgs"
 							:key="burg.id"
 							:burg="burg"
-							:cultures="cultureNames"
-							:religions="religionNames"
+							:turn="props.turn"
+							:state="props.state"
 						/>
 					</div>
 				</ScrollArea>
@@ -63,6 +66,7 @@ const { cultureNames, religionNames } = await useFetchAdministrationReport(props
 						:data="item.content"
 						type="donut"
 						:sort-function="(a, b) => b.amount - a.amount"
+						:valueFormatter="value => `${useFormatNumber(value)}`"
 					/>
 				</div>
 			</AccordionContent>

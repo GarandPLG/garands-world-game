@@ -25,8 +25,6 @@ const totalData = computed(() => ({
 	growth: ruralData.value.growth + urbanData.value.growth
 }));
 
-const formatNumber = (num: number) => num.toLocaleString('en-US');
-
 const getChangeColor = (change: number) => {
 	if (change > 0) return 'text-green-500';
 	if (change < 0) return 'text-red-500';
@@ -41,7 +39,7 @@ const getChangeSymbol = (change: number) => {
 
 const formatChange = (change: number) => {
 	const prefix = change > 0 ? '+' : '';
-	return `${prefix}${formatNumber(change)}`;
+	return `${prefix}${useFormatNumber(change)}`;
 };
 </script>
 
@@ -62,7 +60,7 @@ const formatChange = (change: number) => {
 
 				<div class="numbers-display">
 					<div class="text-2xl font-bold">
-						{{ formatNumber(ruralData.current) }}
+						{{ useFormatNumber(ruralData.current) }}
 					</div>
 
 					<div :class="getChangeColor(ruralData.change)">
@@ -71,7 +69,7 @@ const formatChange = (change: number) => {
 					</div>
 
 					<div class="text-xl">
-						{{ formatNumber(ruralData.growth) }}
+						{{ useFormatNumber(ruralData.growth) }}
 					</div>
 				</div>
 			</div>
@@ -83,7 +81,7 @@ const formatChange = (change: number) => {
 
 				<div class="numbers-display">
 					<div class="text-2xl font-bold">
-						{{ formatNumber(urbanData.current) }}
+						{{ useFormatNumber(urbanData.current) }}
 					</div>
 
 					<div :class="getChangeColor(urbanData.change)">
@@ -92,7 +90,7 @@ const formatChange = (change: number) => {
 					</div>
 
 					<div class="text-xl">
-						{{ formatNumber(urbanData.growth) }}
+						{{ useFormatNumber(urbanData.growth) }}
 					</div>
 				</div>
 			</div>
@@ -105,7 +103,7 @@ const formatChange = (change: number) => {
 
 			<div class="flex items-center justify-center space-x-4">
 				<span class="text-2xl font-bold">
-					{{ formatNumber(totalData.current) }}
+					{{ useFormatNumber(totalData.current) }}
 				</span>
 
 				<div class="flex flex-col items-center">
@@ -116,7 +114,7 @@ const formatChange = (change: number) => {
 				</div>
 
 				<span class="text-2xl">
-					{{ formatNumber(totalData.growth) }}
+					{{ useFormatNumber(totalData.growth) }}
 				</span>
 			</div>
 		</div>

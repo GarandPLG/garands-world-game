@@ -508,6 +508,8 @@
     "PaginationNext": true,
     "PaginationPrev": true,
     "useFetchPopulationReport": true,
-    "useFetchAdministrationReport": true
+    "useFetchAdministrationReport": true,
+    "useRedisKeyPrefix": true,
+    "useFormatNumber": true
   }
 }

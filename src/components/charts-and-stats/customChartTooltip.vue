@@ -31,7 +31,7 @@ defineProps<{
 					</span>
 					<span>{{ item.name }}</span>
 				</div>
-				<span class="ml-4 font-semibold">{{ item.value.toLocaleString('en-US') }}</span>
+				<span class="ml-4 font-semibold">{{ useFormatNumber(item.value) }}</span>
 			</div>
 		</CardContent>
 	</Card>

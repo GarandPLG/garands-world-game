@@ -85,11 +85,7 @@ const changePage = (page: number) => {
 			class="mb-3 mt-6 h-[600px]"
 			:show-legend="false"
 			:custom-tooltip="customChartTooltip"
-			:y-formatter="
-				(tick, i) => {
-					return `${tick.toLocaleString('en-US')}`;
-				}
-			"
+			:y-formatter="(tick, i) => useFormatNumber(tick)"
 		/>
 	</div>
 </template>

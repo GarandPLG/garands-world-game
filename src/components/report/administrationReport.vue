@@ -68,14 +68,17 @@ function prepareChartData(content: object) {
 
 <template>
 	<div class="grid grid-cols-12 gap-3">
-		<div class="col-span-4 rounded-md border p-2">
-			<AdministrationAccordion
-				:accordionItems="accordionItems"
-				:turn="props.turn"
-				:state="props.state"
-			/>
-		</div>
+		<AdministrationAccordion
+			class="col-span-6"
+			:accordionItems="accordionItems"
+			:turn="props.turn"
+			:state="props.state"
+		/>
 
-		<div class="col-span-8 rounded-md border p-2">Zawartość</div>
+		<AdministrationDetails
+			:state="props.state"
+			:turn="props.turn"
+			class="col-span-6 flex w-full flex-col items-center justify-center"
+		/>
 	</div>
 </template>

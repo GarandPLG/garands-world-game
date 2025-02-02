@@ -340,6 +340,7 @@ declare global {
   const useFocus: typeof import('@vueuse/core')['useFocus']
   const useFocusWithin: typeof import('@vueuse/core')['useFocusWithin']
   const useFormField: typeof import('../components/ui/form/useFormField')['useFormField']
+  const useFormatNumber: typeof import('../composables/useFormatNumber')['default']
   const useFps: typeof import('@vueuse/core')['useFps']
   const useFullscreen: typeof import('@vueuse/core')['useFullscreen']
   const useGamepad: typeof import('@vueuse/core')['useGamepad']
@@ -394,6 +395,7 @@ declare global {
   const useProcessEndTurnCollectionsData: typeof import('../composables/useProcessEndTurnCollectionsData')['default']
   const useRafFn: typeof import('@vueuse/core')['useRafFn']
   const useRedis: typeof import('../composables/useRedis')['useRedis']
+  const useRedisKeyPrefix: typeof import('../composables/useRedisKeyPrefix')['default']
   const useRefHistory: typeof import('@vueuse/core')['useRefHistory']
   const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
   const useRoute: typeof import('vue-router')['useRoute']
@@ -822,6 +824,7 @@ declare module 'vue' {
     readonly useFocus: UnwrapRef<typeof import('@vueuse/core')['useFocus']>
     readonly useFocusWithin: UnwrapRef<typeof import('@vueuse/core')['useFocusWithin']>
     readonly useFormField: UnwrapRef<typeof import('../components/ui/form/useFormField')['useFormField']>
+    readonly useFormatNumber: UnwrapRef<typeof import('../composables/useFormatNumber')['default']>
     readonly useFps: UnwrapRef<typeof import('@vueuse/core')['useFps']>
     readonly useFullscreen: UnwrapRef<typeof import('@vueuse/core')['useFullscreen']>
     readonly useGamepad: UnwrapRef<typeof import('@vueuse/core')['useGamepad']>
@@ -876,6 +879,7 @@ declare module 'vue' {
     readonly useProcessEndTurnCollectionsData: UnwrapRef<typeof import('../composables/useProcessEndTurnCollectionsData')['default']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
     readonly useRedis: UnwrapRef<typeof import('../composables/useRedis')['useRedis']>
+    readonly useRedisKeyPrefix: UnwrapRef<typeof import('../composables/useRedisKeyPrefix')['default']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
