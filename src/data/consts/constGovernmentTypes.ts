@@ -1,9 +1,9 @@
-interface GovernmentTyp {
+interface GovernmentType {
 	name: string;
 	governmentCapacityLimit: number;
 }
 
-const governmentTypes: GovernmentTyp[] = [
+const governmentTypes: GovernmentType[] = [
 	{ name: 'Beylik', governmentCapacityLimit: 500 },
 	{ name: 'Despotate', governmentCapacityLimit: 600 },
 	{ name: 'Dominion', governmentCapacityLimit: 800 },
