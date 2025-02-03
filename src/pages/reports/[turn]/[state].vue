@@ -34,16 +34,18 @@ else {
 		})
 	);
 
+	const stateDataFilter = computed(() => {
+		const baseQuery = `name = "${state.value}" && turn = "${turnData.value.id}"`;
+		return isUserNotAdmin ? `${baseQuery} && user = "${isUserNotAdmin}"` : baseQuery;
+	});
+
 	const stateData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>>(
 		await useCachedData({
 			key: `${redisKeyPrefix} -- reportState`,
 			collection: 'states',
 			ttl: 1800,
 			func: 'getFirstListItem',
-			filter: computed(() => {
-				const baseQuery = `name = "${state.value}" && turn = "${turnData.value.id}"`;
-				return isUserNotAdmin ? `${baseQuery} && user = "${isUserNotAdmin}"` : baseQuery;
-			}).value,
+			filter: stateDataFilter.value,
 			requestArgs: {
 				fields: [
 					'id,name,nameFull,emblemSVG,cells,color,culture,form,relations,biomesCells,culturesCells,religionsCells,capital,ruralPopulation,urbanPopulation'
