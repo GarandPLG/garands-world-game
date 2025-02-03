@@ -1,14 +1,10 @@
 <script lang="ts" setup>
-import type { BurgsResponse, ProvincesResponse, TurnsResponse } from '@/types/pb-types';
+const { state, turn } = storeToRefs(useReportStore());
 
-const props = defineProps<{
-	turnRecords: TurnsResponse<unknown>[];
-	burgs: BurgsResponse<unknown>[];
-	provinces: ProvincesResponse<unknown>[];
-}>();
+const { turnRecords, burgs, provinces } = await useFetchPopulationReport(turn.value, state.value);
 
 const createDataTab = (data: any[], field: string) =>
-	props.turnRecords.slice(0, -1).map(turn => ({
+	turnRecords.value.slice(0, -1).map(turn => ({
 		turn: turn.value,
 		...data
 			.filter(item => item.turn === turn.id)
@@ -21,14 +17,14 @@ const createDataTab = (data: any[], field: string) =>
 			)
 	}));
 
-const burgsTab = createDataTab(props.burgs, 'population');
+const burgsTab = createDataTab(burgs.value, 'population');
 const burgsTabCategories: string[] = Object.keys(burgsTab[burgsTab.length - 1]).filter(
 	key => key !== 'turn'
 );
 
-const provincesColorsTab = createDataTab(props.provinces, 'color');
-const provincesRuralPopulationsTab = createDataTab(props.provinces, 'ruralPopulation');
-const provincesUrbanPopulationsTab = createDataTab(props.provinces, 'urbanPopulation');
+const provincesColorsTab = createDataTab(provinces.value, 'color');
+const provincesRuralPopulationsTab = createDataTab(provinces.value, 'ruralPopulation');
+const provincesUrbanPopulationsTab = createDataTab(provinces.value, 'urbanPopulation');
 
 const lastRecord = provincesColorsTab[provincesColorsTab.length - 1];
 const provincesCategories = Object.keys(lastRecord).filter(key => key !== 'turn');

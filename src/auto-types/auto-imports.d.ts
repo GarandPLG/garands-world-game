@@ -142,6 +142,7 @@ declare global {
   const computedEager: typeof import('@vueuse/core')['computedEager']
   const computedInject: typeof import('@vueuse/core')['computedInject']
   const computedWithControl: typeof import('@vueuse/core')['computedWithControl']
+  const constCultureToTechnologyGroup: typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']
   const constGovernmentTypes: typeof import('../data/consts/constGovernmentTypes')['default']
   const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
   const controlledRef: typeof import('@vueuse/core')['controlledRef']
@@ -239,6 +240,7 @@ declare global {
   const refThrottled: typeof import('@vueuse/core')['refThrottled']
   const refWithControl: typeof import('@vueuse/core')['refWithControl']
   const registerFormSchema: typeof import('../data/toTypedSchemas/registerFormSchema')['registerFormSchema']
+  const reportTabsData: typeof import('../data/reportTabsData')['reportTabsData']
   const resetPasswordFormSchema: typeof import('../data/toTypedSchemas/reserPasswordTypedSchema')['resetPasswordFormSchema']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
@@ -399,6 +401,7 @@ declare global {
   const useRedis: typeof import('../composables/useRedis')['useRedis']
   const useRedisKeyPrefix: typeof import('../composables/useRedisKeyPrefix')['default']
   const useRefHistory: typeof import('@vueuse/core')['useRefHistory']
+  const useReportStore: typeof import('../stores/reportStore')['useReportStore']
   const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
@@ -628,6 +631,7 @@ declare module 'vue' {
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
     readonly computedInject: UnwrapRef<typeof import('@vueuse/core')['computedInject']>
     readonly computedWithControl: UnwrapRef<typeof import('@vueuse/core')['computedWithControl']>
+    readonly constCultureToTechnologyGroup: UnwrapRef<typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']>
     readonly constGovernmentTypes: UnwrapRef<typeof import('../data/consts/constGovernmentTypes')['default']>
     readonly controlledComputed: UnwrapRef<typeof import('@vueuse/core')['controlledComputed']>
     readonly controlledRef: UnwrapRef<typeof import('@vueuse/core')['controlledRef']>
@@ -725,6 +729,7 @@ declare module 'vue' {
     readonly refThrottled: UnwrapRef<typeof import('@vueuse/core')['refThrottled']>
     readonly refWithControl: UnwrapRef<typeof import('@vueuse/core')['refWithControl']>
     readonly registerFormSchema: UnwrapRef<typeof import('../data/toTypedSchemas/registerFormSchema')['registerFormSchema']>
+    readonly reportTabsData: UnwrapRef<typeof import('../data/reportTabsData')['reportTabsData']>
     readonly resetPasswordFormSchema: UnwrapRef<typeof import('../data/toTypedSchemas/reserPasswordTypedSchema')['resetPasswordFormSchema']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
@@ -885,6 +890,7 @@ declare module 'vue' {
     readonly useRedis: UnwrapRef<typeof import('../composables/useRedis')['useRedis']>
     readonly useRedisKeyPrefix: UnwrapRef<typeof import('../composables/useRedisKeyPrefix')['default']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
+    readonly useReportStore: UnwrapRef<typeof import('../stores/reportStore')['useReportStore']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>

@@ -95,6 +95,7 @@ declare module 'vue' {
     Progress: typeof import('./../components/ui/progress/Progress.vue')['default']
     RadioGroup: typeof import('./../components/ui/radio-group/RadioGroup.vue')['default']
     RadioGroupItem: typeof import('./../components/ui/radio-group/RadioGroupItem.vue')['default']
+    ReportCardHeader: typeof import('./../components/report/reportCardHeader.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollArea: typeof import('./../components/ui/scroll-area/ScrollArea.vue')['default']

@@ -1,29 +1,14 @@
 <script lang="ts" setup>
 // TODO: Administracja (GovCap, Prowincje, Miasta)
-import type {
-	BurgsResponse,
-	ProvincesResponse,
-	StatesResponse,
-	TurnsResponse
-} from '@/types/pb-types';
+import type { BurgsResponse, ProvincesResponse } from '@/types/pb-types';
 
-const props = defineProps<{
-	turn: TurnsResponse<unknown>;
-	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
-}>();
+const { state, turn } = storeToRefs(useReportStore());
 
-const { currentUser } = storeToRefs(listenCurrentUserStore());
+const { provincesData, burgsData } = await useFetchAdministrationReport(turn.value, state.value);
 
-const { provincesData, burgsData } = await useFetchAdministrationReport(
-	props.turn,
-	props.state,
-	!['moderator', 'admin'].includes(currentUser.value?.role),
-	currentUser.value?.id ? `"${currentUser.value.id}"` : null
-);
-
-const biomesChartData = prepareChartData(props.state.biomesCells as object);
-const religionsChartData = prepareChartData(props.state.religionsCells as object);
-const culturesChartData = prepareChartData(props.state.culturesCells as object);
+const biomesChartData = prepareChartData(state.value.biomesCells as object);
+const religionsChartData = prepareChartData(state.value.religionsCells as object);
+const culturesChartData = prepareChartData(state.value.culturesCells as object);
 
 const accordionItems = [
 	{
@@ -69,16 +54,16 @@ function prepareChartData(content: object) {
 <template>
 	<div class="grid grid-cols-12 gap-3">
 		<AdministrationAccordion
-			class="col-span-6"
+			class="col-span-4"
 			:accordionItems="accordionItems"
-			:turn="props.turn"
-			:state="props.state"
+			:turn="turn"
+			:state="state"
 		/>
 
 		<AdministrationDetails
-			:state="props.state"
-			:turn="props.turn"
-			class="col-span-6 flex w-full flex-col items-center justify-center"
+			class="col-span-8 flex w-full flex-col items-center justify-center"
+			:state="state"
+			:turn="turn"
 		/>
 	</div>
 </template>

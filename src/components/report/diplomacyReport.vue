@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 // TODO: Dyplomacja
-import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
 import _ from 'lodash';
 
 interface Flag {
@@ -19,20 +18,16 @@ interface GroupedRelations {
 	Vassal?: Flag[];
 	Suzerain?: Flag[];
 }
+const { state, turn } = storeToRefs(useReportStore());
 
-const props = defineProps<{
-	turn: TurnsResponse<unknown>;
-	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
-}>();
-
-const { redisKeyPrefix } = useRedisKeyPrefix(props.state.name, props.turn.value);
+const { redisKeyPrefix } = useRedisKeyPrefix(state.value.name, turn.value.value);
 
 const flags: Flag[] = await useCachedData({
 	key: `${redisKeyPrefix} -- reportDiplomacyFlags`,
 	collection: 'states',
 	ttl: 1800,
 	requestArgs: {
-		filter: `turn = "${props.turn.id}" && name != "${props.state.name}" && name != "Neutrals"`,
+		filter: `turn = "${turn.value.id}" && name != "${state.value.name}" && name != "Neutrals"`,
 		fields: ['name,emblemSVG,color']
 	}
 });
@@ -45,7 +40,7 @@ const groupedRelations: GroupedRelations = _.pickBy(
 		_.groupBy(
 			flags.map(flag => ({
 				...flag,
-				relation: (props.state.relations as { [key: string]: string })[flag.name]
+				relation: (state.value.relations as { [key: string]: string })[flag.name]
 			})),
 			'relation'
 		),

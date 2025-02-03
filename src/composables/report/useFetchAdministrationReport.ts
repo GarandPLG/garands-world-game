@@ -7,13 +7,13 @@ import type {
 
 export default async function (
 	turn: TurnsResponse<unknown>,
-	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>,
-	isUserNotAdmin?: boolean,
-	user?: string | null
+	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>
 ) {
+	const { redisKeyPrefix } = useRedisKeyPrefix(state.name, turn.value);
+
 	const provincesData = ref<ProvincesResponse<unknown>[]>(
 		await useCachedData({
-			key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- reportAdministrationProvinces`,
+			key: `${redisKeyPrefix} -- reportAdministrationProvinces`,
 			collection: 'provinces',
 			ttl: 1800,
 			requestArgs: {
@@ -27,7 +27,7 @@ export default async function (
 
 	const burgsData = ref<BurgsResponse<unknown>[]>(
 		await useCachedData({
-			key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- reportAdministrationBurgs`,
+			key: `${redisKeyPrefix} -- reportAdministrationBurgs`,
 			collection: 'burgs',
 			ttl: 1800,
 			requestArgs: {
@@ -40,7 +40,7 @@ export default async function (
 	);
 
 	const cultureNames: { id: string; name: string }[] = await useCachedData({
-		key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- cultureNames`,
+		key: `${redisKeyPrefix} -- cultureNames`,
 		collection: 'cultures',
 		ttl: 1800,
 		requestArgs: {
@@ -50,7 +50,7 @@ export default async function (
 	});
 
 	const religionNames: { id: string; name: string }[] = await useCachedData({
-		key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- religionNames`,
+		key: `${redisKeyPrefix} -- religionNames`,
 		collection: 'religions',
 		ttl: 1800,
 		requestArgs: {

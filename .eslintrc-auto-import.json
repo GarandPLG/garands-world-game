@@ -483,6 +483,9 @@
     "onElementRemoval": true,
     "usePreferredReducedTransparency": true,
     "useSSRWidth": true,
-    "useCountdown": true
+    "useCountdown": true,
+    "constCultureToTechnologyGroup": true,
+    "reportTabsData": true,
+    "useReportStore": true
   }
 }

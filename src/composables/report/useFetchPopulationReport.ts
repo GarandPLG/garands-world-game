@@ -5,15 +5,15 @@ import type {
 	TurnsResponse
 } from '@/types/pb-types';
 
-export default async function useFetchPopulationReport(
+export default async function (
 	turn: TurnsResponse<unknown>,
-	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>,
-	isUserNotAdmin: boolean,
-	user: string | null
+	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>
 ) {
+	const { redisKeyPrefix } = useRedisKeyPrefix(state.name, turn.value);
+
 	const stateRecords = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
 		await useCachedData({
-			key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- reportPopulationStateRecordsIDs`,
+			key: `${redisKeyPrefix} -- reportPopulationStateRecordsIDs`,
 			collection: 'states',
 			ttl: 1800,
 			requestArgs: {
@@ -25,7 +25,7 @@ export default async function useFetchPopulationReport(
 
 	const turnRecords = ref<TurnsResponse<unknown>[]>(
 		await useCachedData({
-			key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- reportPopulationTurnRecords`,
+			key: `${redisKeyPrefix} -- reportPopulationTurnRecords`,
 			collection: 'turns',
 			ttl: 1800,
 			requestArgs: {
@@ -37,7 +37,7 @@ export default async function useFetchPopulationReport(
 
 	const burgs = ref<BurgsResponse<unknown>[]>(
 		await useCachedData({
-			key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- reportPopulationBurgs`,
+			key: `${redisKeyPrefix} -- reportPopulationBurgs`,
 			collection: 'burgs',
 			ttl: 1800,
 			requestArgs: {
@@ -49,7 +49,7 @@ export default async function useFetchPopulationReport(
 
 	const provinces = ref<ProvincesResponse<unknown>[]>(
 		await useCachedData({
-			key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- reportPopulationProvinces`,
+			key: `${redisKeyPrefix} -- reportPopulationProvinces`,
 			collection: 'provinces',
 			ttl: 1800,
 			requestArgs: {

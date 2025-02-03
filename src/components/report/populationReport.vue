@@ -1,19 +1,5 @@
 <script lang="ts" setup>
-import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
-
-const props = defineProps<{
-	turn: TurnsResponse<unknown>;
-	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
-}>();
-
-const { currentUser } = storeToRefs(listenCurrentUserStore());
-
-const { turnRecords, burgs, provinces } = await useFetchPopulationReport(
-	props.turn,
-	props.state,
-	!['moderator', 'admin'].includes(currentUser.value?.role),
-	currentUser.value?.id ? `"${currentUser.value.id}"` : null
-);
+const { state } = storeToRefs(useReportStore());
 </script>
 
 <template>
@@ -27,11 +13,6 @@ const { turnRecords, burgs, provinces } = await useFetchPopulationReport(
 			/>
 		</div>
 
-		<PopulationAccordion
-			:turnRecords="turnRecords"
-			:burgs="burgs"
-			:provinces="provinces"
-			class="col-span-8"
-		/>
+		<PopulationAccordion class="col-span-8" />
 	</div>
 </template>

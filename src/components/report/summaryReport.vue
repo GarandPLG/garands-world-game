@@ -1,11 +1,6 @@
 <script lang="ts" setup>
 // TODO: Podsumowanie
-import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
-
-const props = defineProps<{
-	turn: TurnsResponse<unknown>;
-	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
-}>();
+const { state, turn } = storeToRefs(useReportStore());
 </script>
 
 <template>

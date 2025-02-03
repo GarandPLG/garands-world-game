@@ -49,6 +49,7 @@ const governmentCapacityLimitRows = [
 </script>
 
 <template>
+	<!-- TODO: Powiększyć interface -->
 	<div class="w-full p-6">
 		<Label class="mt-3 text-lg" for="progress">
 			Wykorzystanie: {{ useFormatNumber(governmentCapacityPoints) }} /
