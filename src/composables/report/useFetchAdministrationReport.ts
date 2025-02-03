@@ -39,7 +39,7 @@ export default async function (
 		})
 	);
 
-	const cultureNames = await useCachedData({
+	const cultureNames: { id: string; name: string }[] = await useCachedData({
 		key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- cultureNames`,
 		collection: 'cultures',
 		ttl: 1800,
@@ -49,7 +49,7 @@ export default async function (
 		}
 	});
 
-	const religionNames = await useCachedData({
+	const religionNames: { id: string; name: string }[] = await useCachedData({
 		key: `${state.name}-${turn.value + 1}-${isUserNotAdmin ? user : 'Administration'} -- religionNames`,
 		collection: 'religions',
 		ttl: 1800,

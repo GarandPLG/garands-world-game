@@ -5,83 +5,122 @@ const props = defineProps<{
 	turn: TurnsResponse<unknown>;
 	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
 }>();
+
 const { cultureNames, burgsData } = await useFetchAdministrationReport(props.turn, props.state);
 
-const cells = props.state.cells;
 const primaryCulture = cultureNames.find(c => c.id === props.state.culture)?.id;
-const cultureCells = props.state.culturesCells as Record<string, string>;
-const nonPrimaryCultureCells = Object.values(cultureCells).reduce(
-	(sum, value, key) => (key === primaryCulture ? sum : sum + parseInt(value)),
+
+const nonPrimaryCultureCells: number = (
+	Object.entries(props.state.culturesCells as Record<string, string>) as [string, string][]
+).reduce(
+	(sum: number, [key, value]: [string, string]) =>
+		key !== primaryCulture ? sum : sum + parseInt(value),
 	0
 );
 
-const burgs = burgsData.value.length;
 const nonPrimaryCultureBurgs = burgsData.value.filter(b => b.culture !== primaryCulture).length;
-const sumGovernmentCapacityPoints = cells + nonPrimaryCultureCells + burgs + nonPrimaryCultureBurgs;
+
+const governmentCapacityPoints =
+	props.state.cells + nonPrimaryCultureCells + burgsData.value.length + nonPrimaryCultureBurgs;
+
+const technologieGovernmentCapacityLimit = 1 * 50;
 
 const governmentCapacityLimit =
-	constGovernmentTypes.find(g => g.name === props.state.form)?.governmentCapacityLimit || 0;
-const technologieGovernmentCapacityLimit = 50;
-const sumGovernmentCapacityLimit = governmentCapacityLimit + technologieGovernmentCapacityLimit;
-const governmentCapacity = Math.round(
-	(sumGovernmentCapacityPoints / sumGovernmentCapacityLimit) * 100
-);
+	(constGovernmentTypes.find(g => g.name === props.state.form)?.governmentCapacityLimit || 0) +
+	technologieGovernmentCapacityLimit;
+
+const governmentCapacity = Math.round((governmentCapacityPoints / governmentCapacityLimit) * 100);
 const progress = ref(Math.min(governmentCapacity, 100));
 
-const CapacityCard = defineComponent({
-	props: { title: String },
-	template: /*HTML*/ `
-    <div class='relative mt-2 h-auto w-full rounded-md border p-5'>
-      <span class='absolute -top-4 left-2 bg-background px-2 text-xl text-primary'>
-        {{ title }}
-      </span>
-      <slot></slot>
-    </div>`
-});
+const governmentCapacityRows = [
+	{ type: 'Kratki', points: 1, value: props.state.cells },
+	{ type: 'Kratki ob. kultura', points: 1, value: nonPrimaryCultureCells },
+	{ type: 'Miasta', points: 1, value: burgsData.value.length },
+	{ type: 'Miasta ob. kultura', points: 1, value: nonPrimaryCultureBurgs }
+];
 
-const CapacityRow = defineComponent({
-	props: { label: String, value: Number },
-	template: /*HTML*/ `
-    <TableRow>
-      <TableCell>{{ label }}</TableCell>
-      <TableCell class='text-right'>{{ useFormatNumber(value) }}</TableCell>
-    </TableRow>`
-});
-
-const CapacitySum = defineComponent({
-	props: { value: Number },
-	template: /*HTML*/ `
-    <p class='absolute bottom-3 start-1/3 mt-4 text-center text-lg'>
-      Suma: <span class='text-primary'>{{ useFormatNumber(value) }}</span>
-    </p>`
-});
+const governmentCapacityLimitRows = [
+	{
+		type: 'Forma rządu',
+		value: constGovernmentTypes.find(g => g.name === props.state.form)?.governmentCapacityLimit || 0
+	},
+	{ type: 'Technologia', value: technologieGovernmentCapacityLimit }
+];
 </script>
 
 <template>
 	<div class="w-full p-6">
 		<Label class="mt-3 text-lg" for="progress">
-			Wykorzystanie: {{ useFormatNumber(sumGovernmentCapacityPoints) }} /
-			{{ useFormatNumber(sumGovernmentCapacityLimit) }}
-			(<span class="text-primary">{{ governmentCapacity }}</span
-			>%)
+			Wykorzystanie: {{ useFormatNumber(governmentCapacityPoints) }} /
+			{{ useFormatNumber(governmentCapacityLimit) }} (
+			<span class="text-primary"> {{ governmentCapacity }}</span>
+			% )
 		</Label>
 
 		<Progress v-model="progress" class="mt-1 w-3/5" id="progress" />
 
 		<div class="mt-9 grid grid-cols-2 gap-10">
-			<CapacityCard title="Koszty administracyjne">
-				<CapacityRow label="Kratki" :value="cells" />
-				<CapacityRow label="Kratki ob. kultura" :value="nonPrimaryCultureCells" />
-				<CapacityRow label="Miasta" :value="burgs" />
-				<CapacityRow label="Miasta ob. kultura" :value="nonPrimaryCultureBurgs" />
-				<CapacitySum :value="sumGovernmentCapacityPoints" />
-			</CapacityCard>
+			<div class="relative mt-2 h-auto w-full rounded-md border p-5">
+				<span class="absolute -top-4 left-2 bg-background px-2 text-xl text-primary">
+					Koszty administracyjne
+				</span>
 
-			<CapacityCard title="Źródła pojemności">
-				<CapacityRow label="Forma rządu" :value="governmentCapacityLimit" />
-				<CapacityRow label="Technologia" :value="technologieGovernmentCapacityLimit" />
-				<CapacitySum :value="sumGovernmentCapacityLimit" />
-			</CapacityCard>
+				<Table class="mb-7">
+					<TableHeader>
+						<TableRow>
+							<TableHead> Typ </TableHead>
+
+							<TableHead> Punkty </TableHead>
+
+							<TableHead class="text-right"> Ilość </TableHead>
+						</TableRow>
+					</TableHeader>
+
+					<TableBody class="font-medium">
+						<TableRow v-for="row in governmentCapacityRows" :key="row.type">
+							<TableCell> {{ row.type }} </TableCell>
+
+							<TableCell> {{ row.points }} </TableCell>
+
+							<TableCell class="text-right"> {{ useFormatNumber(row.value) }} </TableCell>
+						</TableRow>
+					</TableBody>
+				</Table>
+
+				<p class="absolute bottom-3 start-1/3 mt-4 text-center text-lg">
+					Suma:
+					<span class="text-primary"> {{ useFormatNumber(governmentCapacityPoints) }} </span>
+				</p>
+			</div>
+
+			<div class="relative mt-2 h-auto w-full rounded-md border p-5">
+				<span class="absolute -top-4 left-2 bg-background px-2 text-xl text-primary">
+					Źródła pojemności
+				</span>
+
+				<Table class="mb-7">
+					<TableHeader>
+						<TableRow>
+							<TableHead> Typ </TableHead>
+
+							<TableHead class="text-right"> Ilość </TableHead>
+						</TableRow>
+					</TableHeader>
+
+					<TableBody class="font-medium">
+						<TableRow v-for="row in governmentCapacityLimitRows" :key="row.type">
+							<TableCell> {{ row.type }} </TableCell>
+
+							<TableCell class="text-right"> {{ useFormatNumber(row.value) }} </TableCell>
+						</TableRow>
+					</TableBody>
+				</Table>
+
+				<p class="absolute bottom-3 start-1/3 mt-4 text-center text-lg">
+					Suma:
+					<span class="text-primary"> {{ useFormatNumber(governmentCapacityLimit) }} </span>
+				</p>
+			</div>
 		</div>
 	</div>
 </template>
