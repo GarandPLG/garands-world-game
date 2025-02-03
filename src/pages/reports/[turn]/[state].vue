@@ -74,7 +74,7 @@ else {
 		}).value,
 		requestArgs: {
 			fields: [
-				'id,name,nameFull,emblemSVG,cells,color,culture,relations,biomesCells,culturesCells,religionsCells,capital,ruralPopulation,urbanPopulation'
+				'id,name,nameFull,emblemSVG,cells,color,culture,form,relations,biomesCells,culturesCells,religionsCells,capital,ruralPopulation,urbanPopulation'
 			]
 		}
 	});

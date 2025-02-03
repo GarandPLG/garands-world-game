@@ -10,22 +10,36 @@ const { cultureNames, burgsData } = await useFetchAdministrationReport(props.tur
 const cells = props.state.cells;
 const primaryCulture = cultureNames.find(
 	(cultureName: { id: string; name: string }) => cultureName.id === props.state.culture
-).name;
+).id;
 const cultureCells = props.state.culturesCells as Record<string, number>;
 
 const nonPrimaryCultureCells = Object.entries(cultureCells).reduce((suma, [klucz, wartość]) => {
-	return klucz === primaryCulture ? suma : suma + wartość;
+	return klucz === primaryCulture ? suma : suma + parseInt(wartość);
 }, 0);
 
 const burgs = burgsData.value.length;
 
 const nonPrimaryCultureBurgs = burgsData.value.filter(
-	burg => burg.culture === primaryCulture
+	burg => burg.culture !== primaryCulture
 ).length;
 
 const sumGovernmentCapacityPoints = cells + nonPrimaryCultureCells + burgs + nonPrimaryCultureBurgs;
 
-const progress = ref(33);
+const governmentCapacityLimit = constGovernmentTypes.find(
+	government => government.name === props.state.form
+).governmentCapacityLimit;
+
+const technologieGovernmentCapacityLimit = 1 * 50;
+
+const sumGovernmentCapacityLimit = governmentCapacityLimit + technologieGovernmentCapacityLimit;
+
+const governmentCapacity = Math.round(
+	(sumGovernmentCapacityPoints / sumGovernmentCapacityLimit) * 100
+);
+
+const progress = ref<number>(
+	Math.min(Math.round((sumGovernmentCapacityPoints / sumGovernmentCapacityLimit) * 100), 100)
+);
 
 // TODO: Dodać limit administracyjny, wyliczanie % zapełnienia limitu i jego wypisywanie w <Progress />>
 </script>
@@ -33,7 +47,10 @@ const progress = ref(33);
 <template>
 	<div class="w-full p-6">
 		<Label class="mt-3 text-lg" for="progress">
-			Wykorzystanie: 33 / 100 ( <span class="text-primary"> 33</span>% )
+			Wykorzystanie: {{ useFormatNumber(sumGovernmentCapacityPoints) }} /
+			{{ useFormatNumber(sumGovernmentCapacityLimit) }} (
+			<span class="text-primary"> {{ governmentCapacity }}</span
+			>% )
 		</Label>
 
 		<Progress v-model="progress" class="mt-1 w-3/5" id="progress" />
@@ -118,19 +135,26 @@ const progress = ref(33);
 						<TableRow>
 							<TableCell> Forma rządu </TableCell>
 
-							<TableCell class="text-right"> 0 </TableCell>
+							<TableCell class="text-right">
+								{{ useFormatNumber(governmentCapacityLimit) }}
+							</TableCell>
 						</TableRow>
 
 						<TableRow>
 							<TableCell> Technologia </TableCell>
 
-							<TableCell class="text-right"> 0 </TableCell>
+							<TableCell class="text-right">
+								{{ useFormatNumber(technologieGovernmentCapacityLimit) }}
+							</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>
 
 				<p class="absolute bottom-3 start-1/3 mt-4 text-center text-lg">
-					Suma: <span class="text-primary"> 0 </span>
+					Suma:
+					<span class="text-primary">
+						{{ useFormatNumber(sumGovernmentCapacityLimit) }}
+					</span>
 				</p>
 			</div>
 		</div>
