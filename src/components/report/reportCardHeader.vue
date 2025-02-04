@@ -3,7 +3,7 @@ import type { CulturesResponse } from '@/types/pb-types';
 
 const { state, turn } = storeToRefs(useReportStore());
 
-const { redisKeyPrefix, isUserNotAdmin } = useRedisKeyPrefix(state.value, turn.value);
+const { redisKeyPrefix, isUserNotAdmin } = useRedisKeyPrefix(state.value.name, turn.value.value);
 
 const culture = ref<CulturesResponse<unknown>>(
 	await useCachedData({

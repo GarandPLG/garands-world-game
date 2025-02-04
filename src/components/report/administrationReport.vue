@@ -14,11 +14,23 @@ interface AccordionItems {
 
 const { state, turn } = storeToRefs(useReportStore());
 
-const { provincesData, burgsData } = await useFetchAdministrationReport(turn.value, state.value);
+const { provincesData, burgsData, cultureData, religionData } = await useFetchAdministrationReport(
+	turn.value,
+	state.value
+);
 
-const biomesChartData = prepareChartData(state.value.biomesCells as object);
-const religionsChartData = prepareChartData(state.value.religionsCells as object);
-const culturesChartData = prepareChartData(state.value.culturesCells as object);
+const biomesChartData = prepareChartData(
+	state.value.biomesCells as Record<string, string>,
+	constBiomesColors
+);
+const religionsChartData = prepareChartData(
+	state.value.religionsCells as Record<string, string>,
+	religionData
+);
+const culturesChartData = prepareChartData(
+	state.value.culturesCells as Record<string, string>,
+	cultureData
+);
 
 const accordionItems: AccordionItems[] = [
 	{
@@ -53,10 +65,14 @@ const accordionItems: AccordionItems[] = [
 	}
 ];
 
-function prepareChartData(content: object) {
+function prepareChartData(
+	content: Record<string, string>,
+	colors: { id?: string; name: string; color: string }[]
+): { name: string; amount: number; color: string }[] {
 	return Object.entries(content).map(([name, value]) => ({
 		name,
-		amount: parseInt(value)
+		amount: parseInt(value),
+		color: colors.find(c => c.name === name)?.color ?? ''
 	}));
 }
 </script>

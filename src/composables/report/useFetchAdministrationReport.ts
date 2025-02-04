@@ -39,30 +39,30 @@ export default async function (
 		})
 	);
 
-	const cultureNames: { id: string; name: string }[] = await useCachedData({
-		key: `${redisKeyPrefix} -- cultureNames`,
+	const cultureData: { id: string; name: string; color: string }[] = await useCachedData({
+		key: `${redisKeyPrefix} -- reportAdministrationCultureData`,
 		collection: 'cultures',
 		ttl: 1800,
 		requestArgs: {
 			filter: `turn = "${turn.id}"`,
-			fields: ['id,name']
+			fields: ['id,name,color']
 		}
 	});
 
-	const religionNames: { id: string; name: string }[] = await useCachedData({
-		key: `${redisKeyPrefix} -- religionNames`,
+	const religionData: { id: string; name: string; color: string }[] = await useCachedData({
+		key: `${redisKeyPrefix} -- reportAdministrationReligionData`,
 		collection: 'religions',
 		ttl: 1800,
 		requestArgs: {
 			filter: `turn = "${turn.id}"`,
-			fields: ['id,name']
+			fields: ['id,name,color']
 		}
 	});
 
 	return {
 		provincesData,
 		burgsData,
-		cultureNames,
-		religionNames
+		cultureData,
+		religionData
 	};
 }

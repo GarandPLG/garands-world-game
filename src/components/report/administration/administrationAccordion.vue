@@ -1,12 +1,11 @@
 <script lang="ts" setup>
 import type { BurgsResponse, ProvincesResponse } from '@/types/pb-types';
 
+type ChartContent = Array<{ name: string; amount: number; color: string }>;
+
 interface AccordionItems {
 	title: string;
-	content:
-		| ProvincesResponse<unknown>[]
-		| BurgsResponse<unknown>[]
-		| { name: string; amount: number }[];
+	content: ProvincesResponse<unknown>[] | BurgsResponse<unknown>[] | ChartContent;
 	len: number;
 	type: 'provinces' | 'burgs' | 'chart';
 }
@@ -15,8 +14,12 @@ const props = defineProps<{
 	accordionItems: AccordionItems[];
 }>();
 
-const provinces = props.accordionItems.find(item => item.type === 'provinces')?.content ?? [];
-const burgs = props.accordionItems.find(item => item.type === 'burgs')?.content ?? [];
+const provinces = (props.accordionItems.find(item => item.type === 'provinces')?.content ??
+	[]) as ProvincesResponse<unknown>[];
+const burgs = (props.accordionItems.find(item => item.type === 'burgs')?.content ??
+	[]) as BurgsResponse<unknown>[];
+
+const colorsFromContent = (content: ChartContent): string[] => content.map(c => c.color);
 </script>
 
 <template>
@@ -57,8 +60,9 @@ const burgs = props.accordionItems.find(item => item.type === 'burgs')?.content 
 				<div class="m-2 p-2">
 					<DonutChart
 						index="name"
-						:category="'amount'"
-						:data="item.content"
+						category="amount"
+						:data="item.content as ChartContent"
+						:colors="colorsFromContent(item.content as ChartContent)"
 						type="donut"
 						:sort-function="(a, b) => b.amount - a.amount"
 						:valueFormatter="value => `${useFormatNumber(value)}`"

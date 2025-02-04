@@ -56,7 +56,7 @@ declare global {
   const DropdownMenuSubTrigger: typeof import('../components/ui/dropdown-menu/index')['DropdownMenuSubTrigger']
   const DropdownMenuTrigger: typeof import('../components/ui/dropdown-menu/index')['DropdownMenuTrigger']
   const EffectScope: typeof import('vue')['EffectScope']
-  const FORM_ITEM_INJECTION_KEY: typeof import('../components/ui/form/index')['FORM_ITEM_INJECTION_KEY']
+  const FORM_ITEM_INJECTION_KEY: typeof import('../components/ui/form/injectionKeys')['FORM_ITEM_INJECTION_KEY']
   const Form: typeof import('../components/ui/form/index')['Form']
   const FormControl: typeof import('../components/ui/form/index')['FormControl']
   const FormDescription: typeof import('../components/ui/form/index')['FormDescription']
@@ -142,6 +142,7 @@ declare global {
   const computedEager: typeof import('@vueuse/core')['computedEager']
   const computedInject: typeof import('@vueuse/core')['computedInject']
   const computedWithControl: typeof import('@vueuse/core')['computedWithControl']
+  const constBiomesColors: typeof import('../data/consts/constBiomesColors')['constBiomesColors']
   const constCultureToTechnologyGroup: typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']
   const constGovernmentTypes: typeof import('../data/consts/constGovernmentTypes')['default']
   const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
@@ -545,7 +546,7 @@ declare module 'vue' {
     readonly DropdownMenuSubTrigger: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenuSubTrigger']>
     readonly DropdownMenuTrigger: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenuTrigger']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
-    readonly FORM_ITEM_INJECTION_KEY: UnwrapRef<typeof import('../components/ui/form/index')['FORM_ITEM_INJECTION_KEY']>
+    readonly FORM_ITEM_INJECTION_KEY: UnwrapRef<typeof import('../components/ui/form/injectionKeys')['FORM_ITEM_INJECTION_KEY']>
     readonly Form: UnwrapRef<typeof import('../components/ui/form/index')['Form']>
     readonly FormControl: UnwrapRef<typeof import('../components/ui/form/index')['FormControl']>
     readonly FormDescription: UnwrapRef<typeof import('../components/ui/form/index')['FormDescription']>
@@ -631,6 +632,7 @@ declare module 'vue' {
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
     readonly computedInject: UnwrapRef<typeof import('@vueuse/core')['computedInject']>
     readonly computedWithControl: UnwrapRef<typeof import('@vueuse/core')['computedWithControl']>
+    readonly constBiomesColors: UnwrapRef<typeof import('../data/consts/constBiomesColors')['constBiomesColors']>
     readonly constCultureToTechnologyGroup: UnwrapRef<typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']>
     readonly constGovernmentTypes: UnwrapRef<typeof import('../data/consts/constGovernmentTypes')['default']>
     readonly controlledComputed: UnwrapRef<typeof import('@vueuse/core')['controlledComputed']>
@@ -698,7 +700,6 @@ declare module 'vue' {
     readonly onBeforeUpdate: UnwrapRef<typeof import('vue')['onBeforeUpdate']>
     readonly onClickOutside: UnwrapRef<typeof import('@vueuse/core')['onClickOutside']>
     readonly onDeactivated: UnwrapRef<typeof import('vue')['onDeactivated']>
-    readonly onElementRemoval: UnwrapRef<typeof import('@vueuse/core')['onElementRemoval']>
     readonly onErrorCaptured: UnwrapRef<typeof import('vue')['onErrorCaptured']>
     readonly onKeyStroke: UnwrapRef<typeof import('@vueuse/core')['onKeyStroke']>
     readonly onLongPress: UnwrapRef<typeof import('@vueuse/core')['onLongPress']>
@@ -795,7 +796,6 @@ declare module 'vue' {
     readonly useCloned: UnwrapRef<typeof import('@vueuse/core')['useCloned']>
     readonly useColorMode: UnwrapRef<typeof import('@vueuse/core')['useColorMode']>
     readonly useConfirmDialog: UnwrapRef<typeof import('@vueuse/core')['useConfirmDialog']>
-    readonly useCountdown: UnwrapRef<typeof import('@vueuse/core')['useCountdown']>
     readonly useCounter: UnwrapRef<typeof import('@vueuse/core')['useCounter']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVar: UnwrapRef<typeof import('@vueuse/core')['useCssVar']>
@@ -883,7 +883,6 @@ declare module 'vue' {
     readonly usePreferredDark: UnwrapRef<typeof import('@vueuse/core')['usePreferredDark']>
     readonly usePreferredLanguages: UnwrapRef<typeof import('@vueuse/core')['usePreferredLanguages']>
     readonly usePreferredReducedMotion: UnwrapRef<typeof import('@vueuse/core')['usePreferredReducedMotion']>
-    readonly usePreferredReducedTransparency: UnwrapRef<typeof import('@vueuse/core')['usePreferredReducedTransparency']>
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
     readonly useProcessEndTurnCollectionsData: UnwrapRef<typeof import('../composables/useProcessEndTurnCollectionsData')['default']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
@@ -894,7 +893,6 @@ declare module 'vue' {
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
-    readonly useSSRWidth: UnwrapRef<typeof import('@vueuse/core')['useSSRWidth']>
     readonly useScreenOrientation: UnwrapRef<typeof import('@vueuse/core')['useScreenOrientation']>
     readonly useScreenSafeArea: UnwrapRef<typeof import('@vueuse/core')['useScreenSafeArea']>
     readonly useScriptTag: UnwrapRef<typeof import('@vueuse/core')['useScriptTag']>

@@ -486,6 +486,7 @@
     "useCountdown": true,
     "constCultureToTechnologyGroup": true,
     "reportTabsData": true,
-    "useReportStore": true
+    "useReportStore": true,
+    "constBiomesColors": true
   }
 }

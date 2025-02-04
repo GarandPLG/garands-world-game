@@ -8,7 +8,7 @@ const props = defineProps<{
 
 const { state, turn } = storeToRefs(useReportStore());
 
-const { cultureNames, religionNames } = await useFetchAdministrationReport(turn.value, state.value);
+const { cultureData, religionData } = await useFetchAdministrationReport(turn.value, state.value);
 </script>
 
 <template>
@@ -33,14 +33,14 @@ const { cultureNames, religionNames } = await useFetchAdministrationReport(turn.
 				<p class="text-base">
 					Kultura:
 					<span class="text-primary">
-						{{ cultureNames.find(culture => culture.id === props.burg.culture)?.name }}
+						{{ cultureData.find(culture => culture.id === props.burg.culture)?.name }}
 					</span>
 				</p>
 
 				<p class="text-base">
 					Religia:
 					<span class="text-primary">
-						{{ religionNames.find(religion => religion.id === props.burg.religion)?.name }}
+						{{ religionData.find(religion => religion.id === props.burg.religion)?.name }}
 					</span>
 				</p>
 

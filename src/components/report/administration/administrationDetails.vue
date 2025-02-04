@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 const { state, turn } = storeToRefs(useReportStore());
 
-const { cultureNames, burgsData } = await useFetchAdministrationReport(turn.value, state.value);
+const { cultureData, burgsData } = await useFetchAdministrationReport(turn.value, state.value);
 
-const primaryCulture = cultureNames.find(c => c.id === state.value.culture)?.id;
+const primaryCulture = cultureData.find(c => c.id === state.value.culture);
 
 const nonPrimaryCultureCells: number = (
 	Object.entries(state.value.culturesCells as Record<string, string>) as [string, string][]
 ).reduce(
 	(sum: number, [key, value]: [string, string]) =>
-		key !== primaryCulture ? sum : sum + parseInt(value),
+		key === primaryCulture?.name ? sum : sum + parseInt(value),
 	0
 );
 
-const nonPrimaryCultureBurgs = burgsData.value.filter(b => b.culture !== primaryCulture).length;
+const nonPrimaryCultureBurgs = burgsData.value.filter(b => b.culture !== primaryCulture?.id).length;
 
 const governmentCapacityPoints =
 	state.value.cells + nonPrimaryCultureCells + burgsData.value.length + nonPrimaryCultureBurgs;
