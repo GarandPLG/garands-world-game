@@ -44,9 +44,8 @@ const governmentCapacityLimitRows = [
 </script>
 
 <template>
-	<!-- TODO: Powiększyć interface -->
-	<div class="w-full p-6">
-		<Label class="mt-3 text-lg" for="progress">
+	<div class="w-full p-2">
+		<Label class="mt-3 text-xl" for="progress">
 			Wykorzystanie: {{ useFormatNumber(governmentCapacityPoints) }} /
 			{{ useFormatNumber(governmentCapacityLimit) }} (
 			<span class="text-primary"> {{ governmentCapacity }}</span>
@@ -57,11 +56,11 @@ const governmentCapacityLimitRows = [
 
 		<div class="mt-9 grid grid-cols-2 gap-10">
 			<div class="relative mt-2 h-auto w-full rounded-md border p-5">
-				<span class="absolute -top-4 left-2 bg-background px-2 text-xl text-primary">
+				<span class="absolute -top-4 left-2 bg-background px-2 text-2xl text-primary">
 					Koszty administracyjne
 				</span>
 
-				<Table class="mb-7">
+				<Table class="mb-7 text-lg">
 					<TableHeader>
 						<TableRow>
 							<TableHead> Typ </TableHead>
@@ -83,18 +82,18 @@ const governmentCapacityLimitRows = [
 					</TableBody>
 				</Table>
 
-				<p class="absolute bottom-3 start-1/3 mt-4 text-center text-lg">
+				<p class="absolute bottom-3 start-1/3 mt-4 text-center text-2xl">
 					Suma:
 					<span class="text-primary"> {{ useFormatNumber(governmentCapacityPoints) }} </span>
 				</p>
 			</div>
 
 			<div class="relative mt-2 h-auto w-full rounded-md border p-5">
-				<span class="absolute -top-4 left-2 bg-background px-2 text-xl text-primary">
-					Źródła pojemności
+				<span class="absolute -top-4 left-2 bg-background px-2 text-2xl text-primary">
+					Limit administracyjny
 				</span>
 
-				<Table class="mb-7">
+				<Table class="mb-7 text-lg">
 					<TableHeader>
 						<TableRow>
 							<TableHead> Typ </TableHead>
@@ -112,7 +111,7 @@ const governmentCapacityLimitRows = [
 					</TableBody>
 				</Table>
 
-				<p class="absolute bottom-3 start-1/3 mt-4 text-center text-lg">
+				<p class="absolute bottom-3 start-1/3 mt-4 text-center text-2xl">
 					Suma:
 					<span class="text-primary"> {{ useFormatNumber(governmentCapacityLimit) }} </span>
 				</p>

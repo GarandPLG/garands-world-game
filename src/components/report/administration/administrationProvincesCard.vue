@@ -31,7 +31,9 @@ const props = defineProps<{ province: ProvincesResponse<unknown> }>();
 			<div class="mt-[-0.6rem] flex flex-col">
 				<p class="text-base">
 					Stolica:
-					<span class="text-primary">{{ props.province.capital }}</span>
+					<span class="text-primary">
+						{{ props.province.capital ? props.province.capital : 'Brak' }}
+					</span>
 				</p>
 
 				<p class="text-base">
