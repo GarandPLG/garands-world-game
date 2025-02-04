@@ -2,6 +2,16 @@
 // TODO: Administracja (GovCap, Prowincje, Miasta)
 import type { BurgsResponse, ProvincesResponse } from '@/types/pb-types';
 
+interface AccordionItems {
+	title: string;
+	content:
+		| ProvincesResponse<unknown>[]
+		| BurgsResponse<unknown>[]
+		| { name: string; amount: number }[];
+	len: number;
+	type: 'provinces' | 'burgs' | 'chart';
+}
+
 const { state, turn } = storeToRefs(useReportStore());
 
 const { provincesData, burgsData } = await useFetchAdministrationReport(turn.value, state.value);
@@ -10,7 +20,7 @@ const biomesChartData = prepareChartData(state.value.biomesCells as object);
 const religionsChartData = prepareChartData(state.value.religionsCells as object);
 const culturesChartData = prepareChartData(state.value.culturesCells as object);
 
-const accordionItems = [
+const accordionItems: AccordionItems[] = [
 	{
 		title: 'Prowincje',
 		content: provincesData.value as ProvincesResponse<unknown>[],
@@ -53,12 +63,7 @@ function prepareChartData(content: object) {
 
 <template>
 	<div class="grid grid-cols-12 gap-3">
-		<AdministrationAccordion
-			class="col-span-4"
-			:accordionItems="accordionItems"
-			:turn="turn"
-			:state="state"
-		/>
+		<AdministrationAccordion class="col-span-4" :accordionItems="accordionItems" />
 
 		<AdministrationDetails
 			class="col-span-8 flex w-full flex-col items-center justify-center"

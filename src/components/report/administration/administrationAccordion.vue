@@ -1,17 +1,18 @@
 <script lang="ts" setup>
-import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
+import type { BurgsResponse, ProvincesResponse } from '@/types/pb-types';
 
-interface AccordionItem {
+interface AccordionItems {
 	title: string;
-	content: any[];
+	content:
+		| ProvincesResponse<unknown>[]
+		| BurgsResponse<unknown>[]
+		| { name: string; amount: number }[];
 	len: number;
 	type: 'provinces' | 'burgs' | 'chart';
 }
 
 const props = defineProps<{
-	turn: TurnsResponse<unknown>;
-	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
-	accordionItems: AccordionItem[];
+	accordionItems: AccordionItems[];
 }>();
 
 const provinces = props.accordionItems.find(item => item.type === 'provinces')?.content ?? [];
@@ -47,13 +48,7 @@ const burgs = props.accordionItems.find(item => item.type === 'burgs')?.content 
 			<AccordionContent v-else-if="item.type === 'burgs'">
 				<ScrollArea class="h-[500px]">
 					<div class="flex flex-wrap justify-center gap-6">
-						<AdministrationBurgCard
-							v-for="burg in burgs"
-							:key="burg.id"
-							:burg="burg"
-							:turn="props.turn"
-							:state="props.state"
-						/>
+						<AdministrationBurgCard v-for="burg in burgs" :key="burg.id" :burg="burg" />
 					</div>
 				</ScrollArea>
 			</AccordionContent>

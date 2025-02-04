@@ -1,8 +1,10 @@
 import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
 
 export const useReportStore = defineStore('useReportStore', () => {
-	const state = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>>();
-	const turn = ref<TurnsResponse<unknown>>();
+	const state = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>>(
+		{} as StatesResponse<unknown, unknown, unknown, unknown, unknown>
+	);
+	const turn = ref<TurnsResponse<unknown>>({} as TurnsResponse<unknown>);
 
 	function setState(newState: StatesResponse<unknown, unknown, unknown, unknown, unknown>): void {
 		state.value = newState;

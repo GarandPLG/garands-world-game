@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import type { BurgsResponse, StatesResponse, TurnsResponse } from '@/types/pb-types';
+import type { BurgsResponse } from '@/types/pb-types';
 import { Icon } from '@iconify/vue';
 
 const props = defineProps<{
 	burg: BurgsResponse<unknown>;
-	turn: TurnsResponse<unknown>;
-	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
 }>();
 
-const { cultureNames, religionNames } = await useFetchAdministrationReport(props.turn, props.state);
+const { state, turn } = storeToRefs(useReportStore());
+
+const { cultureNames, religionNames } = await useFetchAdministrationReport(turn.value, state.value);
 </script>
 
 <template>

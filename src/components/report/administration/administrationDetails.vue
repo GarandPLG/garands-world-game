@@ -1,17 +1,12 @@
 <script lang="ts" setup>
-import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
+const { state, turn } = storeToRefs(useReportStore());
 
-const props = defineProps<{
-	turn: TurnsResponse<unknown>;
-	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>;
-}>();
+const { cultureNames, burgsData } = await useFetchAdministrationReport(turn.value, state.value);
 
-const { cultureNames, burgsData } = await useFetchAdministrationReport(props.turn, props.state);
-
-const primaryCulture = cultureNames.find(c => c.id === props.state.culture)?.id;
+const primaryCulture = cultureNames.find(c => c.id === state.value.culture)?.id;
 
 const nonPrimaryCultureCells: number = (
-	Object.entries(props.state.culturesCells as Record<string, string>) as [string, string][]
+	Object.entries(state.value.culturesCells as Record<string, string>) as [string, string][]
 ).reduce(
 	(sum: number, [key, value]: [string, string]) =>
 		key !== primaryCulture ? sum : sum + parseInt(value),
@@ -21,19 +16,19 @@ const nonPrimaryCultureCells: number = (
 const nonPrimaryCultureBurgs = burgsData.value.filter(b => b.culture !== primaryCulture).length;
 
 const governmentCapacityPoints =
-	props.state.cells + nonPrimaryCultureCells + burgsData.value.length + nonPrimaryCultureBurgs;
+	state.value.cells + nonPrimaryCultureCells + burgsData.value.length + nonPrimaryCultureBurgs;
 
 const technologieGovernmentCapacityLimit = 1 * 50;
 
 const governmentCapacityLimit =
-	(constGovernmentTypes.find(g => g.name === props.state.form)?.governmentCapacityLimit || 0) +
+	(constGovernmentTypes.find(g => g.name === state.value.form)?.governmentCapacityLimit || 0) +
 	technologieGovernmentCapacityLimit;
 
 const governmentCapacity = Math.round((governmentCapacityPoints / governmentCapacityLimit) * 100);
 const progress = ref(Math.min(governmentCapacity, 100));
 
 const governmentCapacityRows = [
-	{ type: 'Kratki', points: 1, value: props.state.cells },
+	{ type: 'Kratki', points: 1, value: state.value.cells },
 	{ type: 'Kratki ob. kultura', points: 1, value: nonPrimaryCultureCells },
 	{ type: 'Miasta', points: 1, value: burgsData.value.length },
 	{ type: 'Miasta ob. kultura', points: 1, value: nonPrimaryCultureBurgs }
@@ -42,7 +37,7 @@ const governmentCapacityRows = [
 const governmentCapacityLimitRows = [
 	{
 		type: 'Forma rządu',
-		value: constGovernmentTypes.find(g => g.name === props.state.form)?.governmentCapacityLimit || 0
+		value: constGovernmentTypes.find(g => g.name === state.value.form)?.governmentCapacityLimit || 0
 	},
 	{ type: 'Technologia', value: technologieGovernmentCapacityLimit }
 ];
