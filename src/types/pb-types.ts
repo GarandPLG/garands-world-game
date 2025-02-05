@@ -15,6 +15,7 @@ export enum Collections {
 	ReportOutputs = 'reportOutputs',
 	Reports = 'reports',
 	States = 'states',
+	Trades = 'trades',
 	Turns = 'turns',
 	Users = 'users'
 }
@@ -309,6 +310,54 @@ export type StatesRecord<
 	user?: RecordIdString;
 };
 
+export enum TradesProductOptions {
+	'Groceries' = 'Groceries',
+	'Clothes' = 'Clothes',
+	'Furniture' = 'Furniture',
+	'Fish' = 'Fish',
+	'Fabrics' = 'Fabrics',
+	'Grain' = 'Grain',
+	'Paper' = 'Paper',
+	'Wood' = 'Wood',
+	'Iron' = 'Iron',
+	'Coal' = 'Coal',
+	'Tools' = 'Tools',
+	'Dyes' = 'Dyes',
+	'Explosives' = 'Explosives',
+	'Fertilizer' = 'Fertilizer',
+	'Glass' = 'Glass',
+	'Hardwood' = 'Hardwood',
+	'Lead' = 'Lead',
+	'Silk' = 'Silk',
+	'Steel' = 'Steel',
+	'Sulfur' = 'Sulfur',
+	'Coffee' = 'Coffee',
+	'Fruit' = 'Fruit',
+	'Gold' = 'Gold',
+	'Alcohol' = 'Alcohol',
+	'Luxuryclothes' = 'Luxuryclothes',
+	'Luxuryfurniture' = 'Luxuryfurniture',
+	'Meat' = 'Meat',
+	'Porcelain' = 'Porcelain',
+	'Sugar' = 'Sugar',
+	'Tea' = 'Tea',
+	'Tobacco' = 'Tobacco',
+	'Wine' = 'Wine',
+	'Weapon' = 'Weapon',
+	'Artillery' = 'Artillery',
+	'Ammunition' = 'Ammunition',
+	'Ships' = 'Ships'
+}
+export type TradesRecord = {
+	exportState: RecordIdString;
+	importState: RecordIdString;
+	isContinued?: boolean;
+	price: number;
+	product: TradesProductOptions;
+	turn: RecordIdString;
+	volume: number;
+};
+
 export type TurnsRecord = {
 	value?: number;
 };
@@ -346,6 +395,7 @@ export type StatesResponse<
 	Texpand = unknown
 > = Required<StatesRecord<TbiomesCells, TculturesCells, Trelations, TreligionsCells>> &
 	BaseSystemFields<Texpand>;
+export type TradesResponse<Texpand = unknown> = Required<TradesRecord> & BaseSystemFields<Texpand>;
 export type TurnsResponse<Texpand = unknown> = Required<TurnsRecord> & BaseSystemFields<Texpand>;
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>;
 
@@ -361,6 +411,7 @@ export type CollectionRecords = {
 	reportOutputs: ReportOutputsRecord;
 	reports: ReportsRecord;
 	states: StatesRecord;
+	trades: TradesRecord;
 	turns: TurnsRecord;
 	users: UsersRecord;
 };
@@ -375,6 +426,7 @@ export type CollectionResponses = {
 	reportOutputs: ReportOutputsResponse;
 	reports: ReportsResponse;
 	states: StatesResponse;
+	trades: TradesResponse;
 	turns: TurnsResponse;
 	users: UsersResponse;
 };
@@ -392,6 +444,7 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'reportOutputs'): RecordService<ReportOutputsResponse>;
 	collection(idOrName: 'reports'): RecordService<ReportsResponse>;
 	collection(idOrName: 'states'): RecordService<StatesResponse>;
+	collection(idOrName: 'trades'): RecordService<TradesResponse>;
 	collection(idOrName: 'turns'): RecordService<TurnsResponse>;
 	collection(idOrName: 'users'): RecordService<UsersResponse>;
 };
