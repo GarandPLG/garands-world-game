@@ -29,14 +29,14 @@ export default async function () {
 		})
 	);
 
-	const statesNames = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
+	const statesTrade = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
 		await useCachedData({
-			key: `${redisKeyPrefix} -- reportTradeStatesNames`,
+			key: `${redisKeyPrefix} -- reportTradeStatesData`,
 			collection: 'states',
 			ttl: 1800,
 			requestArgs: {
 				filter: `turn = "${turn.value.id}"`,
-				fields: ['id,name']
+				fields: ['id,name,emblemSVG,color']
 			}
 		})
 	);
@@ -44,6 +44,6 @@ export default async function () {
 	return {
 		imports,
 		exports,
-		statesNames
+		statesTrade
 	};
 }

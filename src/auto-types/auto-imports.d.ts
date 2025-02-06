@@ -125,6 +125,10 @@ declare global {
   const ToastTitle: typeof import('../components/ui/toast/index')['ToastTitle']
   const ToastViewport: typeof import('../components/ui/toast/index')['ToastViewport']
   const Toaster: typeof import('../components/ui/toast/index')['Toaster']
+  const Tooltip: typeof import('../components/ui/tooltip/index')['Tooltip']
+  const TooltipContent: typeof import('../components/ui/tooltip/index')['TooltipContent']
+  const TooltipProvider: typeof import('../components/ui/tooltip/index')['TooltipProvider']
+  const TooltipTrigger: typeof import('../components/ui/tooltip/index')['TooltipTrigger']
   const TradesProductOptions: typeof import('../types/pb-types')['TradesProductOptions']
   const UsersRoleOptions: typeof import('../types/pb-types')['UsersRoleOptions']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
@@ -618,6 +622,10 @@ declare module 'vue' {
     readonly ToastTitle: UnwrapRef<typeof import('../components/ui/toast/index')['ToastTitle']>
     readonly ToastViewport: UnwrapRef<typeof import('../components/ui/toast/index')['ToastViewport']>
     readonly Toaster: UnwrapRef<typeof import('../components/ui/toast/index')['Toaster']>
+    readonly Tooltip: UnwrapRef<typeof import('../components/ui/tooltip/index')['Tooltip']>
+    readonly TooltipContent: UnwrapRef<typeof import('../components/ui/tooltip/index')['TooltipContent']>
+    readonly TooltipProvider: UnwrapRef<typeof import('../components/ui/tooltip/index')['TooltipProvider']>
+    readonly TooltipTrigger: UnwrapRef<typeof import('../components/ui/tooltip/index')['TooltipTrigger']>
     readonly TradesProductOptions: UnwrapRef<typeof import('../types/pb-types')['TradesProductOptions']>
     readonly UsersRoleOptions: UnwrapRef<typeof import('../types/pb-types')['UsersRoleOptions']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>

@@ -490,6 +490,10 @@
     "constBiomesColors": true,
     "TradesProductOptions": true,
     "useFetchTradeReport": true,
-    "constProductsData": true
+    "constProductsData": true,
+    "Tooltip": true,
+    "TooltipContent": true,
+    "TooltipProvider": true,
+    "TooltipTrigger": true
   }
 }

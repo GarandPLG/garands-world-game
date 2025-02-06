@@ -4,76 +4,121 @@ import { Icon }                from '@iconify/vue';
 
 const props = defineProps<{ tradeType: TradesResponse<unknown>[]; header: string }>();
 
-const { statesNames } = await useFetchTradeReport();
+const { statesTrade } = await useFetchTradeReport();
 </script>
 
 <template>
-	<div class="trade-card m-2 rounded-lg border-2 p-4">
+	<div>
 		<h2 class="mb-4 text-center text-2xl font-bold text-primary">
 			{{ header }}
 		</h2>
 
-		<div v-for="tradeDeal in tradeType" :key="tradeDeal.id" class="mb-4 last:mb-0">
-			<div class="grid grid-cols-3 items-center gap-4">
-				<div class="flex h-full w-full flex-col items-center justify-center rounded-md border">
-					<span class="mb-3 font-semibold text-primary">
-						{{ constProductsData[tradeDeal.product].translation }}
-					</span>
+		<div class="grid grid-cols-2 gap-4">
+			<div v-for="tradeDeal in tradeType" :key="tradeDeal.id" class="rounded-lg border-2 p-4">
+				<div class="mb-4 flex justify-center">
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger as-child>
+								<Icon
+									:icon="constProductsData[tradeDeal.product].icon"
+									width="52"
+									height="52"
+									class="text-primary"
+								/>
+							</TooltipTrigger>
 
-					<Icon
-						:icon="constProductsData[tradeDeal.product].icon"
-						width="52"
-						height="52"
-						class="mb-2"
-					/>
+							<TooltipContent>
+								<p class="text-center">
+									{{ constProductsData[tradeDeal.product].translation }}
+								</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 				</div>
 
-				<div class="flex h-full w-full flex-col items-center justify-center rounded-md border">
-					<span class="font-semibold text-primary">
-						{{
-							statesNames.find(
-								state => state.id === (tradeDeal.exportState || tradeDeal.importState)
-							)?.name
-						}}
-					</span>
+				<div class="flex justify-center">
+					<div class="flex h-[165px] w-[200px] flex-col gap-3 rounded-md border">
+						<div class="flex items-center justify-center">
+							<span class="mr-2 h-3 w-3">
+								<svg width="100%" height="100%" viewBox="0 0 30 30">
+									<path
+										d=" M 15 15 m -14, 0 a 14,14 0 1,1 28,0 a 14,14 0 1,1 -28,0"
+										:stroke="
+											statesTrade.find(
+												state => state.id === (tradeDeal.exportState || tradeDeal.importState)
+											)?.color
+										"
+										:fill="
+											statesTrade.find(
+												state => state.id === (tradeDeal.exportState || tradeDeal.importState)
+											)?.color
+										"
+										stroke-width="1"
+									/>
+								</svg>
+							</span>
 
-					<div class="mb-2 h-[120px] w-[180px] rounded-md border">
-						<!-- TODO: Dodać flagę danego kraju, dodać nowe zapytanie w useFetchTradeReport -->
+							<h3 class="text-center text-lg font-bold">{{
+								statesTrade.find(
+									state => state.id === (tradeDeal.exportState || tradeDeal.importState)
+								)?.name
+							}}</h3>
+						</div>
+
+						<figure
+							v-html="
+								statesTrade.find(
+									state => state.id === (tradeDeal.exportState || tradeDeal.importState)
+								)?.emblemSVG
+							"
+							class="my-[-3rem]"
+						></figure>
 					</div>
 				</div>
 
-				<div class="flex h-full w-full items-center justify-center rounded-md border p-3">
-					<div class="space-y-2">
-						<div class="flex justify-between gap-4">
-							<span>Ilość:</span>
+				<div class="mt-5 rounded-md border p-3">
+					<div class="grid grid-cols-2 gap-2">
+						<span>Ilość:</span>
+						<span class="text-right text-primary">
+							{{ useFormatNumber(tradeDeal.volume) }}
+						</span>
 
-							<span class="text-primary">
-								{{ useFormatNumber(tradeDeal.volume) }}
-							</span>
-						</div>
+						<span>Cena:</span>
+						<span class="text-right text-primary">
+							{{ useFormatNumber(tradeDeal.price) }}
+						</span>
 
-						<div class="flex justify-between gap-4">
-							<span>Cena:</span>
-
-							<span class="text-primary">
-								{{ useFormatNumber(tradeDeal.price) }}
-							</span>
-						</div>
-
-						<div class="flex justify-between gap-4">
-							<span>Wartość:</span>
-
-							<span class="text-primary">
-								{{
-									useFormatNumber(
-										tradeDeal.price * tradeDeal.volume * (tradeDeal?.exportState ? -1 : 1)
-									)
-								}}
-							</span>
-						</div>
+						<span>Wartość:</span>
+						<span class="text-right text-primary">
+							{{
+								useFormatNumber(
+									tradeDeal.price * tradeDeal.volume * (tradeDeal?.exportState ? -1 : 1)
+								)
+							}}
+						</span>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
+
+<style>
+figure {
+	display: inline-block;
+	transition: 0.2s;
+}
+figcaption {
+	text-align: center;
+	margin: 0.4em 0;
+	font-family: 'Overlock SC';
+}
+address {
+	width: 100%;
+	max-width: 1018px;
+	margin: 0 auto;
+}
+figure > a {
+	text-decoration: none;
+}
+</style>
