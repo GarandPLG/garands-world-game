@@ -487,6 +487,7 @@
     "constCultureToTechnologyGroup": true,
     "reportTabsData": true,
     "useReportStore": true,
-    "constBiomesColors": true
+    "constBiomesColors": true,
+    "TradesProductOptions": true
   }
 }

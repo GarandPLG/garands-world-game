@@ -125,6 +125,7 @@ declare global {
   const ToastTitle: typeof import('../components/ui/toast/index')['ToastTitle']
   const ToastViewport: typeof import('../components/ui/toast/index')['ToastViewport']
   const Toaster: typeof import('../components/ui/toast/index')['Toaster']
+  const TradesProductOptions: typeof import('../types/pb-types')['TradesProductOptions']
   const UsersRoleOptions: typeof import('../types/pb-types')['UsersRoleOptions']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const afterAll: typeof import('vitest')['afterAll']
@@ -487,7 +488,7 @@ declare global {
   export type { Component, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
   // @ts-ignore
-  export type { Collections, CulturesTypeOptions, CulturesNamesbaseOptions, ProvincesFormOptions, ReligionsTypeOptions, StatesFormOptions, UsersRoleOptions } from '../types/pb-types'
+  export type { Collections, CulturesTypeOptions, CulturesNamesbaseOptions, ProvincesFormOptions, ReligionsTypeOptions, StatesFormOptions, TradesProductOptions, UsersRoleOptions } from '../types/pb-types'
   import('../types/pb-types')
 }
 
@@ -615,6 +616,7 @@ declare module 'vue' {
     readonly ToastTitle: UnwrapRef<typeof import('../components/ui/toast/index')['ToastTitle']>
     readonly ToastViewport: UnwrapRef<typeof import('../components/ui/toast/index')['ToastViewport']>
     readonly Toaster: UnwrapRef<typeof import('../components/ui/toast/index')['Toaster']>
+    readonly TradesProductOptions: UnwrapRef<typeof import('../types/pb-types')['TradesProductOptions']>
     readonly UsersRoleOptions: UnwrapRef<typeof import('../types/pb-types')['UsersRoleOptions']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly afterAll: UnwrapRef<typeof import('vitest')['afterAll']>

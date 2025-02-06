@@ -9,13 +9,14 @@ const { state, turn } = storeToRefs(useReportStore());
 
 <!-- 
 population_products = [
+  'Groceries',
+  'Clothes',
   'Furniture',
   'Fish',
   'Fabrics',
   'Grain',
   'Paper',
   'Wood',
-  'Coal',
   'Glass',
   'Coffee',
   'Fruit',
@@ -25,17 +26,15 @@ population_products = [
   'Meat',
   'Porcelain',
   'Sugar',
-  'Tea',
-  'Tobacco',
-  'Wine'
+  'Tea'
 ]
 
 army_demand = [
   'Groceries',
   'Clothes',
   'Weapon',
-  'Artillery',
-  'Ammunition',
+  'RangedWeapon',
+  'Armor',
   'Ships'
 ]
 
@@ -64,45 +63,38 @@ base_population_demand = {
 }
 
 productsTab = [
-	Groceries, Clothes, Furniture, Fish, Fabrics, Grain, Paper, Wood, Iron, Coal, Tools, Dyes, Explosives, Fertilizer, Glass, Hardwood, Lead, Silk, Steel, Sulfur, Coffee, Fruit, Gold, Alcohol, Luxuryclothes, Luxuryfurniture, Meat, Porcelain, Sugar, Tea, Tobacco, Wine, Weapon, Artillery, Ammunition, Ships
-]
+  "Groceries", "Clothes", "Furniture", "Fish", "Fabrics", "Grain", "Paper", "Wood", "Iron", "Tools", "Dyes", "Glass", "Silk", "Coffee", "Fruit", "Gold", "Alcohol", "LuxuryClothes", "LuxuryFurniture", "Meat", "Porcelain", "Sugar", "Tea", "Weapon", "RangedWeapon", "Armor", "Ships"
+];
 
-products = {
-	'Groceries': [30, "Produkty spożywcze"],
-	'Clothes': [30, "Ubrania"],
-	'Furniture': [30, "Meble"],
-	'Fish': [20, "Ryby"],
-	'Fabrics': [20, "Tkaniny"],
-	'Grain': [20, "Zboże"],
-	'Paper': [30, "Papier"],
-  'Wood': [20, "Drewno"],
-  'Iron': [40, "Żelazo"],
-  'Coal': [30, "Węgiel"],
-  'Tools': [40, "Narzędzia"],
-  'Dyes': [40, "Barwniki"],
-  'Explosives': [50, "Materiały wybuchowe"],
-  'Fertilizer': [30, "Nawóz"],
-  'Glass': [40, "Szkło"],
-  'Hardwood': [40, "Twarde drewno"],
-  'Lead': [40, "Ołów"],
-  'Silk': [40, "Jedwab"],
-  'Steel': [50, "Stal"],
-  'Sulfur': [50, "Siarka"],
-  'Coffee': [50, "Kawa"],
-  'Fruit': [50, "Owoc"],
-  'Gold': [100, "Złoto"],
-  'Alcohol': [30, "Alkohol"],
-  'Luxuryclothes': [60, "Ubrania luksusowe"],
-  'Luxuryfurniture': [60, "Meble luksusowe"],
-  'Meat': [30, "Mięso"],
-  'Porcelain': [70, "Porcelana"],
-  'Sugar': [30, "Cukier"],
-  'Tea': [30, "Herbata"],
-  'Tobacco': [40, "Tytoń"],
-  'Wine': [50, "Wino"],
-  'Weapon': [60, "Broń"],
-  'Artillery': [70, "Artyleria"],
-  'Ammunition': [50, "Amunicja"],
-  'Ships': [60, "Statki"]
-}
+Groceries, Clothes, Furniture, Fish, Fabrics, Grain, Paper, Wood, Iron, Tools, Dyes, Glass, Silk, Coffee, Fruit, Gold, Alcohol, LuxuryClothes, LuxuryFurniture, Meat, Porcelain, Sugar, Tea, Weapon, RangedWeapon, Armor, Ships
+
+products = products = {
+  Groceries: { value: 30, translation: "Produkty spożywcze" },
+  Clothes: { value: 30, translation: "Ubrania" },
+  Furniture: { value: 30, translation: "Meble" },
+  Fish: { value: 20, translation: "Ryby" },
+  Fabrics: { value: 20, translation: "Tkaniny" },
+  Grain: { value: 20, translation: "Zboże" },
+  Paper: { value: 30, translation: "Papier" },
+  Wood: { value: 20, translation: "Drewno" },
+  Iron: { value: 40, translation: "Żelazo" },
+  Tools: { value: 40, translation: "Narzędzia" },
+  Dyes: { value: 40, translation: "Barwniki" },
+  Glass: { value: 40, translation: "Szkło" },
+  Silk: { value: 40, translation: "Jedwab" },
+  Coffee: { value: 50, translation: "Kawa" },
+  Fruit: { value: 50, translation: "Owoc" },
+  Gold: { value: 100, translation: "Złoto" },
+  Alcohol: { value: 30, translation: "Alkohol" },
+  LuxuryClothes: { value: 60, translation: "Ubrania luksusowe" },
+  LuxuryFurniture: { value: 60, translation: "Meble luksusowe" },
+  Meat: { value: 30, translation: "Mięso" },
+  Porcelain: { value: 70, translation: "Porcelana" },
+  Sugar: { value: 30, translation: "Cukier" },
+  Tea: { value: 30, translation: "Herbata" },
+  Weapon: { value: 60, translation: "Broń" },
+  RangedWeapon: { value: 50, translation: "Broń dystansowa" },
+  Armor: { value: 80, translation: "Zbroja" },
+  Ships: { value: 90, translation: "Statki" }
+};
 -->
