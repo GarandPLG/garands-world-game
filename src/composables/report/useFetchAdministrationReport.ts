@@ -1,15 +1,9 @@
-import type {
-	BurgsResponse,
-	ProvincesResponse,
-	StatesResponse,
-	TurnsResponse
-} from '@/types/pb-types';
+import type { BurgsResponse, ProvincesResponse } from '@/types/pb-types';
 
-export default async function (
-	turn: TurnsResponse<unknown>,
-	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>
-) {
-	const { redisKeyPrefix } = useRedisKeyPrefix(state.name, turn.value);
+export default async function () {
+	const { state, turn } = storeToRefs(useReportStore());
+
+	const { redisKeyPrefix } = useRedisKeyPrefix(state.value.name, turn.value.value);
 
 	const provincesData = ref<ProvincesResponse<unknown>[]>(
 		await useCachedData({
@@ -17,7 +11,7 @@ export default async function (
 			collection: 'provinces',
 			ttl: 1800,
 			requestArgs: {
-				filter: `turn = "${turn.id}" && state = "${state.id}"`,
+				filter: `turn = "${turn.value.id}" && state = "${state.value.id}"`,
 				fields: [
 					'color,name,nameFull,emblemSVG,capital,ruralPopulation,urbanPopulation,burgs,cells'
 				]
@@ -31,7 +25,7 @@ export default async function (
 			collection: 'burgs',
 			ttl: 1800,
 			requestArgs: {
-				filter: `turn = "${turn.id}" && state = "${state.id}"`,
+				filter: `turn = "${turn.value.id}" && state = "${state.value.id}"`,
 				fields: [
 					'name,cityGeneratorLink,emblemSVG,culture,religion,population,isCapital,isPort,isCitadel,isWalls,isPlaza,isTemple,isShantyTown'
 				]
@@ -44,7 +38,7 @@ export default async function (
 		collection: 'cultures',
 		ttl: 1800,
 		requestArgs: {
-			filter: `turn = "${turn.id}"`,
+			filter: `turn = "${turn.value.id}"`,
 			fields: ['id,name,color']
 		}
 	});
@@ -54,7 +48,7 @@ export default async function (
 		collection: 'religions',
 		ttl: 1800,
 		requestArgs: {
-			filter: `turn = "${turn.id}"`,
+			filter: `turn = "${turn.value.id}"`,
 			fields: ['id,name,color']
 		}
 	});

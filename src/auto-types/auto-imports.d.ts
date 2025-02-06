@@ -146,6 +146,7 @@ declare global {
   const constBiomesColors: typeof import('../data/consts/constBiomesColors')['constBiomesColors']
   const constCultureToTechnologyGroup: typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']
   const constGovernmentTypes: typeof import('../data/consts/constGovernmentTypes')['default']
+  const constProductsData: typeof import('../data/consts/constProductsData')['constProductsData']
   const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
   const controlledRef: typeof import('@vueuse/core')['controlledRef']
   const cookieParse: typeof import('pocketbase')['cookieParse']
@@ -341,6 +342,7 @@ declare global {
   const useFetch: typeof import('@vueuse/core')['useFetch']
   const useFetchAdministrationReport: typeof import('../composables/report/useFetchAdministrationReport')['default']
   const useFetchPopulationReport: typeof import('../composables/report/useFetchPopulationReport')['default']
+  const useFetchTradeReport: typeof import('../composables/report/useFetchTradeReport')['default']
   const useFileDialog: typeof import('@vueuse/core')['useFileDialog']
   const useFileSystemAccess: typeof import('@vueuse/core')['useFileSystemAccess']
   const useFocus: typeof import('@vueuse/core')['useFocus']
@@ -637,6 +639,7 @@ declare module 'vue' {
     readonly constBiomesColors: UnwrapRef<typeof import('../data/consts/constBiomesColors')['constBiomesColors']>
     readonly constCultureToTechnologyGroup: UnwrapRef<typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']>
     readonly constGovernmentTypes: UnwrapRef<typeof import('../data/consts/constGovernmentTypes')['default']>
+    readonly constProductsData: UnwrapRef<typeof import('../data/consts/constProductsData')['constProductsData']>
     readonly controlledComputed: UnwrapRef<typeof import('@vueuse/core')['controlledComputed']>
     readonly controlledRef: UnwrapRef<typeof import('@vueuse/core')['controlledRef']>
     readonly cookieParse: UnwrapRef<typeof import('pocketbase')['cookieParse']>
@@ -830,6 +833,7 @@ declare module 'vue' {
     readonly useFetch: UnwrapRef<typeof import('@vueuse/core')['useFetch']>
     readonly useFetchAdministrationReport: UnwrapRef<typeof import('../composables/report/useFetchAdministrationReport')['default']>
     readonly useFetchPopulationReport: UnwrapRef<typeof import('../composables/report/useFetchPopulationReport')['default']>
+    readonly useFetchTradeReport: UnwrapRef<typeof import('../composables/report/useFetchTradeReport')['default']>
     readonly useFileDialog: UnwrapRef<typeof import('@vueuse/core')['useFileDialog']>
     readonly useFileSystemAccess: UnwrapRef<typeof import('@vueuse/core')['useFileSystemAccess']>
     readonly useFocus: UnwrapRef<typeof import('@vueuse/core')['useFocus']>

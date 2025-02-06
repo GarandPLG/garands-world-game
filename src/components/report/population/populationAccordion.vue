@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-const { state, turn } = storeToRefs(useReportStore());
-
-const { turnRecords, burgs, provinces } = await useFetchPopulationReport(turn.value, state.value);
+const { turnRecords, burgs, provinces } = await useFetchPopulationReport();
 
 const createDataTab = (data: any[], field: string) =>
 	turnRecords.value.slice(0, -1).map(turn => ({

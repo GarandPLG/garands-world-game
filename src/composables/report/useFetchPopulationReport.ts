@@ -5,11 +5,10 @@ import type {
 	TurnsResponse
 } from '@/types/pb-types';
 
-export default async function (
-	turn: TurnsResponse<unknown>,
-	state: StatesResponse<unknown, unknown, unknown, unknown, unknown>
-) {
-	const { redisKeyPrefix } = useRedisKeyPrefix(state.name, turn.value);
+export default async function () {
+	const { state, turn } = storeToRefs(useReportStore());
+
+	const { redisKeyPrefix } = useRedisKeyPrefix(state.value.name, turn.value.value);
 
 	const stateRecords = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
 		await useCachedData({
@@ -17,7 +16,7 @@ export default async function (
 			collection: 'states',
 			ttl: 1800,
 			requestArgs: {
-				filter: `name = "${state.name}"`,
+				filter: `name = "${state.value.name}"`,
 				fields: ['id']
 			}
 		})
@@ -29,7 +28,7 @@ export default async function (
 			collection: 'turns',
 			ttl: 1800,
 			requestArgs: {
-				filter: `value <= ${turn.value + 1}`,
+				filter: `value <= ${turn.value.value + 1}`,
 				fields: ['id,value']
 			}
 		})
@@ -41,7 +40,7 @@ export default async function (
 			collection: 'burgs',
 			ttl: 1800,
 			requestArgs: {
-				filter: stateRecords.value.map(state => `(state~'${state.id}')`).join('||'),
+				filter: stateRecords.value.map(stateData => `(state~'${stateData.id}')`).join('||'),
 				fields: ['id,name,population,turn']
 			}
 		})
@@ -53,7 +52,7 @@ export default async function (
 			collection: 'provinces',
 			ttl: 1800,
 			requestArgs: {
-				filter: stateRecords.value.map(state => `(state~'${state.id}')`).join('||'),
+				filter: stateRecords.value.map(stateData => `(state~'${stateData.id}')`).join('||'),
 				fields: ['id,turn,name,color,ruralPopulation,urbanPopulation']
 			}
 		})

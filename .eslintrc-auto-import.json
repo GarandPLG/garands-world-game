@@ -488,6 +488,8 @@
     "reportTabsData": true,
     "useReportStore": true,
     "constBiomesColors": true,
-    "TradesProductOptions": true
+    "TradesProductOptions": true,
+    "useFetchTradeReport": true,
+    "constProductsData": true
   }
 }

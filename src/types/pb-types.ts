@@ -320,38 +320,28 @@ export enum TradesProductOptions {
 	'Paper' = 'Paper',
 	'Wood' = 'Wood',
 	'Iron' = 'Iron',
-	'Coal' = 'Coal',
 	'Tools' = 'Tools',
 	'Dyes' = 'Dyes',
-	'Explosives' = 'Explosives',
-	'Fertilizer' = 'Fertilizer',
 	'Glass' = 'Glass',
-	'Hardwood' = 'Hardwood',
-	'Lead' = 'Lead',
 	'Silk' = 'Silk',
-	'Steel' = 'Steel',
-	'Sulfur' = 'Sulfur',
 	'Coffee' = 'Coffee',
 	'Fruit' = 'Fruit',
 	'Gold' = 'Gold',
 	'Alcohol' = 'Alcohol',
-	'Luxuryclothes' = 'Luxuryclothes',
-	'Luxuryfurniture' = 'Luxuryfurniture',
+	'LuxuryClothes' = 'LuxuryClothes',
+	'LuxuryFurniture' = 'LuxuryFurniture',
 	'Meat' = 'Meat',
-	'Porcelain' = 'Porcelain',
 	'Sugar' = 'Sugar',
 	'Tea' = 'Tea',
-	'Tobacco' = 'Tobacco',
-	'Wine' = 'Wine',
 	'Weapon' = 'Weapon',
-	'Artillery' = 'Artillery',
-	'Ammunition' = 'Ammunition',
+	'RangedWeapon' = 'RangedWeapon',
+	'Armor' = 'Armor',
 	'Ships' = 'Ships'
 }
 export type TradesRecord = {
 	exportState: RecordIdString;
 	importState: RecordIdString;
-	isContinued?: boolean;
+	isDiscontinued?: boolean;
 	price: number;
 	product: TradesProductOptions;
 	turn: RecordIdString;

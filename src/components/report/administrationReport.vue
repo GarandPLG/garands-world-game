@@ -2,22 +2,19 @@
 // TODO: Administracja (GovCap, Prowincje, Miasta)
 import type { BurgsResponse, ProvincesResponse } from '@/types/pb-types';
 
+type ChartContent = Array<{ name: string; amount: number; color: string }>;
+
 interface AccordionItems {
 	title: string;
-	content:
-		| ProvincesResponse<unknown>[]
-		| BurgsResponse<unknown>[]
-		| { name: string; amount: number }[];
+	content: ProvincesResponse<unknown>[] | BurgsResponse<unknown>[] | ChartContent;
 	len: number;
 	type: 'provinces' | 'burgs' | 'chart';
 }
 
 const { state, turn } = storeToRefs(useReportStore());
 
-const { provincesData, burgsData, cultureData, religionData } = await useFetchAdministrationReport(
-	turn.value,
-	state.value
-);
+const { provincesData, burgsData, cultureData, religionData } =
+	await useFetchAdministrationReport();
 
 const biomesChartData = prepareChartData(
 	state.value.biomesCells as Record<string, string>,

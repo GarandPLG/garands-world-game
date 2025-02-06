@@ -125,6 +125,8 @@ declare module 'vue' {
     ToastProvider: typeof import('./../components/ui/toast/ToastProvider.vue')['default']
     ToastTitle: typeof import('./../components/ui/toast/ToastTitle.vue')['default']
     ToastViewport: typeof import('./../components/ui/toast/ToastViewport.vue')['default']
+    TradeDeal: typeof import('./../components/report/trade/tradeDeal.vue')['default']
+    TradeDeals: typeof import('./../components/report/trade/tradeDeals.vue')['default']
     TradeReport: typeof import('./../components/report/tradeReport.vue')['default']
     TurnEndTab: typeof import('./../components/admin-panel/turnEndTab.vue')['default']
   }

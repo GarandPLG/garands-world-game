@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-const { state, turn } = storeToRefs(useReportStore());
+const { state } = storeToRefs(useReportStore());
 
-const { cultureData, burgsData } = await useFetchAdministrationReport(turn.value, state.value);
+const { cultureData, burgsData } = await useFetchAdministrationReport();
 
 const primaryCulture = cultureData.find(c => c.id === state.value.culture);
 

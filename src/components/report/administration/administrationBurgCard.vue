@@ -6,9 +6,7 @@ const props = defineProps<{
 	burg: BurgsResponse<unknown>;
 }>();
 
-const { state, turn } = storeToRefs(useReportStore());
-
-const { cultureData, religionData } = await useFetchAdministrationReport(turn.value, state.value);
+const { cultureData, religionData } = await useFetchAdministrationReport();
 </script>
 
 <template>
