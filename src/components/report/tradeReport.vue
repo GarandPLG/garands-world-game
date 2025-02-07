@@ -2,8 +2,6 @@
 // TODO: Handel
 
 const { imports, exports } = await useFetchTradeReport();
-
-// TODO: Rozwiązać problem z redisem, gdy nie ma danych o imporcie lub eksporcie
 </script>
 
 <template>

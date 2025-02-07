@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { TradesResponse } from '@/types/pb-types';
-import { Icon }                from '@iconify/vue';
+import { Icon } from '@iconify/vue';
 
 const props = defineProps<{ tradeType: TradesResponse<unknown>[]; header: string }>();
 
@@ -37,67 +37,20 @@ const { statesTrade } = await useFetchTradeReport();
 				</div>
 
 				<div class="flex justify-center">
-					<div class="flex h-[165px] w-[200px] flex-col gap-3 rounded-md border">
-						<div class="flex items-center justify-center">
-							<span class="mr-2 h-3 w-3">
-								<svg width="100%" height="100%" viewBox="0 0 30 30">
-									<path
-										d=" M 15 15 m -14, 0 a 14,14 0 1,1 28,0 a 14,14 0 1,1 -28,0"
-										:stroke="
-											statesTrade.find(
-												state => state.id === (tradeDeal.exportState || tradeDeal.importState)
-											)?.color
-										"
-										:fill="
-											statesTrade.find(
-												state => state.id === (tradeDeal.exportState || tradeDeal.importState)
-											)?.color
-										"
-										stroke-width="1"
-									/>
-								</svg>
-							</span>
-
-							<h3 class="text-center text-lg font-bold">{{
-								statesTrade.find(
-									state => state.id === (tradeDeal.exportState || tradeDeal.importState)
-								)?.name
-							}}</h3>
-						</div>
-
-						<figure
-							v-html="
-								statesTrade.find(
-									state => state.id === (tradeDeal.exportState || tradeDeal.importState)
-								)?.emblemSVG
-							"
-							class="my-[-3rem]"
-						></figure>
-					</div>
+					<ShowEmblemFrame
+						:state="
+							statesTrade.find(
+								state => state.id === (tradeDeal.exportState || tradeDeal.importState)
+							)
+						"
+					/>
 				</div>
 
-				<div class="mt-5 rounded-md border p-3">
-					<div class="grid grid-cols-2 gap-2">
-						<span>Ilość:</span>
-						<span class="text-right text-primary">
-							{{ useFormatNumber(tradeDeal.volume) }}
-						</span>
-
-						<span>Cena:</span>
-						<span class="text-right text-primary">
-							{{ useFormatNumber(tradeDeal.price) }}
-						</span>
-
-						<span>Wartość:</span>
-						<span class="text-right text-primary">
-							{{
-								useFormatNumber(
-									tradeDeal.price * tradeDeal.volume * (tradeDeal?.exportState ? -1 : 1)
-								)
-							}}
-						</span>
-					</div>
-				</div>
+				<TradeDealDetails
+					:volume="tradeDeal.volume"
+					:price="tradeDeal.price"
+					:is-export="!!tradeDeal.exportState"
+				/>
 			</div>
 		</div>
 	</div>

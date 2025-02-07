@@ -32,30 +32,37 @@ export async function useCachedData({
 				case 'getFullList':
 					response = await pb.collection(collection).getFullList(requestArgs);
 
-					await redis.set(key, response, ttl, 'list');
+					if (!response) await redis.set(key, response, ttl, 'list');
+
 					break;
 
 				case 'getFirstListItem':
 					if (!filter) return [];
+
 					response = await pb.collection(collection).getFirstListItem(filter, requestArgs);
 
-					await redis.set(key, response, ttl);
+					if (!response) await redis.set(key, response, ttl);
+
 					break;
 
 				case 'getList':
 					if (!pagination[0] || !pagination[1]) return [];
+
 					response = await pb
 						.collection(collection)
 						.getList(pagination[0], pagination[1], requestArgs);
 
-					await redis.set(key, response, ttl, 'list');
+					if (!response) await redis.set(key, response, ttl, 'list');
+
 					break;
 
 				case 'getOne':
 					if (!recordId) return [];
+
 					response = await pb.collection(collection).getOne(recordId, requestArgs);
 
-					await redis.set(key, response, ttl);
+					if (!response) await redis.set(key, response, ttl);
+
 					break;
 			}
 		} catch (error) {

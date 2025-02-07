@@ -25,6 +25,8 @@ const totalData = computed(() => ({
 	growth: ruralData.value.growth + urbanData.value.growth
 }));
 
+const urbanizationRate = computed(() => parseFloat(((props.urban / props.rural) * 100).toFixed(2)));
+
 const getChangeColor = (change: number) => {
 	if (change > 0) return 'text-green-500';
 	if (change < 0) return 'text-red-500';
@@ -116,6 +118,18 @@ const formatChange = (change: number) => {
 				<span class="text-2xl">
 					{{ useFormatNumber(totalData.growth) }}
 				</span>
+			</div>
+		</div>
+
+		<div class="stat-card">
+			<h2 class="mb-4 text-xl font-semibold">
+				<span class="text-primary">Urbanizacja</span>
+			</h2>
+
+			<div class="flex items-center justify-center space-x-4">
+				<p class="text-2xl font-bold">
+					<span class="text-primary"> {{ useFormatNumber(urbanizationRate) }} </span>%
+				</p>
 			</div>
 		</div>
 	</div>
