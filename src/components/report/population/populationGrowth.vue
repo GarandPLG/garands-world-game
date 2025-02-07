@@ -62,7 +62,7 @@ const formatChange = (change: number) => {
 
 				<div class="numbers-display">
 					<div class="text-2xl font-bold">
-						{{ useFormatNumber(ruralData.current) }}
+						{{ useFormatNumber(ruralData.growth) }}
 					</div>
 
 					<div :class="getChangeColor(ruralData.change)">
@@ -71,7 +71,7 @@ const formatChange = (change: number) => {
 					</div>
 
 					<div class="text-xl">
-						{{ useFormatNumber(ruralData.growth) }}
+						{{ useFormatNumber(ruralData.current) }}
 					</div>
 				</div>
 			</div>
@@ -83,7 +83,7 @@ const formatChange = (change: number) => {
 
 				<div class="numbers-display">
 					<div class="text-2xl font-bold">
-						{{ useFormatNumber(urbanData.current) }}
+						{{ useFormatNumber(urbanData.growth) }}
 					</div>
 
 					<div :class="getChangeColor(urbanData.change)">
@@ -92,7 +92,7 @@ const formatChange = (change: number) => {
 					</div>
 
 					<div class="text-xl">
-						{{ useFormatNumber(urbanData.growth) }}
+						{{ useFormatNumber(urbanData.current) }}
 					</div>
 				</div>
 			</div>
@@ -104,7 +104,7 @@ const formatChange = (change: number) => {
 			</h2>
 
 			<div class="flex items-center justify-center space-x-4">
-				<span class="text-2xl font-bold">
+				<span class="text-2xl">
 					{{ useFormatNumber(totalData.current) }}
 				</span>
 
@@ -115,7 +115,7 @@ const formatChange = (change: number) => {
 					</span>
 				</div>
 
-				<span class="text-2xl">
+				<span class="text-2xl font-bold">
 					{{ useFormatNumber(totalData.growth) }}
 				</span>
 			</div>
