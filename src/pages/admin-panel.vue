@@ -1,13 +1,12 @@
 <script lang="ts" setup>
-useHead({
-	title: "Garand's WG | Panel Administratora"
-});
-
+import manageTradeDeals from '@/components/admin-panel/manageTradeDeals.vue';
 import PreviewReportTab from '@/components/admin-panel/previewReportTab.vue';
 import TurnEndTab from '@/components/admin-panel/turnEndTab.vue';
 import type { Component } from 'vue';
 
-const route = useRoute();
+useHead({
+	title: "Garand's WG | Panel Administratora"
+});
 
 const sidebarNavItems: {
 	content: Component;
@@ -28,6 +27,13 @@ const sidebarNavItems: {
 		props: {
 			title: 'Przeglądanie Raportów',
 			description: 'Możliwość obejrzenia raportów danego kraju'
+		}
+	},
+	{
+		content: manageTradeDeals,
+		props: {
+			title: 'Zarządzanie umowami handlowymi',
+			description: 'Dodawanie/Edytowanie/Usuwanie umów handlowych'
 		}
 	}
 ];
