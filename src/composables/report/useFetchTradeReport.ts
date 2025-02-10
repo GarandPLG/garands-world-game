@@ -5,7 +5,7 @@ export default async function () {
 
 	const { redisKeyPrefix } = useRedisKeyPrefix(state.value.name, turn.value.value);
 
-	const imports = ref<TradesResponse<unknown>[]>(
+	const imports = ref<TradesResponse<unknown>[] | []>(
 		await useCachedData({
 			key: `${redisKeyPrefix} -- reportTradeImports`,
 			collection: 'trades',
@@ -17,7 +17,7 @@ export default async function () {
 		})
 	);
 
-	const exports = ref<TradesResponse<unknown>[]>(
+	const exports = ref<TradesResponse<unknown>[] | []>(
 		await useCachedData({
 			key: `${redisKeyPrefix} -- reportTradeExports`,
 			collection: 'trades',

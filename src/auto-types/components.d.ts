@@ -65,6 +65,7 @@ declare module 'vue' {
     Input: typeof import('./../components/ui/input/Input.vue')['default']
     Label: typeof import('./../components/ui/label/Label.vue')['default']
     LineChart: typeof import('./../components/ui/chart-line/LineChart.vue')['default']
+    ManageRedisTab: typeof import('./../components/admin-panel/manageRedisTab.vue')['default']
     ManageTradeDeals: typeof import('./../components/admin-panel/manageTradeDeals.vue')['default']
     MilitaryReport: typeof import('./../components/report/militaryReport.vue')['default']
     NavigationBar: typeof import('./../components/NavigationBar.vue')['default']

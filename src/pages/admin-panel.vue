@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import manageRedisTab from '@/components/admin-panel/manageRedisTab.vue';
 import manageTradeDeals from '@/components/admin-panel/manageTradeDeals.vue';
 import PreviewReportTab from '@/components/admin-panel/previewReportTab.vue';
 import TurnEndTab from '@/components/admin-panel/turnEndTab.vue';
@@ -32,8 +33,15 @@ const sidebarNavItems: {
 	{
 		content: manageTradeDeals,
 		props: {
-			title: 'Zarządzanie umowami handlowymi',
+			title: 'Handel',
 			description: 'Dodawanie/Edytowanie/Usuwanie umów handlowych'
+		}
+	},
+	{
+		content: manageRedisTab,
+		props: {
+			title: 'Redis',
+			description: "Zarządzanie Redis'em"
 		}
 	}
 ];
