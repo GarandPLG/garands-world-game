@@ -3,6 +3,9 @@ const props = defineProps<{
 	title: string;
 	description: string;
 }>();
+
+// const { presentTurn, followingTurn, tradeDeals, statesTradeEmblems } =
+// 	await useFetchTradeAdminTab();
 </script>
 
 <template>
@@ -15,8 +18,8 @@ const props = defineProps<{
 
 		<Separator />
 
-		<CardContent class="space-y-2 py-6">
-			<p>Placeholder</p>
+		<CardContent class="h-full space-y-2 py-6">
+			<TradeDetailsTableAdmin />
 		</CardContent>
 	</Card>
 </template>

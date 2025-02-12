@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { TradesResponse } from '@/types/pb-types';
-import { Icon } from '@iconify/vue';
 
 const props = defineProps<{ tradeType: TradesResponse<unknown>[] }>();
 
@@ -35,24 +34,7 @@ const tradeSums: Record<string, number> = {
 			<TableBody class="h-full">
 				<TableRow v-for="tradeDeal in tradeType" :key="tradeDeal.id">
 					<TableCell class="w-[52px] text-center">
-						<TooltipProvider>
-							<Tooltip>
-								<TooltipTrigger as-child>
-									<Icon
-										:icon="constProductsData[tradeDeal.product].icon"
-										width="52"
-										height="52"
-										class="text-primary"
-									/>
-								</TooltipTrigger>
-
-								<TooltipContent>
-									<p class="text-center">
-										{{ constProductsData[tradeDeal.product].translation }}
-									</p>
-								</TooltipContent>
-							</Tooltip>
-						</TooltipProvider>
+						<ProductTooltip :product="tradeDeal.product" />
 					</TableCell>
 
 					<TableCell>

@@ -494,6 +494,8 @@
     "Tooltip": true,
     "TooltipContent": true,
     "TooltipProvider": true,
-    "TooltipTrigger": true
+    "TooltipTrigger": true,
+    "useFetchTradeTab": true,
+    "useFetchTradeAdminTab": true
   }
 }

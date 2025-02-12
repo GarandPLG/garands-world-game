@@ -94,6 +94,7 @@ declare module 'vue' {
     PopulationGrowth: typeof import('./../components/report/population/populationGrowth.vue')['default']
     PopulationReport: typeof import('./../components/report/populationReport.vue')['default']
     PreviewReportTab: typeof import('./../components/admin-panel/previewReportTab.vue')['default']
+    ProductTooltip: typeof import('./../components/report/productTooltip.vue')['default']
     Progress: typeof import('./../components/ui/progress/Progress.vue')['default']
     RadioGroup: typeof import('./../components/ui/radio-group/RadioGroup.vue')['default']
     RadioGroupItem: typeof import('./../components/ui/radio-group/RadioGroupItem.vue')['default']
@@ -135,6 +136,7 @@ declare module 'vue' {
     TradeDeal: typeof import('./../components/report/trade/tradeDeal.vue')['default']
     TradeDealDetails: typeof import('./../components/report/trade/tradeDealDetails.vue')['default']
     TradeDeals: typeof import('./../components/report/trade/tradeDeals.vue')['default']
+    TradeDetailsTableAdmin: typeof import('./../components/admin-panel/trade/tradeDetailsTableAdmin.vue')['default']
     TradeReport: typeof import('./../components/report/tradeReport.vue')['default']
     TurnEndTab: typeof import('./../components/admin-panel/turnEndTab.vue')['default']
   }
