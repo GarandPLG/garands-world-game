@@ -1,9 +1,34 @@
 <script lang="ts" setup>
-const { tradeDeals, statesTradeEmblems } = await useFetchTradeAdminTab();
+import type { TradesResponse } from '@/types/pb-types';
+import { X } from 'lucide-vue-next';
+
+const { statesTradeEmblems } = await useFetchTradeAdminTab();
+
+defineProps<{
+	tradeDeals: TradesResponse<unknown>[];
+}>();
 </script>
 
 <template>
 	<Table class="h-full w-full">
+		<TableCaption>
+			<Dialog>
+				<DialogTrigger as-child>
+					<Button> Dodaj transakcję </Button>
+				</DialogTrigger>
+
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Dodaj nową transakcję</DialogTitle>
+					</DialogHeader>
+
+					<form class="h-[500px]"></form>
+
+					<DialogFooter> Submit </DialogFooter>
+				</DialogContent>
+			</Dialog>
+		</TableCaption>
+
 		<TableHeader>
 			<TableRow>
 				<TableHead class="w-[52px] text-center"> Produkt </TableHead>
@@ -18,9 +43,11 @@ const { tradeDeals, statesTradeEmblems } = await useFetchTradeAdminTab();
 
 				<TableHead class="text-center"> Wartość </TableHead>
 
-				<TableHead class="w-[25px] text-center"> Zapisz </TableHead>
+				<TableHead class="text-center"> Kontynuować? </TableHead>
 
-				<TableHead class="w-[25px] text-center"> Usuń </TableHead>
+				<TableHead class="w-[80px] text-center"> Zapisz </TableHead>
+
+				<TableHead class="w-[50px] text-center"> Usuń </TableHead>
 			</TableRow>
 		</TableHeader>
 
@@ -43,15 +70,84 @@ const { tradeDeals, statesTradeEmblems } = await useFetchTradeAdminTab();
 				</TableCell>
 
 				<TableCell class="text-center text-xl font-bold">
-					{{ useFormatNumber(tradeDeal.price) }}
+					<NumberField :default-value="tradeDeal.price" :min="0">
+						<NumberFieldContent>
+							<NumberFieldDecrement />
+							<NumberFieldInput />
+							<NumberFieldIncrement />
+						</NumberFieldContent>
+					</NumberField>
 				</TableCell>
 
 				<TableCell class="text-center text-xl font-bold">
-					{{ useFormatNumber(tradeDeal.volume) }}
+					<NumberField :default-value="tradeDeal.volume" :min="1">
+						<NumberFieldContent>
+							<NumberFieldDecrement />
+							<NumberFieldInput />
+							<NumberFieldIncrement />
+						</NumberFieldContent>
+					</NumberField>
 				</TableCell>
 
 				<TableCell class="text-center text-xl font-bold">
 					{{ useFormatNumber(tradeDeal.price * tradeDeal.volume) }}
+				</TableCell>
+
+				<TableCell class="w-[25px] text-center">
+					<Switch :checked="!tradeDeal.isDiscontinued" />
+				</TableCell>
+
+				<TableCell variant="outline" class="w-[80px] text-center">
+					<AlertDialog>
+						<AlertDialogTrigger as-child>
+							<Button> Zapisz </Button>
+						</AlertDialogTrigger>
+
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle> Czy jesteś pewien? </AlertDialogTitle>
+
+								<AlertDialogDescription>
+									Przeanalizuj zmiany, jakie zostaną wprowadzone do tego rekordu w bazie danych:
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+
+							<AlertDialogFooter>
+								<AlertDialogCancel> Cofnij </AlertDialogCancel>
+
+								<AlertDialogAction> Kontynuuj </AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
+				</TableCell>
+
+				<TableCell class="w-[50px] text-center">
+					<AlertDialog>
+						<AlertDialogTrigger as-child>
+							<Button variant="outline" size="icon" class="border-destructive">
+								<X class="h-4 w-4 text-destructive" />
+							</Button>
+						</AlertDialogTrigger>
+
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle> Czy jesteś pewien? </AlertDialogTitle>
+
+								<AlertDialogDescription>
+									Zastanów się, czy na pewno chcesz usunąć tą umowę handlową? Jeżeli chcesz
+									zakończyć umową, to bardziej rekomendowaną opcją jest odznaczenie switcha
+									"Kontynuować?". Ponieważ pozwoli to zostawić record w bazie danych, co pozwoli na
+									ujęcie tego rekordu na wykresach.
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+
+							<AlertDialogFooter>
+								<AlertDialogCancel> Cofnij </AlertDialogCancel>
+
+								<AlertDialogAction> Kontynuuj </AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
 				</TableCell>
 			</TableRow>
 		</TableBody>

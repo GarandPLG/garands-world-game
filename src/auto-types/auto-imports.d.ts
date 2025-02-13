@@ -11,6 +11,15 @@ declare global {
   const AccordionItem: typeof import('../components/ui/accordion/index')['AccordionItem']
   const AccordionTrigger: typeof import('../components/ui/accordion/index')['AccordionTrigger']
   const AdminService: typeof import('pocketbase')['AdminService']
+  const AlertDialog: typeof import('../components/ui/alert-dialog/index')['AlertDialog']
+  const AlertDialogAction: typeof import('../components/ui/alert-dialog/index')['AlertDialogAction']
+  const AlertDialogCancel: typeof import('../components/ui/alert-dialog/index')['AlertDialogCancel']
+  const AlertDialogContent: typeof import('../components/ui/alert-dialog/index')['AlertDialogContent']
+  const AlertDialogDescription: typeof import('../components/ui/alert-dialog/index')['AlertDialogDescription']
+  const AlertDialogFooter: typeof import('../components/ui/alert-dialog/index')['AlertDialogFooter']
+  const AlertDialogHeader: typeof import('../components/ui/alert-dialog/index')['AlertDialogHeader']
+  const AlertDialogTitle: typeof import('../components/ui/alert-dialog/index')['AlertDialogTitle']
+  const AlertDialogTrigger: typeof import('../components/ui/alert-dialog/index')['AlertDialogTrigger']
   const AsyncAuthStore: typeof import('pocketbase')['AsyncAuthStore']
   const BaseAuthStore: typeof import('pocketbase')['BaseAuthStore']
   const Button: typeof import('../components/ui/button/index')['Button']
@@ -505,6 +514,15 @@ declare module 'vue' {
     readonly AccordionItem: UnwrapRef<typeof import('../components/ui/accordion/index')['AccordionItem']>
     readonly AccordionTrigger: UnwrapRef<typeof import('../components/ui/accordion/index')['AccordionTrigger']>
     readonly AdminService: UnwrapRef<typeof import('pocketbase')['AdminService']>
+    readonly AlertDialog: UnwrapRef<typeof import('../components/ui/alert-dialog/index')['AlertDialog']>
+    readonly AlertDialogAction: UnwrapRef<typeof import('../components/ui/alert-dialog/index')['AlertDialogAction']>
+    readonly AlertDialogCancel: UnwrapRef<typeof import('../components/ui/alert-dialog/index')['AlertDialogCancel']>
+    readonly AlertDialogContent: UnwrapRef<typeof import('../components/ui/alert-dialog/index')['AlertDialogContent']>
+    readonly AlertDialogDescription: UnwrapRef<typeof import('../components/ui/alert-dialog/index')['AlertDialogDescription']>
+    readonly AlertDialogFooter: UnwrapRef<typeof import('../components/ui/alert-dialog/index')['AlertDialogFooter']>
+    readonly AlertDialogHeader: UnwrapRef<typeof import('../components/ui/alert-dialog/index')['AlertDialogHeader']>
+    readonly AlertDialogTitle: UnwrapRef<typeof import('../components/ui/alert-dialog/index')['AlertDialogTitle']>
+    readonly AlertDialogTrigger: UnwrapRef<typeof import('../components/ui/alert-dialog/index')['AlertDialogTrigger']>
     readonly AsyncAuthStore: UnwrapRef<typeof import('pocketbase')['AsyncAuthStore']>
     readonly BaseAuthStore: UnwrapRef<typeof import('pocketbase')['BaseAuthStore']>
     readonly Button: UnwrapRef<typeof import('../components/ui/button/index')['Button']>

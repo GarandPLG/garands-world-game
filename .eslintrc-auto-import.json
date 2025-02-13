@@ -496,6 +496,15 @@
     "TooltipProvider": true,
     "TooltipTrigger": true,
     "useFetchTradeTab": true,
-    "useFetchTradeAdminTab": true
+    "useFetchTradeAdminTab": true,
+    "AlertDialog": true,
+    "AlertDialogAction": true,
+    "AlertDialogCancel": true,
+    "AlertDialogContent": true,
+    "AlertDialogDescription": true,
+    "AlertDialogFooter": true,
+    "AlertDialogHeader": true,
+    "AlertDialogTitle": true,
+    "AlertDialogTrigger": true
   }
 }

@@ -4,8 +4,7 @@ const props = defineProps<{
 	description: string;
 }>();
 
-// const { presentTurn, followingTurn, tradeDeals, statesTradeEmblems } =
-// 	await useFetchTradeAdminTab();
+const { tradeDealsPresentTurn, tradeDealsFollowingTurn } = await useFetchTradeAdminTab();
 </script>
 
 <template>
@@ -19,7 +18,21 @@ const props = defineProps<{
 		<Separator />
 
 		<CardContent class="h-full space-y-2 py-6">
-			<TradeDetailsTableAdmin />
+			<Tabs default-value="presentTurn" class="w-full">
+				<TabsList class="w-full gap-10">
+					<TabsTrigger value="presentTurn"> Umowy handlowe z obecnej tury </TabsTrigger>
+
+					<TabsTrigger value="followingTurn"> Umowy handlowe na przyszłą turę </TabsTrigger>
+				</TabsList>
+
+				<TabsContent value="presentTurn">
+					<TradeDetailsTableAdmin :tradeDeals="tradeDealsPresentTurn" />
+				</TabsContent>
+
+				<TabsContent value="followingTurn">
+					<TradeDetailsTableAdmin :tradeDeals="tradeDealsFollowingTurn" />
+				</TabsContent>
+			</Tabs>
 		</CardContent>
 	</Card>
 </template>

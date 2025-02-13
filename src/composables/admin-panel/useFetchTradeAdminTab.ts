@@ -20,13 +20,25 @@ export default async function () {
 		() => turns.value.at(-1) ?? ({} as TurnsResponse<unknown>)
 	);
 
-	const tradeDeals = ref<TradesResponse<unknown>[] | []>(
+	const tradeDealsPresentTurn = ref<TradesResponse<unknown>[] | []>(
 		await useCachedData({
-			key: `TradeDeals-${presentTurn.value.value + 1} -- adminPanelTrade`,
+			key: `TradeDealsPresentTurn-${presentTurn.value.value + 1} -- adminPanelTrade`,
 			collection: 'trades',
 			ttl: 1800,
 			requestArgs: {
-				filter: `turn = "${presentTurn.value.id}" || turn = "${followingTurn.value.id}"`,
+				filter: `turn = "${presentTurn.value.id}"`,
+				fields: ['importState,exportState,volume,product,price,isDiscontinued']
+			}
+		})
+	);
+
+	const tradeDealsFollowingTurn = ref<TradesResponse<unknown>[] | []>(
+		await useCachedData({
+			key: `TradeDealsFollowingTurn-${followingTurn.value.value + 1} -- adminPanelTrade`,
+			collection: 'trades',
+			ttl: 1800,
+			requestArgs: {
+				filter: `turn = "${followingTurn.value.id}"`,
 				fields: ['importState,exportState,volume,product,price,isDiscontinued']
 			}
 		})
@@ -47,7 +59,8 @@ export default async function () {
 	return {
 		presentTurn,
 		followingTurn,
-		tradeDeals,
+		tradeDealsPresentTurn,
+		tradeDealsFollowingTurn,
 		statesTradeEmblems
 	};
 }
