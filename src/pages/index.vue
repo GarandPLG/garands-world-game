@@ -13,14 +13,25 @@ useHead({
 
 		<p class="mb-4 text-sm">Wersja: <span class="text-primary">0.0.30 Indev</span></p>
 
-		<a
-			href="https://discord.gg/vhBmFVpR3w"
-			target="_blank"
-			class="mb-4 flex items-center gap-1 text-blue-500 hover:text-blue-700"
-		>
-			<Icon icon="simple-icons:discord" width="24" height="24" class="mr-2 text-primary" />
-			Dołącz do serwera Discord!
-		</a>
+		<div class="mb-4 flex flex-wrap justify-center">
+			<a
+				href="https://metalhead.club/@Garand_PLG"
+				target="_blank"
+				class="mr-4 flex items-center gap-1 text-blue-500 hover:text-blue-700"
+			>
+				<Icon icon="simple-icons:mastodon" width="24" height="24" class="mr-2 text-primary" />
+				Mój profil na Mastodonie
+			</a>
+
+			<a
+				href="https://www.youtube.com/channel/UCnYj9HJDMVuq2Qa9jsnLljA"
+				target="_blank"
+				class="mr-4 flex items-center gap-1 text-blue-500 hover:text-blue-700"
+			>
+				<Icon icon="line-md:youtube" width="24" height="24" class="mr-1 text-primary" />
+				Mój kanał na YouTube
+			</a>
+		</div>
 
 		<div class="mb-4 flex flex-wrap justify-center">
 			<a
@@ -33,12 +44,12 @@ useHead({
 			</a>
 
 			<a
-				href="https://www.youtube.com/channel/UCnYj9HJDMVuq2Qa9jsnLljA"
+				href="https://discord.gg/vhBmFVpR3w"
 				target="_blank"
 				class="mr-4 flex items-center gap-1 text-blue-500 hover:text-blue-700"
 			>
-				<Icon icon="line-md:youtube" width="24" height="24" class="mr-1 text-primary" />
-				Mój kanał na YouTube
+				<Icon icon="simple-icons:discord" width="24" height="24" class="mr-2 text-primary" />
+				Dołącz do serwera Discord!
 			</a>
 		</div>
 	</div>
