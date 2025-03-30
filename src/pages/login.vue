@@ -1,11 +1,6 @@
 <script lang="ts" setup>
-useHead({
-	title: "Garand's WG | Zaloguj się"
-});
-
-import { useForm } from 'vee-validate';
-
 import { FormField } from '@/components/ui/form';
+import { useForm } from 'vee-validate';
 
 const pb = usePocketBase();
 const router = useRouter();
@@ -38,6 +33,10 @@ const onSubmit = handleSubmit(async values => {
 	});
 
 	router.push('/');
+});
+
+useHead({
+	title: "Garand's WG | Zaloguj się"
 });
 </script>
 

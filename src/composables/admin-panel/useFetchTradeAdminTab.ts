@@ -56,11 +56,37 @@ export default async function () {
 		})
 	);
 
+	const presentTurnStates = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
+		await useCachedData({
+			key: `presentTurnStates-${presentTurn.value.value + 1} -- adminPanelTrade`,
+			collection: 'states',
+			ttl: 1800,
+			requestArgs: {
+				filter: `turn = "${presentTurn.value.id}"`,
+				fields: ['id,name']
+			}
+		})
+	);
+
+	const followingTurnStates = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
+		await useCachedData({
+			key: `followingTurnStates-${followingTurn.value.value + 1} -- adminPanelTrade`,
+			collection: 'states',
+			ttl: 1800,
+			requestArgs: {
+				filter: `turn = "${followingTurn.value.id}"`,
+				fields: ['id,name']
+			}
+		})
+	);
+
 	return {
 		presentTurn,
 		followingTurn,
 		tradeDealsPresentTurn,
 		tradeDealsFollowingTurn,
-		statesTradeEmblems
+		statesTradeEmblems,
+		presentTurnStates,
+		followingTurnStates
 	};
 }

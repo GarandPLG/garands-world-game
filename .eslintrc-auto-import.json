@@ -505,6 +505,18 @@
     "AlertDialogFooter": true,
     "AlertDialogHeader": true,
     "AlertDialogTitle": true,
-    "AlertDialogTrigger": true
+    "AlertDialogTrigger": true,
+    "tradeDealFormSchema": true,
+    "Select": true,
+    "SelectContent": true,
+    "SelectGroup": true,
+    "SelectItem": true,
+    "SelectItemText": true,
+    "SelectLabel": true,
+    "SelectScrollDownButton": true,
+    "SelectScrollUpButton": true,
+    "SelectSeparator": true,
+    "SelectTrigger": true,
+    "SelectValue": true
   }
 }
