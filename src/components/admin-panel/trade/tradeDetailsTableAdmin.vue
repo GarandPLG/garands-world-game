@@ -24,9 +24,6 @@ const {
 });
 
 const onSubmit = handleSubmit(async values => {
-	// values.turn = presentTurn.value.id;
-	// values.isDiscontinued = false;
-
 	const createTradeDeal = await pb
 		.collection('trades')
 		.create({
@@ -46,10 +43,13 @@ const onSubmit = handleSubmit(async values => {
 			if (error instanceof Error) throw error;
 		});
 
-	if (createTradeDeal)
+	if (createTradeDeal) {
 		toast({
 			title: 'Transakcja została dodana!'
 		});
+
+		openDialog.value = false;
+	}
 });
 
 function updatePriceAndVolume() {
@@ -60,7 +60,8 @@ function updatePriceAndVolume() {
 	}
 }
 
-// TODO: Zamknięcie okna dialogowego po dodaniu transakcji
+const openDialog = ref(false);
+
 // TODO: Usunięcie cachedData z redis
 // TODO: Odświeżenie tabelki
 // TODO: Wyciągnięcie <form> do własnego komponentu
@@ -69,7 +70,7 @@ function updatePriceAndVolume() {
 <template>
 	<Table class="h-full w-full">
 		<TableCaption>
-			<Dialog>
+			<Dialog v-model:open="openDialog">
 				<DialogTrigger as-child>
 					<Button> Dodaj transakcję </Button>
 				</DialogTrigger>
@@ -113,47 +114,6 @@ function updatePriceAndVolume() {
 							</FormItem>
 						</FormField>
 
-						<FormField v-slot="{ componentField }" name="importState">
-							<FormItem>
-								<FormLabel> Import do </FormLabel>
-
-								<Select v-bind="componentField">
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Wybierz państwo importujące" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										<SelectGroup>
-											<SelectItem
-												v-for="(value, key) in statesTradeEmblems"
-												:key="key"
-												:value="value.id"
-											>
-												<div class="flex items-center gap-2">
-													<span class="mr-2 h-3 w-3">
-														<svg width="100%" height="100%" viewBox="0 0 30 30">
-															<path
-																d="M 15 15 m -14, 0 a 14,14 0 1,1 28,0 a 14,14 0 1,1 -28,0"
-																:stroke="value.color"
-																:fill="value.color"
-																stroke-width="1"
-															/>
-														</svg>
-													</span>
-													<h3 class="text-center text-lg font-bold">{{ value.name }}</h3>
-												</div>
-											</SelectItem>
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-
-								<FormDescription> Państwo importujące w transakcji. </FormDescription>
-
-								<FormMessage />
-							</FormItem>
-						</FormField>
-
 						<FormField v-slot="{ componentField }" name="exportState">
 							<FormItem>
 								<FormLabel> Eksport z </FormLabel>
@@ -191,6 +151,47 @@ function updatePriceAndVolume() {
 								</Select>
 
 								<FormDescription> Państwo eksportujące w transakcji. </FormDescription>
+
+								<FormMessage />
+							</FormItem>
+						</FormField>
+
+						<FormField v-slot="{ componentField }" name="importState">
+							<FormItem>
+								<FormLabel> Import do </FormLabel>
+
+								<Select v-bind="componentField">
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Wybierz państwo importujące" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										<SelectGroup>
+											<SelectItem
+												v-for="(value, key) in statesTradeEmblems"
+												:key="key"
+												:value="value.id"
+											>
+												<div class="flex items-center gap-2">
+													<span class="mr-2 h-3 w-3">
+														<svg width="100%" height="100%" viewBox="0 0 30 30">
+															<path
+																d="M 15 15 m -14, 0 a 14,14 0 1,1 28,0 a 14,14 0 1,1 -28,0"
+																:stroke="value.color"
+																:fill="value.color"
+																stroke-width="1"
+															/>
+														</svg>
+													</span>
+													<h3 class="text-center text-lg font-bold">{{ value.name }}</h3>
+												</div>
+											</SelectItem>
+										</SelectGroup>
+									</SelectContent>
+								</Select>
+
+								<FormDescription> Państwo importujące w transakcji. </FormDescription>
 
 								<FormMessage />
 							</FormItem>
@@ -249,6 +250,16 @@ function updatePriceAndVolume() {
 								</NumberField>
 							</FormItem>
 						</FormField>
+
+						<p
+							class="flex justify-center text-center"
+							v-if="useFormValues.volume && useFormValues.price"
+						>
+							Wartość transakcji:
+							<span class="ps-1 text-primary">
+								{{ useFormatNumber(useFormValues.price * useFormValues.volume) }}
+							</span>
+						</p>
 
 						<DialogFooter>
 							<Button class="w-full" type="submit"> Dodaj transakcję </Button>
