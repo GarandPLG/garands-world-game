@@ -4,8 +4,17 @@ const props = defineProps<{
 	description: string;
 }>();
 
-const { tradeDealsPresentTurn, tradeDealsFollowingTurn, presentTurn, followingTurn } =
-	await useFetchTradeAdminTab();
+const {
+	tradeDealsPresentTurn,
+	tradeDealsFollowingTurn,
+	presentTurn,
+	followingTurn,
+	rePullTradeDeals
+} = await useFetchTradeAdminTab();
+
+const handleRefresh = async () => {
+	await rePullTradeDeals();
+};
 </script>
 
 <template>
@@ -27,11 +36,19 @@ const { tradeDealsPresentTurn, tradeDealsFollowingTurn, presentTurn, followingTu
 				</TabsList>
 
 				<TabsContent value="presentTurn">
-					<TradeDetailsTableAdmin :tradeDeals="tradeDealsPresentTurn" :turn="presentTurn" />
+					<TradeDetailsTableAdmin
+						:tradeDeals="tradeDealsPresentTurn"
+						:turn="presentTurn"
+						@refresh-table="handleRefresh"
+					/>
 				</TabsContent>
 
 				<TabsContent value="followingTurn">
-					<TradeDetailsTableAdmin :tradeDeals="tradeDealsFollowingTurn" :turn="followingTurn" />
+					<TradeDetailsTableAdmin
+						:tradeDeals="tradeDealsFollowingTurn"
+						:turn="followingTurn"
+						@refresh-table="handleRefresh"
+					/>
 				</TabsContent>
 			</Tabs>
 		</CardContent>

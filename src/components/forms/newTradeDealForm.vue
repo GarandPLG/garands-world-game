@@ -1,11 +1,15 @@
 <script lang="ts" setup>
-import { FormField } from '@/components/ui/form';
+import { FormField }                          from '@/components/ui/form';
 import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
-import { useForm } from 'vee-validate';
+import { useForm }                            from 'vee-validate';
 
 const props = defineProps<{
 	turn: TurnsResponse<unknown>;
 	states: StatesResponse<unknown, unknown, unknown, unknown, unknown>[];
+}>();
+
+const emit = defineEmits<{
+	'trade-added': [];
 }>();
 
 const pb = usePocketBase();
@@ -50,6 +54,8 @@ const onSubmit = handleSubmit(async values => {
 
 		await flushTradeDealsCache();
 		await rePullTradeDeals();
+
+		emit('trade-added');
 
 		openDialog.value = false;
 	}

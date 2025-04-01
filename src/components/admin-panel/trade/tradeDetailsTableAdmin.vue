@@ -1,20 +1,27 @@
 <script lang="ts" setup>
 import type { TradesResponse, TurnsResponse } from '@/types/pb-types';
-import { X } from 'lucide-vue-next';
+import { X }                                  from 'lucide-vue-next';
 
 defineProps<{
 	tradeDeals: TradesResponse<unknown>[];
 	turn: TurnsResponse<unknown>;
 }>();
 
+const emit = defineEmits<{
+	'refresh-table': [];
+}>();
+
+const refreshTable = () => {
+	emit('refresh-table');
+};
+
 const { tradeDealsStates: states } = await useFetchTradeAdminTab();
-// TODO: Odświeżenie tabelki
 </script>
 
 <template>
 	<Table class="h-full w-full">
 		<TableCaption>
-			<NewTradeDealForm :turn="turn" :states="states" />
+			<NewTradeDealForm :turn="turn" :states="states" @trade-added="refreshTable" />
 		</TableCaption>
 
 		<TableHeader>
