@@ -19,7 +19,7 @@ export const constProductsData: Record<string, ProductDetails> = {
 	Fish: {
 		value: 20,
 		translation: 'Ryby',
-		icon: 'game-icons:fish'
+		icon: 'tdesign:fish-filled'
 	},
 	Fabrics: {
 		value: 20,

@@ -1,4 +1,5 @@
 import type { StatesResponse, TradesResponse, TurnsResponse } from '@/types/pb-types';
+const redis = useRedis();
 
 export default async function () {
 	const turns = ref<TurnsResponse<unknown>[]>(
@@ -20,9 +21,12 @@ export default async function () {
 		() => turns.value.at(-1) ?? ({} as TurnsResponse<unknown>)
 	);
 
+	const tradeDealsPresentTurnKey = `TradeDealsPresentTurn-${presentTurn.value.value + 1} -- adminPanelTrade`;
+	const tradeDealsFollowingTurnKey = `TradeDealsFollowingTurn-${followingTurn.value.value + 1} -- adminPanelTrade`;
+
 	const tradeDealsPresentTurn = ref<TradesResponse<unknown>[] | []>(
 		await useCachedData({
-			key: `TradeDealsPresentTurn-${presentTurn.value.value + 1} -- adminPanelTrade`,
+			key: tradeDealsPresentTurnKey,
 			collection: 'trades',
 			ttl: 1800,
 			requestArgs: {
@@ -34,7 +38,7 @@ export default async function () {
 
 	const tradeDealsFollowingTurn = ref<TradesResponse<unknown>[] | []>(
 		await useCachedData({
-			key: `TradeDealsFollowingTurn-${followingTurn.value.value + 1} -- adminPanelTrade`,
+			key: tradeDealsFollowingTurnKey,
 			collection: 'trades',
 			ttl: 1800,
 			requestArgs: {
@@ -56,29 +60,32 @@ export default async function () {
 		})
 	);
 
-	const presentTurnStates = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
-		await useCachedData({
-			key: `presentTurnStates-${presentTurn.value.value + 1} -- adminPanelTrade`,
-			collection: 'states',
-			ttl: 1800,
-			requestArgs: {
-				filter: `turn = "${presentTurn.value.id}"`,
-				fields: ['id,name']
-			}
-		})
-	);
+	const flushTradeDealsCache = async () => {
+		await redis.del(tradeDealsPresentTurnKey);
+		await redis.del(tradeDealsFollowingTurnKey);
+	};
 
-	const followingTurnStates = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
-		await useCachedData({
-			key: `followingTurnStates-${followingTurn.value.value + 1} -- adminPanelTrade`,
-			collection: 'states',
+	const rePullTradeDeals = async () => {
+		tradeDealsFollowingTurn.value = await useCachedData({
+			key: tradeDealsFollowingTurnKey,
+			collection: 'trades',
 			ttl: 1800,
 			requestArgs: {
 				filter: `turn = "${followingTurn.value.id}"`,
-				fields: ['id,name']
+				fields: ['importState,exportState,volume,product,price,isDiscontinued']
 			}
-		})
-	);
+		});
+
+		tradeDealsPresentTurn.value = await useCachedData({
+			key: tradeDealsPresentTurnKey,
+			collection: 'trades',
+			ttl: 1800,
+			requestArgs: {
+				filter: `turn = "${presentTurn.value.id}"`,
+				fields: ['importState,exportState,volume,product,price,isDiscontinued']
+			}
+		});
+	};
 
 	return {
 		presentTurn,
@@ -86,7 +93,7 @@ export default async function () {
 		tradeDealsPresentTurn,
 		tradeDealsFollowingTurn,
 		statesTradeEmblems,
-		presentTurnStates,
-		followingTurnStates
+		flushTradeDealsCache,
+		rePullTradeDeals
 	};
 }

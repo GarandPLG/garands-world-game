@@ -87,6 +87,7 @@ declare module 'vue' {
     NavigationMenuList: typeof import('./../components/ui/navigation-menu/NavigationMenuList.vue')['default']
     NavigationMenuTrigger: typeof import('./../components/ui/navigation-menu/NavigationMenuTrigger.vue')['default']
     NavigationMenuViewport: typeof import('./../components/ui/navigation-menu/NavigationMenuViewport.vue')['default']
+    NewTradeDealForm: typeof import('./../components/forms/newTradeDealForm.vue')['default']
     NumberField: typeof import('./../components/ui/number-field/NumberField.vue')['default']
     NumberFieldContent: typeof import('./../components/ui/number-field/NumberFieldContent.vue')['default']
     NumberFieldDecrement: typeof import('./../components/ui/number-field/NumberFieldDecrement.vue')['default']
