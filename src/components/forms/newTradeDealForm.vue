@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { FormField } from '@/components/ui/form';
+import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
 import { useForm } from 'vee-validate';
 
+const props = defineProps<{
+	turn: TurnsResponse<unknown>;
+	states: StatesResponse<unknown, unknown, unknown, unknown, unknown>[];
+}>();
+
 const pb = usePocketBase();
-const {
-	statesTradeEmblems,
-	presentTurn,
-	flushTradeDealsCache,
-	rePullTradeDeals,
-	tradeDealsPresentTurn
-} = await useFetchTradeAdminTab();
+const { flushTradeDealsCache, rePullTradeDeals } = await useFetchTradeAdminTab();
 
 const {
 	handleSubmit,
@@ -18,13 +18,12 @@ const {
 } = useForm({
 	validationSchema: tradeDealFormSchema,
 	initialValues: {
-		turn: presentTurn.value.id,
+		turn: props.turn.id,
 		isDiscontinued: false
 	}
 });
 
 const onSubmit = handleSubmit(async values => {
-	console.log(tradeDealsPresentTurn.value);
 	const createTradeDeal = await pb
 		.collection('trades')
 		.create({
@@ -123,11 +122,7 @@ const openDialog = ref(false);
 							</FormControl>
 							<SelectContent>
 								<SelectGroup>
-									<SelectItem
-										v-for="(value, key) in statesTradeEmblems"
-										:key="key"
-										:value="value.id"
-									>
+									<SelectItem v-for="(value, key) in states" :key="key" :value="value.id">
 										<div class="flex items-center gap-2">
 											<span class="mr-2 h-3 w-3">
 												<svg width="100%" height="100%" viewBox="0 0 30 30">
@@ -165,11 +160,7 @@ const openDialog = ref(false);
 							</FormControl>
 							<SelectContent>
 								<SelectGroup>
-									<SelectItem
-										v-for="(value, key) in statesTradeEmblems"
-										:key="key"
-										:value="value.id"
-									>
+									<SelectItem v-for="(value, key) in states" :key="key" :value="value.id">
 										<div class="flex items-center gap-2">
 											<span class="mr-2 h-3 w-3">
 												<svg width="100%" height="100%" viewBox="0 0 30 30">

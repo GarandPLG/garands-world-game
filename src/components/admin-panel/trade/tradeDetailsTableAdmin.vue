@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-import type { TradesResponse } from '@/types/pb-types';
+import type { TradesResponse, TurnsResponse } from '@/types/pb-types';
 import { X } from 'lucide-vue-next';
 
 defineProps<{
 	tradeDeals: TradesResponse<unknown>[];
+	turn: TurnsResponse<unknown>;
 }>();
 
-const { statesTradeEmblems } = await useFetchTradeAdminTab();
-
+const { tradeDealsStates: states } = await useFetchTradeAdminTab();
 // TODO: Odświeżenie tabelki
 </script>
 
 <template>
 	<Table class="h-full w-full">
 		<TableCaption>
-			<NewTradeDealForm />
+			<NewTradeDealForm :turn="turn" :states="states" />
 		</TableCaption>
 
 		<TableHeader>
@@ -47,13 +47,15 @@ const { statesTradeEmblems } = await useFetchTradeAdminTab();
 
 				<TableCell>
 					<ShowEmblemFrame
-						:state="statesTradeEmblems.find(state => state.id === tradeDeal.importState)"
+						v-if="states.some(state => state.id === tradeDeal.importState)"
+						:state="states.find(state => state.id === tradeDeal.importState)!"
 					/>
 				</TableCell>
 
 				<TableCell>
 					<ShowEmblemFrame
-						:state="statesTradeEmblems.find(state => state.id === tradeDeal.exportState)"
+						v-if="states.some(state => state.id === tradeDeal.exportState)"
+						:state="states.find(state => state.id === tradeDeal.exportState)!"
 					/>
 				</TableCell>
 

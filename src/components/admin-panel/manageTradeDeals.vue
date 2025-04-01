@@ -4,7 +4,8 @@ const props = defineProps<{
 	description: string;
 }>();
 
-const { tradeDealsPresentTurn, tradeDealsFollowingTurn } = await useFetchTradeAdminTab();
+const { tradeDealsPresentTurn, tradeDealsFollowingTurn, presentTurn, followingTurn } =
+	await useFetchTradeAdminTab();
 </script>
 
 <template>
@@ -26,11 +27,11 @@ const { tradeDealsPresentTurn, tradeDealsFollowingTurn } = await useFetchTradeAd
 				</TabsList>
 
 				<TabsContent value="presentTurn">
-					<TradeDetailsTableAdmin :tradeDeals="tradeDealsPresentTurn" />
+					<TradeDetailsTableAdmin :tradeDeals="tradeDealsPresentTurn" :turn="presentTurn" />
 				</TabsContent>
 
 				<TabsContent value="followingTurn">
-					<TradeDetailsTableAdmin :tradeDeals="tradeDealsFollowingTurn" />
+					<TradeDetailsTableAdmin :tradeDeals="tradeDealsFollowingTurn" :turn="followingTurn" />
 				</TabsContent>
 			</Tabs>
 		</CardContent>

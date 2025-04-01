@@ -48,9 +48,9 @@ export default async function () {
 		})
 	);
 
-	const statesTradeEmblems = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
+	const tradeDealsStates = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
 		await useCachedData({
-			key: `Emblems-${presentTurn.value.value + 1} -- adminPanelTrade`,
+			key: `tradeDealsStates-${presentTurn.value.value + 1} -- adminPanelTrade`,
 			collection: 'states',
 			ttl: 1800,
 			requestArgs: {
@@ -92,7 +92,7 @@ export default async function () {
 		followingTurn,
 		tradeDealsPresentTurn,
 		tradeDealsFollowingTurn,
-		statesTradeEmblems,
+		tradeDealsStates,
 		flushTradeDealsCache,
 		rePullTradeDeals
 	};
