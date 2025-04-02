@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { FormField }                          from '@/components/ui/form';
+import { FormField } from '@/components/ui/form';
 import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
-import { useForm }                            from 'vee-validate';
+import { useForm } from 'vee-validate';
 
 const props = defineProps<{
 	turn: TurnsResponse<unknown>;
@@ -51,9 +51,6 @@ const onSubmit = handleSubmit(async values => {
 		toast({
 			title: 'Transakcja została dodana!'
 		});
-
-		await flushTradeDealsCache();
-		await rePullTradeDeals();
 
 		emit('trade-added');
 

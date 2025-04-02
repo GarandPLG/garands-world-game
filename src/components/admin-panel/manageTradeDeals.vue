@@ -9,10 +9,12 @@ const {
 	tradeDealsFollowingTurn,
 	presentTurn,
 	followingTurn,
+	flushTradeDealsCache,
 	rePullTradeDeals
 } = await useFetchTradeAdminTab();
 
 const handleRefresh = async () => {
+	await flushTradeDealsCache();
 	await rePullTradeDeals();
 };
 </script>

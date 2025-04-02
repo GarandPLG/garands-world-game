@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import type { ToastProps } from '.';
 
 const TOAST_LIMIT = 5;
-const TOAST_REMOVE_DELAY = 1000000;
+const TOAST_REMOVE_DELAY = 4000;
 
 export type StringOrVNode = string | VNode | (() => VNode);
 

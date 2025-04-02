@@ -355,28 +355,33 @@ const onSubmit = handleSubmit(async values => {
 			if (error instanceof Error) throw error;
 		});
 	endTime = new Date().getTime();
-	const endTimeAll = new Date().getTime();
 
 	toast({
 		title: 'Mapa i nowa tura zostały dodane!',
 		description: `Dodano mapę i nową turę w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
 	});
+
+	// TODO: powielanie umów handlowych
+
 	// =============================================================================
 
-	redis.del('statesDataCharts');
-	redis.del('provincesDataCharts');
-	redis.del('burgsDataCharts');
-	redis.del('culturesDataCharts');
-	redis.del('religionsDataCharts');
-	redis.del('turnsDataCharts');
-	redis.del('miscDataCharts');
+	for (const key of [
+		'statesDataCharts',
+		'provincesDataCharts',
+		'burgsDataCharts',
+		'culturesDataCharts',
+		'religionsDataCharts',
+		'turnsDataCharts',
+		'miscDataCharts',
+		'statesDataPreviewReport',
+		'turnsDataPreviewReport',
+		'turnsDataTurnEnd',
+		'statesDataTurnEnd'
+	]) {
+		redis.del(key);
+	}
 
-	redis.del('statesDataPreviewReport');
-	redis.del('turnsDataPreviewReport');
-
-	redis.del('turnsDataTurnEnd');
-	redis.del('statesDataTurnEnd');
-
+	const endTimeAll = new Date().getTime();
 	toast({
 		title: 'Udało się zakończyć turę!',
 		description: `Zakończono turę w czasie: ${((endTimeAll - startTimeAll) / 1000).toFixed(3)} s`
@@ -389,17 +394,11 @@ async function parseCSVFile(file: File) {
 			skipFirstRow: true
 		});
 	} catch (error) {
-		if (error instanceof Error) {
-			toast({
-				title: 'Błąd przy parsowaniu pliku CSV!',
-				description: `${error.name}: ${error.message}`
-			});
-			throw error;
-		} else
-			toast({
-				title: 'Błąd przy parsowaniu pliku CSV!',
-				description: 'Nieznany błąd.'
-			});
+		toast({
+			title: 'Błąd przy parsowaniu pliku CSV!',
+			description: error instanceof Error ? error.message : 'Wystąpił nieznany błąd.'
+		});
+		if (error instanceof Error) throw error;
 	}
 }
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { TradesResponse, TurnsResponse } from '@/types/pb-types';
-import { X }                                  from 'lucide-vue-next';
+import { X } from 'lucide-vue-next';
 
 defineProps<{
 	tradeDeals: TradesResponse<unknown>[];
@@ -15,7 +15,49 @@ const refreshTable = () => {
 	emit('refresh-table');
 };
 
-const { tradeDealsStates: states } = await useFetchTradeAdminTab();
+const pb = usePocketBase();
+const { tradeDealsStates: states, flushTradeDealsCache } = await useFetchTradeAdminTab();
+
+const updateTradeDeal = async (tradeDeal: TradesResponse<unknown>) => {
+	console.table(tradeDeal);
+	try {
+		await pb.collection('trades').update(tradeDeal.id, {
+			price: tradeDeal.price,
+			volume: tradeDeal.volume,
+			isDiscontinued: tradeDeal.isDiscontinued
+		});
+
+		toast({
+			title: 'Umowa handlowa zaktualizowana!',
+			description: 'Zmiany zostały pomyślnie zapisane.'
+		});
+
+		emit('refresh-table');
+	} catch (error) {
+		toast({
+			title: 'Błąd podczas aktualizacji umowy handlowej',
+			description: error instanceof Error ? error.message : 'Wystąpił nieznany błąd.'
+		});
+	}
+};
+
+const deleteTradeDeal = async (tradeDeal: TradesResponse<unknown>) => {
+	try {
+		await pb.collection('trades').delete(tradeDeal.id);
+
+		toast({
+			title: 'Umowa handlowa usunięta!',
+			description: 'Zmiany zostały pomyślnie zapisane.'
+		});
+
+		emit('refresh-table');
+	} catch (error) {
+		toast({
+			title: 'Błąd podczas usuwania umowy handlowej',
+			description: error instanceof Error ? error.message : 'Wystąpił nieznany błąd.'
+		});
+	}
+};
 </script>
 
 <template>
@@ -38,7 +80,7 @@ const { tradeDealsStates: states } = await useFetchTradeAdminTab();
 
 				<TableHead class="text-center"> Wartość </TableHead>
 
-				<TableHead class="text-center"> Kontynuować? </TableHead>
+				<TableHead class="text-center"> Zakończyć? </TableHead>
 
 				<TableHead class="w-[80px] text-center"> Zapisz </TableHead>
 
@@ -67,7 +109,12 @@ const { tradeDealsStates: states } = await useFetchTradeAdminTab();
 				</TableCell>
 
 				<TableCell class="text-center text-xl font-bold">
-					<NumberField :default-value="tradeDeal.price" :min="0">
+					<NumberField
+						:default-value="tradeDeal.price"
+						:min="0"
+						:model-value="tradeDeal.price"
+						@update:model-value="value => (tradeDeal.price = value)"
+					>
 						<NumberFieldContent>
 							<NumberFieldDecrement />
 							<NumberFieldInput />
@@ -77,7 +124,12 @@ const { tradeDealsStates: states } = await useFetchTradeAdminTab();
 				</TableCell>
 
 				<TableCell class="text-center text-xl font-bold">
-					<NumberField :default-value="tradeDeal.volume" :min="1">
+					<NumberField
+						:default-value="tradeDeal.volume"
+						:min="1"
+						:model-value="tradeDeal.volume"
+						@update:model-value="value => (tradeDeal.volume = value)"
+					>
 						<NumberFieldContent>
 							<NumberFieldDecrement />
 							<NumberFieldInput />
@@ -91,7 +143,11 @@ const { tradeDealsStates: states } = await useFetchTradeAdminTab();
 				</TableCell>
 
 				<TableCell class="w-[25px] text-center">
-					<Switch :checked="!tradeDeal.isDiscontinued" />
+					<Switch
+						:model-value="tradeDeal.isDiscontinued"
+						@click="() => (tradeDeal.isDiscontinued = !tradeDeal.isDiscontinued)"
+						:checked="tradeDeal.isDiscontinued"
+					/>
 				</TableCell>
 
 				<TableCell variant="outline" class="w-[80px] text-center">
@@ -103,7 +159,6 @@ const { tradeDealsStates: states } = await useFetchTradeAdminTab();
 						<AlertDialogContent>
 							<AlertDialogHeader>
 								<AlertDialogTitle> Czy jesteś pewien? </AlertDialogTitle>
-
 								<AlertDialogDescription>
 									Przeanalizuj zmiany, jakie zostaną wprowadzone do tego rekordu w bazie danych:
 								</AlertDialogDescription>
@@ -111,8 +166,9 @@ const { tradeDealsStates: states } = await useFetchTradeAdminTab();
 
 							<AlertDialogFooter>
 								<AlertDialogCancel> Cofnij </AlertDialogCancel>
-
-								<AlertDialogAction> Kontynuuj </AlertDialogAction>
+								<AlertDialogAction @click="updateTradeDeal(tradeDeal)">
+									Kontynuuj
+								</AlertDialogAction>
 							</AlertDialogFooter>
 						</AlertDialogContent>
 					</AlertDialog>
@@ -131,9 +187,9 @@ const { tradeDealsStates: states } = await useFetchTradeAdminTab();
 								<AlertDialogTitle> Czy jesteś pewien? </AlertDialogTitle>
 
 								<AlertDialogDescription>
-									Zastanów się, czy na pewno chcesz usunąć tą umowę handlową? Jeżeli chcesz
+									Zastanów się, czy na pewno chcesz usunąć tą umowę handlową! Jeżeli chcesz
 									zakończyć umową, to bardziej rekomendowaną opcją jest odznaczenie switcha
-									"Kontynuować?". Ponieważ pozwoli to zostawić record w bazie danych, co pozwoli na
+									"Zakończyć?". Ponieważ pozwoli to zostawić record w bazie danych, co pozwoli na
 									ujęcie tego rekordu na wykresach.
 								</AlertDialogDescription>
 							</AlertDialogHeader>
@@ -141,7 +197,9 @@ const { tradeDealsStates: states } = await useFetchTradeAdminTab();
 							<AlertDialogFooter>
 								<AlertDialogCancel> Cofnij </AlertDialogCancel>
 
-								<AlertDialogAction> Kontynuuj </AlertDialogAction>
+								<AlertDialogAction @click="deleteTradeDeal(tradeDeal)">
+									Kontynuuj
+								</AlertDialogAction>
 							</AlertDialogFooter>
 						</AlertDialogContent>
 					</AlertDialog>

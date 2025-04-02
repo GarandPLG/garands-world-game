@@ -31,7 +31,7 @@ export default async function () {
 			ttl: 1800,
 			requestArgs: {
 				filter: `turn = "${presentTurn.value.id}"`,
-				fields: ['importState,exportState,volume,product,price,isDiscontinued']
+				fields: ['id,importState,exportState,volume,product,price,isDiscontinued']
 			}
 		})
 	);
@@ -43,7 +43,7 @@ export default async function () {
 			ttl: 1800,
 			requestArgs: {
 				filter: `turn = "${followingTurn.value.id}"`,
-				fields: ['importState,exportState,volume,product,price,isDiscontinued']
+				fields: ['id,importState,exportState,volume,product,price,isDiscontinued']
 			}
 		})
 	);
@@ -72,7 +72,7 @@ export default async function () {
 			ttl: 1800,
 			requestArgs: {
 				filter: `turn = "${followingTurn.value.id}"`,
-				fields: ['importState,exportState,volume,product,price,isDiscontinued']
+				fields: ['id,importState,exportState,volume,product,price,isDiscontinued']
 			}
 		});
 
@@ -82,7 +82,7 @@ export default async function () {
 			ttl: 1800,
 			requestArgs: {
 				filter: `turn = "${presentTurn.value.id}"`,
-				fields: ['importState,exportState,volume,product,price,isDiscontinued']
+				fields: ['id,importState,exportState,volume,product,price,isDiscontinued']
 			}
 		});
 	};

@@ -11,7 +11,7 @@ useHead({
 			Witaj na <span class="text-primary">Garandowym WG</span>!
 		</h1>
 
-		<p class="mb-4 text-sm">Wersja: <span class="text-primary">0.0.30 Indev</span></p>
+		<p class="mb-4 text-sm">Wersja: <span class="text-primary">0.0.31 Indev</span></p>
 
 		<div class="mb-4 flex flex-wrap justify-center">
 			<a
