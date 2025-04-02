@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { FormField } from '@/components/ui/form';
-import type { StatesResponse, TurnsResponse } from '@/types/pb-types';
+import type { StatesResponse, TradesResponse, TurnsResponse } from '@/types/pb-types';
 import { ELEMENT_NODE, parse, render, walk } from '@michaelhthomas/fluxhtml';
 import { parse as parseCSV } from '@std/csv';
 import { useForm } from 'vee-validate';
@@ -25,6 +25,9 @@ const turnsData = ref<TurnsResponse<unknown>[]>(
 	})
 );
 
+const turns = ref(turnsData.value.slice().reverse());
+const turn = ref(turns.value[0]);
+
 const statesData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknown>[]>(
 	await useCachedData({
 		key: 'statesDataTurnEnd',
@@ -36,10 +39,21 @@ const statesData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknow
 	})
 );
 
-const turns = ref(turnsData.value.slice().reverse());
-const turn = ref(turns.value[0]);
-
 const statesFromPreviousTurn = statesData.value.filter(state => state.turn === turns.value[1].id);
+
+const tradeDeals = ref<TradesResponse<unknown>[]>(
+	turns.value?.[1]?.id
+		? await useCachedData({
+				key: 'tradeDealsTurnEnd',
+				collection: 'trades',
+				ttl: 1800,
+				requestArgs: {
+					filter: `turn = "${turns.value[1].id}" && isDiscontinued != true`,
+					fields: ['id,product,importState,exportState,volume,price,isDiscontinued']
+				}
+			})
+		: []
+);
 
 const CSVFilesForms = [
 	createCSVForm('statesCSV', 'Państw', 'get-states-csv', 'Plik CSV'),
@@ -315,6 +329,40 @@ const onSubmit = handleSubmit(async values => {
 		'Miasta'
 	);
 
+	startTime = new Date().getTime();
+	try {
+		await Promise.all(
+			tradeDeals.value.map(tradeDeal => {
+				const newTradeDeal = {
+					turn: turn.value.id,
+					product: tradeDeal.product,
+					exportState: tradeDeal.exportState, // FIXME: dodać odpowiedni id stateu
+					importState: tradeDeal.importState, // FIXME: dodać odpowiedni id stateu
+					price: tradeDeal.price,
+					volume: tradeDeal.volume,
+					isDiscontinued: tradeDeal.isDiscontinued
+				};
+
+				console.log('--- NEW TRADE DEAL ---');
+				console.table(newTradeDeal);
+
+				return pb.collection('trades').create(newTradeDeal);
+			})
+		);
+	} catch (error) {
+		toast({
+			title: 'Błąd podczas powielania umów handlowych',
+			description: error instanceof Error ? error.message : 'Wystąpił nieznany błąd.'
+		});
+		if (error instanceof Error) throw error;
+	}
+	endTime = new Date().getTime();
+
+	toast({
+		title: 'Powielono umowy handlowe!',
+		description: `Kontynuowano ${tradeDeals.value.length} umów handlowych w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
+	});
+
 	// FIXME: Poprawić drawio, żeby znowu odwzorowywał obecną bazę danych
 
 	// TODO: uprościć ten pierdolnik 2
@@ -376,7 +424,8 @@ const onSubmit = handleSubmit(async values => {
 		'statesDataPreviewReport',
 		'turnsDataPreviewReport',
 		'turnsDataTurnEnd',
-		'statesDataTurnEnd'
+		'statesDataTurnEnd',
+		'tradeDealsTurnEnd'
 	]) {
 		redis.del(key);
 	}

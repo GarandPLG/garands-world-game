@@ -16,7 +16,7 @@ const refreshTable = () => {
 };
 
 const pb = usePocketBase();
-const { tradeDealsStates: states, flushTradeDealsCache } = await useFetchTradeAdminTab();
+const { tradeDealsStates: states } = await useFetchTradeAdminTab();
 
 const updateTradeDeal = async (tradeDeal: TradesResponse<unknown>) => {
 	console.table(tradeDeal);

@@ -13,7 +13,6 @@ const emit = defineEmits<{
 }>();
 
 const pb = usePocketBase();
-const { flushTradeDealsCache, rePullTradeDeals } = await useFetchTradeAdminTab();
 
 const {
 	handleSubmit,
