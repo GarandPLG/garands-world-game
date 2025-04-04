@@ -125,6 +125,12 @@ const handleRedisAction = async (
 
 		case 'DELETE':
 			if (!key) return { error: 'Brak klucza' };
+
+			if (key === 'FLUSHALL') {
+				await client.flushAll();
+				return { message: 'Wszystkie klucze zostały usunięte' };
+			}
+
 			await client.del(key);
 			return { message: 'Klucz usunięty' };
 

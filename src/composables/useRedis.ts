@@ -20,6 +20,11 @@ export function useRedis() {
 			const result = await response.json();
 			if (!response.ok) throw new Error(result.error || 'Błąd API');
 
+			if (endpoint === '/redis?key=FLUSHALL')
+				toast({
+					title: 'Wszystkie klucze redis zostały usunięte'
+				});
+
 			return result;
 		} catch (err) {
 			toast({
@@ -47,6 +52,10 @@ export function useRedis() {
 		return await makeRequest(`/redis?key=${encodeURIComponent(key)}`, 'DELETE');
 	};
 
+	const flushAll = async () => {
+		return await makeRequest(`/redis?key=FLUSHALL`, 'DELETE');
+	};
+
 	const healthCheck = async () => {
 		return await makeRequest('/health', 'GET');
 	};
@@ -57,6 +66,7 @@ export function useRedis() {
 		get,
 		set,
 		del,
+		flushAll,
 		healthCheck
 	};
 }

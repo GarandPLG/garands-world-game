@@ -414,23 +414,7 @@ const onSubmit = handleSubmit(async values => {
 
 	// =============================================================================
 
-	for (const key of [
-		'statesDataCharts',
-		'provincesDataCharts',
-		'burgsDataCharts',
-		'culturesDataCharts',
-		'religionsDataCharts',
-		'turnsDataCharts',
-		'miscDataCharts',
-		'statesDataPreviewReport',
-		'turnsDataPreviewReport',
-		'turnsDataTurnEnd',
-		'statesDataTurnEnd',
-		'currentTradeDealsTurnEnd',
-		'nextTradeDealsTurnEnd'
-	]) {
-		redis.del(key);
-	}
+	redis.flushAll();
 
 	const endTimeAll = new Date().getTime();
 	toast({

@@ -3,6 +3,7 @@ const props = defineProps<{
 	title: string;
 	description: string;
 }>();
+const { flushAll } = useRedis();
 </script>
 
 <template>
@@ -15,8 +16,12 @@ const props = defineProps<{
 
 		<Separator />
 
-		<CardContent class="space-y-2 py-6">
-			<p>Placeholder</p>
+		<CardContent class="flex flex-col items-center space-y-2 py-6">
+			<!-- <p>Placeholder</p> -->
+
+			<Button @click="flushAll" variant="destructive" class="w-1/3">
+				Wyczyść wszystkie klucze
+			</Button>
 		</CardContent>
 	</Card>
 </template>
