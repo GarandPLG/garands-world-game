@@ -34,21 +34,35 @@ const statesData = ref<StatesResponse<unknown, unknown, unknown, unknown, unknow
 		collection: 'states',
 		ttl: 1800,
 		requestArgs: {
-			fields: ['turn']
+			fields: ['id,turn,name']
 		}
 	})
 );
 
 const statesFromPreviousTurn = statesData.value.filter(state => state.turn === turns.value[1].id);
 
-const tradeDeals = ref<TradesResponse<unknown>[]>(
+const currentTurnTradeDeals = ref<TradesResponse<unknown>[]>(
 	turns.value?.[1]?.id
 		? await useCachedData({
-				key: 'tradeDealsTurnEnd',
+				key: 'currentTradeDealsTurnEnd',
 				collection: 'trades',
 				ttl: 1800,
 				requestArgs: {
 					filter: `turn = "${turns.value[1].id}" && isDiscontinued != true`,
+					fields: ['id,product,importState,exportState,volume,price,isDiscontinued']
+				}
+			})
+		: []
+);
+
+const nextTurnTradeDeals = ref<TradesResponse<unknown>[]>(
+	turns.value?.[0]?.id
+		? await useCachedData({
+				key: 'nextTradeDealsTurnEnd',
+				collection: 'trades',
+				ttl: 1800,
+				requestArgs: {
+					filter: `turn = "${turns.value[0].id}" && isDiscontinued != true`,
 					fields: ['id,product,importState,exportState,volume,price,isDiscontinued']
 				}
 			})
@@ -330,37 +344,24 @@ const onSubmit = handleSubmit(async values => {
 	);
 
 	startTime = new Date().getTime();
-	try {
-		await Promise.all(
-			tradeDeals.value.map(tradeDeal => {
-				const newTradeDeal = {
-					turn: turn.value.id,
-					product: tradeDeal.product,
-					exportState: tradeDeal.exportState, // FIXME: dodać odpowiedni id stateu
-					importState: tradeDeal.importState, // FIXME: dodać odpowiedni id stateu
-					price: tradeDeal.price,
-					volume: tradeDeal.volume,
-					isDiscontinued: tradeDeal.isDiscontinued
-				};
+	await handleTradeDeals(
+		currentTurnTradeDeals.value,
+		statesResponses,
+		'create',
+		'Błąd podczas powielania obecnych umów handlowych'
+	);
 
-				console.log('--- NEW TRADE DEAL ---');
-				console.table(newTradeDeal);
-
-				return pb.collection('trades').create(newTradeDeal);
-			})
-		);
-	} catch (error) {
-		toast({
-			title: 'Błąd podczas powielania umów handlowych',
-			description: error instanceof Error ? error.message : 'Wystąpił nieznany błąd.'
-		});
-		if (error instanceof Error) throw error;
-	}
+	await handleTradeDeals(
+		nextTurnTradeDeals.value,
+		statesResponses,
+		'update',
+		'Błąd podczas aktualizowania przyszłych umów handlowych'
+	);
 	endTime = new Date().getTime();
 
 	toast({
 		title: 'Powielono umowy handlowe!',
-		description: `Kontynuowano ${tradeDeals.value.length} umów handlowych w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
+		description: `Kontynuowano + zaktualizowano ${currentTurnTradeDeals.value.length + nextTurnTradeDeals.value.length} umów handlowych w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
 	});
 
 	// FIXME: Poprawić drawio, żeby znowu odwzorowywał obecną bazę danych
@@ -425,7 +426,8 @@ const onSubmit = handleSubmit(async values => {
 		'turnsDataPreviewReport',
 		'turnsDataTurnEnd',
 		'statesDataTurnEnd',
-		'tradeDealsTurnEnd'
+		'currentTradeDealsTurnEnd',
+		'nextTradeDealsTurnEnd'
 	]) {
 		redis.del(key);
 	}
@@ -479,6 +481,44 @@ async function readFileAsync(file: File) {
 		reader.readAsText(file);
 	});
 }
+
+function getNewStateID(id: string, responses: { [key: string]: string }): string {
+	const state = statesFromPreviousTurn.find(s => s.id === id);
+	return state && statesFromPreviousTurn ? responses[state.name] : '';
+}
+
+const handleTradeDeals = async (
+	tradeDeals: TradesResponse<unknown>[],
+	responses: { [key: string]: string },
+	operation: string,
+	errorMessage: string
+) => {
+	try {
+		await Promise.all(
+			tradeDeals.map(tradeDeal => {
+				const newTradeDeal = {
+					turn: operation === 'create' ? turn.value.id : tradeDeal.turn,
+					product: tradeDeal.product,
+					exportState: getNewStateID(tradeDeal.exportState, responses),
+					importState: getNewStateID(tradeDeal.importState, responses),
+					volume: tradeDeal.volume,
+					isDiscontinued: tradeDeal.isDiscontinued,
+					...(operation === 'create' && { price: tradeDeal.price })
+				};
+
+				return operation === 'create'
+					? pb.collection('trades').create(newTradeDeal)
+					: pb.collection('trades').update(tradeDeal.id, newTradeDeal);
+			})
+		);
+	} catch (error) {
+		toast({
+			title: errorMessage,
+			description: error instanceof Error ? error.message : 'Wystąpił nieznany błąd.'
+		});
+		if (error instanceof Error) throw error;
+	}
+};
 </script>
 
 <template>
