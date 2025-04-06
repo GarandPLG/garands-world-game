@@ -14,7 +14,7 @@ RUN bun run build-only \
 FROM alpine:latest
 
 LABEL maintainer="garandplg@garandplg.com"
-LABEL version="0.0.33"
+LABEL version="0.0.34"
 LABEL description="Garand's WG. Pocketbase + Redis + Bun + Vue3 + Vite + TypeScript + TailwindCSS + Shadcn-vue"
 
 ARG PB_VERSION=0.22.26

@@ -517,6 +517,11 @@
     "SelectScrollUpButton": true,
     "SelectSeparator": true,
     "SelectTrigger": true,
-    "SelectValue": true
+    "SelectValue": true,
+    "useReportOutputsStore": true,
+    "useReportInputsStore": true,
+    "constBuildingsData": true,
+    "constMilitaryUnitsData": true,
+    "governmentTypes": true
   }
 }

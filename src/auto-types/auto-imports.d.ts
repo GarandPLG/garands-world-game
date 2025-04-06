@@ -168,8 +168,10 @@ declare global {
   const computedInject: typeof import('@vueuse/core')['computedInject']
   const computedWithControl: typeof import('@vueuse/core')['computedWithControl']
   const constBiomesColors: typeof import('../data/consts/constBiomesColors')['constBiomesColors']
+  const constBuildingsData: typeof import('../data/consts/constBuildingsData')['constBuildingsData']
   const constCultureToTechnologyGroup: typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']
   const constGovernmentTypes: typeof import('../data/consts/constGovernmentTypes')['default']
+  const constMilitaryUnitsData: typeof import('../data/consts/constMilitaryUnitsData')['constMilitaryUnitsData']
   const constProductsData: typeof import('../data/consts/constProductsData')['constProductsData']
   const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
   const controlledRef: typeof import('@vueuse/core')['controlledRef']
@@ -204,6 +206,7 @@ declare global {
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const getTokenPayload: typeof import('pocketbase')['getTokenPayload']
+  const governmentTypes: typeof import('../data/consts/constGovernmentTypes')['governmentTypes']
   const h: typeof import('vue')['h']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']
@@ -431,6 +434,8 @@ declare global {
   const useRedis: typeof import('../composables/useRedis')['useRedis']
   const useRedisKeyPrefix: typeof import('../composables/useRedisKeyPrefix')['default']
   const useRefHistory: typeof import('@vueuse/core')['useRefHistory']
+  const useReportInputsStore: typeof import('../stores/reportInputsStore')['useReportInputsStore']
+  const useReportOutputsStore: typeof import('../stores/reportOutputsStore')['useReportOutputsStore']
   const useReportStore: typeof import('../stores/reportStore')['useReportStore']
   const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
   const useRoute: typeof import('vue-router')['useRoute']
@@ -687,8 +692,9 @@ declare module 'vue' {
     readonly computedInject: UnwrapRef<typeof import('@vueuse/core')['computedInject']>
     readonly computedWithControl: UnwrapRef<typeof import('@vueuse/core')['computedWithControl']>
     readonly constBiomesColors: UnwrapRef<typeof import('../data/consts/constBiomesColors')['constBiomesColors']>
+    readonly constBuildingsData: UnwrapRef<typeof import('../data/consts/constBuildingsData')['constBuildingsData']>
     readonly constCultureToTechnologyGroup: UnwrapRef<typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']>
-    readonly constGovernmentTypes: UnwrapRef<typeof import('../data/consts/constGovernmentTypes')['default']>
+    readonly constMilitaryUnitsData: UnwrapRef<typeof import('../data/consts/constMilitaryUnitsData')['constMilitaryUnitsData']>
     readonly constProductsData: UnwrapRef<typeof import('../data/consts/constProductsData')['constProductsData']>
     readonly controlledComputed: UnwrapRef<typeof import('@vueuse/core')['controlledComputed']>
     readonly controlledRef: UnwrapRef<typeof import('@vueuse/core')['controlledRef']>
@@ -723,6 +729,7 @@ declare module 'vue' {
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getTokenPayload: UnwrapRef<typeof import('pocketbase')['getTokenPayload']>
+    readonly governmentTypes: UnwrapRef<typeof import('../data/consts/constGovernmentTypes')['governmentTypes']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
@@ -950,6 +957,8 @@ declare module 'vue' {
     readonly useRedis: UnwrapRef<typeof import('../composables/useRedis')['useRedis']>
     readonly useRedisKeyPrefix: UnwrapRef<typeof import('../composables/useRedisKeyPrefix')['default']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
+    readonly useReportInputsStore: UnwrapRef<typeof import('../stores/reportInputsStore')['useReportInputsStore']>
+    readonly useReportOutputsStore: UnwrapRef<typeof import('../stores/reportOutputsStore')['useReportOutputsStore']>
     readonly useReportStore: UnwrapRef<typeof import('../stores/reportStore')['useReportStore']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>

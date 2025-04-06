@@ -22,8 +22,8 @@ const culture = ref<CulturesResponse<unknown>>(
 );
 
 const technologyGroup = ref<string>(
-	culture.value.namesbase in constCultureToTechnologyGroup
-		? constCultureToTechnologyGroup[culture.value.namesbase]
+	constCultureToTechnologyGroup.has(culture.value.namesbase)
+		? constCultureToTechnologyGroup.get(culture.value.namesbase)!
 		: 'Human'
 );
 </script>

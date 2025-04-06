@@ -61,7 +61,7 @@ function updatePriceAndVolume() {
 	const product = useFormValues.product;
 	if (product) {
 		setFieldValue('volume', 50);
-		setFieldValue('price', constProductsData[product].value);
+		setFieldValue('price', constProductsData.get(product)?.value ?? 50);
 	}
 }
 
@@ -99,7 +99,7 @@ const openDialog = ref(false);
 										<div class="flex items-center gap-2">
 											<ProductTooltip :product="value" />
 
-											<p class="text-xl"> {{ constProductsData[value].translation }} </p>
+											<p class="text-xl"> {{ constProductsData.get(value)?.translation ?? '' }} </p>
 										</div>
 									</SelectItem>
 								</SelectGroup>

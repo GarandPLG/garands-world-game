@@ -27,7 +27,7 @@ export default async function useProcessEndTurnCollectionsData(
 	data: any[],
 	mapFunction: (entity: any) => Record<string, any>,
 	errorPrefix: string
-): { [key: string]: string } {
+): Promise<{ [key: string]: string }> {
 	const startTime = Date.now();
 
 	const responses = await Promise.all(
