@@ -224,7 +224,14 @@ export const constProductsData = new Map<
 			icon: 'game-icons:chest-armor'
 		}
 	],
-	// TODO: Sprzęt oblężniczy  game-icons:siege-ram
+	[
+		'SiegeEquipment',
+		{
+			value: 100,
+			translation: 'Sprzęt oblężniczy',
+			icon: 'game-icons:siege-ram'
+		}
+	],
 	[
 		'Ships',
 		{
@@ -262,12 +269,13 @@ army_demand = [
   'Weapon',
   'RangedWeapon',
   'Armor',
+  'SiegeEquipment',
   'Ships'
 ]
 
 productsTab = [
-  "Groceries", "Clothes", "Furniture", "Fish", "Fabrics", "Grain", "Paper", "Wood", "Iron", "Tools", "Dyes", "Glass", "Silk", "Coffee", "Fruit", "Gold", "Alcohol", "LuxuryClothes", "LuxuryFurniture", "Meat", "Sugar", "Tea", "Weapon", "RangedWeapon", "Armor", "Ships"
+  "Groceries", "Clothes", "Furniture", "Fish", "Fabrics", "Grain", "Paper", "Wood", "Iron", "Tools", "Dyes", "Glass", "Silk", "Coffee", "Fruit", "Gold", "Alcohol", "LuxuryClothes", "LuxuryFurniture", "Meat", "Sugar", "Tea", "Weapon", "RangedWeapon", "Armor", "SiegeEquipment", "Ships"
 ];
 
-Groceries, Clothes, Furniture, Fish, Fabrics, Grain, Paper, Wood, Iron, Tools, Dyes, Glass, Silk, Coffee, Fruit, Gold, Alcohol, LuxuryClothes, LuxuryFurniture, Meat, Sugar, Tea, Weapon, RangedWeapon, Armor, Ships
+Groceries, Clothes, Furniture, Fish, Fabrics, Grain, Paper, Wood, Iron, Tools, Dyes, Glass, Silk, Coffee, Fruit, Gold, Alcohol, LuxuryClothes, LuxuryFurniture, Meat, Sugar, Tea, Weapon, RangedWeapon, Armor, SiegeEquipment, Ships
 */

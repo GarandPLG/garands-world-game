@@ -336,6 +336,7 @@ export enum TradesProductOptions {
 	'Weapon' = 'Weapon',
 	'RangedWeapon' = 'RangedWeapon',
 	'Armor' = 'Armor',
+	'SiegeEquipment' = 'SiegeEquipment',
 	'Ships' = 'Ships'
 }
 export type TradesRecord = {

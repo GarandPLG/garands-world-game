@@ -7,5 +7,6 @@ export const constCultureToTechnologyGroup: Map<string, string> = new Map([
 	['Giant', 'Giants'],
 	['Draconic', 'Draconic'],
 	['Arachnid', 'Arachnid'],
-	['Serpents', 'Serpents']
+	['Serpents', 'Serpents'],
+	['Human', 'Humanic']
 ]);
