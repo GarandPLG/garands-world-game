@@ -3,7 +3,7 @@ interface GovernmentType {
 	governmentCapacityLimit: number;
 }
 
-export const governmentTypes: GovernmentType[] = [
+export const constGovernmentTypes: GovernmentType[] = [
 	{ name: 'Beylik', governmentCapacityLimit: 500 },
 	{ name: 'Despotate', governmentCapacityLimit: 600 },
 	{ name: 'Dominion', governmentCapacityLimit: 800 },

@@ -170,7 +170,7 @@ declare global {
   const constBiomesColors: typeof import('../data/consts/constBiomesColors')['constBiomesColors']
   const constBuildingsData: typeof import('../data/consts/constBuildingsData')['constBuildingsData']
   const constCultureToTechnologyGroup: typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']
-  const constGovernmentTypes: typeof import('../data/consts/constGovernmentTypes')['default']
+  const constGovernmentTypes: typeof import('../data/consts/constGovernmentTypes')['constGovernmentTypes']
   const constMilitaryUnitsData: typeof import('../data/consts/constMilitaryUnitsData')['constMilitaryUnitsData']
   const constProductsData: typeof import('../data/consts/constProductsData')['constProductsData']
   const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
@@ -694,6 +694,7 @@ declare module 'vue' {
     readonly constBiomesColors: UnwrapRef<typeof import('../data/consts/constBiomesColors')['constBiomesColors']>
     readonly constBuildingsData: UnwrapRef<typeof import('../data/consts/constBuildingsData')['constBuildingsData']>
     readonly constCultureToTechnologyGroup: UnwrapRef<typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']>
+    readonly constGovernmentTypes: UnwrapRef<typeof import('../data/consts/constGovernmentTypes')['constGovernmentTypes']>
     readonly constMilitaryUnitsData: UnwrapRef<typeof import('../data/consts/constMilitaryUnitsData')['constMilitaryUnitsData']>
     readonly constProductsData: UnwrapRef<typeof import('../data/consts/constProductsData')['constProductsData']>
     readonly controlledComputed: UnwrapRef<typeof import('@vueuse/core')['controlledComputed']>
@@ -729,7 +730,6 @@ declare module 'vue' {
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getTokenPayload: UnwrapRef<typeof import('pocketbase')['getTokenPayload']>
-    readonly governmentTypes: UnwrapRef<typeof import('../data/consts/constGovernmentTypes')['governmentTypes']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>

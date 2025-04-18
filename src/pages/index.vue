@@ -24,7 +24,7 @@ useHead({
 			</a>
 
 			<a
-				href="https://www.youtube.com/channel/UCnYj9HJDMVuq2Qa9jsnLljA"
+				href="https://www.youtube.com/@Garand_PLG"
 				target="_blank"
 				class="mr-4 flex items-center gap-1 text-blue-500 hover:text-blue-700"
 			>
