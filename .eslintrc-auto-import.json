@@ -522,6 +522,15 @@
     "useReportInputsStore": true,
     "constBuildingsData": true,
     "constMilitaryUnitsData": true,
-    "governmentTypes": true
+    "governmentTypes": true,
+    "buildingsDeck01": true,
+    "militaryUnitsDeck01": true,
+    "Carousel": true,
+    "CarouselContent": true,
+    "CarouselItem": true,
+    "CarouselNext": true,
+    "CarouselPrevious": true,
+    "useCarousel": true,
+    "useProvideCarousel": true
   }
 }

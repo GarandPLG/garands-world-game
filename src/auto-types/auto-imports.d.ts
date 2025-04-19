@@ -29,6 +29,11 @@ declare global {
   const CardFooter: typeof import('../components/ui/card/index')['CardFooter']
   const CardHeader: typeof import('../components/ui/card/index')['CardHeader']
   const CardTitle: typeof import('../components/ui/card/index')['CardTitle']
+  const Carousel: typeof import('../components/ui/carousel/index')['Carousel']
+  const CarouselContent: typeof import('../components/ui/carousel/index')['CarouselContent']
+  const CarouselItem: typeof import('../components/ui/carousel/index')['CarouselItem']
+  const CarouselNext: typeof import('../components/ui/carousel/index')['CarouselNext']
+  const CarouselPrevious: typeof import('../components/ui/carousel/index')['CarouselPrevious']
   const ChartCrosshair: typeof import('../components/ui/chart/index')['ChartCrosshair']
   const ChartLegend: typeof import('../components/ui/chart/index')['ChartLegend']
   const ChartSingleTooltip: typeof import('../components/ui/chart/index')['ChartSingleTooltip']
@@ -159,6 +164,7 @@ declare global {
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const beforeAll: typeof import('vitest')['beforeAll']
   const beforeEach: typeof import('vitest')['beforeEach']
+  const buildingsDeck01: typeof import('../data/decks/buildings/buildingsDeck01')['buildingsDeck01']
   const buttonVariants: typeof import('../components/ui/button/index')['buttonVariants']
   const chai: typeof import('vitest')['chai']
   const chartsCategories: typeof import('../data/chartsConfig')['chartsCategories']
@@ -228,6 +234,7 @@ declare global {
   const mapStores: typeof import('pinia')['mapStores']
   const mapWritableState: typeof import('pinia')['mapWritableState']
   const markRaw: typeof import('vue')['markRaw']
+  const militaryUnitsDeck01: typeof import('../data/decks/militaryUnits/militaryUnitsDeck01')['militaryUnitsDeck01']
   const navigationMenuTriggerStyle: typeof import('../components/ui/navigation-menu/index')['navigationMenuTriggerStyle']
   const nextTick: typeof import('vue')['nextTick']
   const normalizeUnknownQueryParams: typeof import('pocketbase')['normalizeUnknownQueryParams']
@@ -331,6 +338,7 @@ declare global {
   const useBrowserLocation: typeof import('@vueuse/core')['useBrowserLocation']
   const useCached: typeof import('@vueuse/core')['useCached']
   const useCachedData: typeof import('../composables/useCachedData')['useCachedData']
+  const useCarousel: typeof import('../components/ui/carousel/useCarousel')['useCarousel']
   const useChartData: typeof import('../composables/useChartData')['useChartData']
   const useClipboard: typeof import('@vueuse/core')['useClipboard']
   const useClipboardItems: typeof import('@vueuse/core')['useClipboardItems']
@@ -430,6 +438,7 @@ declare global {
   const usePreferredReducedTransparency: typeof import('@vueuse/core')['usePreferredReducedTransparency']
   const usePrevious: typeof import('@vueuse/core')['usePrevious']
   const useProcessEndTurnCollectionsData: typeof import('../composables/useProcessEndTurnCollectionsData')['default']
+  const useProvideCarousel: typeof import('../components/ui/carousel/useCarousel')['useProvideCarousel']
   const useRafFn: typeof import('@vueuse/core')['useRafFn']
   const useRedis: typeof import('../composables/useRedis')['useRedis']
   const useRedisKeyPrefix: typeof import('../composables/useRedisKeyPrefix')['default']
@@ -553,6 +562,11 @@ declare module 'vue' {
     readonly CardFooter: UnwrapRef<typeof import('../components/ui/card/index')['CardFooter']>
     readonly CardHeader: UnwrapRef<typeof import('../components/ui/card/index')['CardHeader']>
     readonly CardTitle: UnwrapRef<typeof import('../components/ui/card/index')['CardTitle']>
+    readonly Carousel: UnwrapRef<typeof import('../components/ui/carousel/index')['Carousel']>
+    readonly CarouselContent: UnwrapRef<typeof import('../components/ui/carousel/index')['CarouselContent']>
+    readonly CarouselItem: UnwrapRef<typeof import('../components/ui/carousel/index')['CarouselItem']>
+    readonly CarouselNext: UnwrapRef<typeof import('../components/ui/carousel/index')['CarouselNext']>
+    readonly CarouselPrevious: UnwrapRef<typeof import('../components/ui/carousel/index')['CarouselPrevious']>
     readonly ChartCrosshair: UnwrapRef<typeof import('../components/ui/chart/index')['ChartCrosshair']>
     readonly ChartLegend: UnwrapRef<typeof import('../components/ui/chart/index')['ChartLegend']>
     readonly ChartSingleTooltip: UnwrapRef<typeof import('../components/ui/chart/index')['ChartSingleTooltip']>
@@ -683,6 +697,7 @@ declare module 'vue' {
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly beforeAll: UnwrapRef<typeof import('vitest')['beforeAll']>
     readonly beforeEach: UnwrapRef<typeof import('vitest')['beforeEach']>
+    readonly buildingsDeck01: UnwrapRef<typeof import('../data/decks/buildings/buildingsDeck01')['buildingsDeck01']>
     readonly buttonVariants: UnwrapRef<typeof import('../components/ui/button/index')['buttonVariants']>
     readonly chai: UnwrapRef<typeof import('vitest')['chai']>
     readonly chartsCategories: UnwrapRef<typeof import('../data/chartsConfig')['chartsCategories']>
@@ -751,6 +766,7 @@ declare module 'vue' {
     readonly mapStores: UnwrapRef<typeof import('pinia')['mapStores']>
     readonly mapWritableState: UnwrapRef<typeof import('pinia')['mapWritableState']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
+    readonly militaryUnitsDeck01: UnwrapRef<typeof import('../data/decks/militaryUnits/militaryUnitsDeck01')['militaryUnitsDeck01']>
     readonly navigationMenuTriggerStyle: UnwrapRef<typeof import('../components/ui/navigation-menu/index')['navigationMenuTriggerStyle']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly normalizeUnknownQueryParams: UnwrapRef<typeof import('pocketbase')['normalizeUnknownQueryParams']>
@@ -854,6 +870,7 @@ declare module 'vue' {
     readonly useBrowserLocation: UnwrapRef<typeof import('@vueuse/core')['useBrowserLocation']>
     readonly useCached: UnwrapRef<typeof import('@vueuse/core')['useCached']>
     readonly useCachedData: UnwrapRef<typeof import('../composables/useCachedData')['useCachedData']>
+    readonly useCarousel: UnwrapRef<typeof import('../components/ui/carousel/useCarousel')['useCarousel']>
     readonly useChartData: UnwrapRef<typeof import('../composables/useChartData')['useChartData']>
     readonly useClipboard: UnwrapRef<typeof import('@vueuse/core')['useClipboard']>
     readonly useClipboardItems: UnwrapRef<typeof import('@vueuse/core')['useClipboardItems']>
@@ -953,6 +970,7 @@ declare module 'vue' {
     readonly usePreferredReducedTransparency: UnwrapRef<typeof import('@vueuse/core')['usePreferredReducedTransparency']>
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
     readonly useProcessEndTurnCollectionsData: UnwrapRef<typeof import('../composables/useProcessEndTurnCollectionsData')['default']>
+    readonly useProvideCarousel: UnwrapRef<typeof import('../components/ui/carousel/useCarousel')['useProvideCarousel']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
     readonly useRedis: UnwrapRef<typeof import('../composables/useRedis')['useRedis']>
     readonly useRedisKeyPrefix: UnwrapRef<typeof import('../composables/useRedisKeyPrefix')['default']>

@@ -13,7 +13,7 @@ const turn = computed<number>(() => (route.params as RouteParams).turn - 1);
 const state = computed<string>(() => (route.params as RouteParams).state);
 
 useHead({
-	title: `Garand's WG | Raport | Tura ${turn.value} | ${state.value}`
+	title: `Garand's WG | Raport | Tura ${turn.value + 1} | ${state.value}`
 });
 
 const { redisKeyPrefix, user, isUserNotAdmin } = useRedisKeyPrefix(state.value, turn.value);

@@ -72,7 +72,7 @@ W wersji produkcyjnej:
 ## ⚖️ Licencja
 
 Projekt jest udostępniony na licencji **MIT** – możesz korzystać z niego dowolnie, zgodnie z
-warunkami licencji.
+warunkami licencji. Zobacz plik [LICENSE.md](LICENSE.md) aby poznać szczegóły.
 
 ## 📬 Kontakt
 
