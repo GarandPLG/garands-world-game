@@ -531,6 +531,9 @@
     "CarouselNext": true,
     "CarouselPrevious": true,
     "useCarousel": true,
-    "useProvideCarousel": true
+    "useProvideCarousel": true,
+    "createRef": true,
+    "useBuildings": true,
+    "useFilteredBuildings": true
   }
 }

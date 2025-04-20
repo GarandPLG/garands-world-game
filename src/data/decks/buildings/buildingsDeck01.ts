@@ -79,7 +79,7 @@ export const buildingsDeck01: Map<string, Building> = new Map<string, Building>(
 				['I', createTier([1, 5], 155, 250, 5875, new Map([[P.Gold, 20]]), new Map([[P.Tools, 2]]))],
 				[
 					'II',
-					createTier([6, 6], 235, 500, 9200, new Map([[P.Gold, 30]]), new Map([[P.Tools, 4]]))
+					createTier([6, 16], 235, 500, 9200, new Map([[P.Gold, 30]]), new Map([[P.Tools, 4]]))
 				],
 				[
 					'III',
@@ -131,7 +131,7 @@ export const buildingsDeck01: Map<string, Building> = new Map<string, Building>(
 				[
 					'III',
 					createTier(
-						[11, 25],
+						[12, 25],
 						75,
 						1000,
 						12550,
@@ -821,7 +821,7 @@ export const buildingsDeck01: Map<string, Building> = new Map<string, Building>(
 				[
 					'III',
 					createTier(
-						[11, 15],
+						[11, 25],
 						45,
 						750,
 						13000,

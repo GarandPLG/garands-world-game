@@ -13,7 +13,8 @@ interface MilitaryUnit {
 
 interface MilitaryUnitTier {
 	techRange: [number, number];
-	power: number;
+	damage: number;
+	armor: number;
 	demand: Map<P, number>;
 }
 
