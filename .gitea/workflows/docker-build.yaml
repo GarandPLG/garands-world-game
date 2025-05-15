@@ -14,10 +14,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
+      - name: List files to debug
+        run: |
+          ls -la
+          echo "Current directory: $(pwd)"
+          find . -name "*dockerfile*" -o -name "*Dockerfile*"
+      
       - name: Extract version from Dockerfile
         id: version
         run: |
-          VERSION=$(grep -oP 'LABEL version="\K[^"]+' dockerfile)
+          # Używamy find, aby zlokalizować plik niezależnie od jego dokładnej nazwy
+          DOCKERFILE=$(find . -type f -name "dockerfile" -o -name "Dockerfile" | head -n 1)
+          if [ -z "$DOCKERFILE" ]; then
+            echo "Error: Dockerfile not found"
+            exit 1
+          fi
+          echo "Found Dockerfile at: $DOCKERFILE"
+          VERSION=$(grep -oP 'LABEL version="\K[^"]+' "$DOCKERFILE")
           echo "version=$VERSION" >> $GITEA_OUTPUT
           echo "Extracted version: $VERSION"
       
