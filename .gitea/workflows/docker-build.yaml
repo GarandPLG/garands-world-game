@@ -17,7 +17,7 @@ jobs:
       - name: Extract version from Dockerfile
         id: version
         run: |
-          VERSION=$(grep -oP 'LABEL version="\K[^"]+' Dockerfile)
+          VERSION=$(grep -oP 'LABEL version="\K[^"]+' dockerfile)
           echo "version=$VERSION" >> $GITEA_OUTPUT
           echo "Extracted version: $VERSION"
       
