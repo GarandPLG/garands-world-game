@@ -43,7 +43,8 @@ Projekt wykorzystuje nowoczesny stack technologiczny:
 2. Zainstaluj wymagane moduły za pomocą `bun install`.
 3. Uruchom Redis:
    - Przejdź do folderu `redis`: `cd redis`.
-   - Zbuduj obraz API na podstawie Dockerfile: `docker build . -t dpr.garandplg.com/garandplg/gwg-redis-api:latest`.
+   - Zbuduj obraz API na podstawie Dockerfile:
+     `docker build . -t dpr.garandplg.com/garandplg/gwg-redis-api:latest`.
    - Uruchom Redis za pomocą Docker Compose: `docker-compose up -d`.
 4. Uruchom projekt:
    - Jeśli korzystasz z **nix** lub **nixOS**, uruchom projekt za pomocą `nix-shell`.
@@ -72,7 +73,7 @@ W wersji produkcyjnej:
 ## ⚖️ Licencja
 
 Projekt jest udostępniony na licencji **MIT** – możesz korzystać z niego dowolnie, zgodnie z
-warunkami licencji. Zobacz plik [LICENSE.md](LICENSE.md) aby poznać szczegóły.
+warunkami licencji.
 
 ## 📬 Kontakt
 
