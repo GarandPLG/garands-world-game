@@ -10,5 +10,8 @@ pocketbase/pocketbase.drawio
 
 .gitignore
 slim.report.json
-start-dev.sh
 shell.nix
+
+.docker-build-env
+.docker-build-env.template
+docker-build.sh

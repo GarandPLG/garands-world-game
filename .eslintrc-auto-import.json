@@ -534,6 +534,14 @@
     "useProvideCarousel": true,
     "createRef": true,
     "useBuildings": true,
-    "useFilteredBuildings": true
+    "useFilteredBuildings": true,
+    "extractStatesData": true,
+    "useExtractMapData": true,
+    "extractCulturesData": true,
+    "extractReligionsData": true,
+    "extractBurgsData": true,
+    "extractProvincesData": true,
+    "extractDiplomacyData": true,
+    "namesBases": true
   }
 }

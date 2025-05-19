@@ -45,3 +45,5 @@ commit.txt
 git-diff.txt
 
 auto-types
+
+.docker-build-env

@@ -208,6 +208,12 @@ declare global {
   const effectScope: typeof import('vue')['effectScope']
   const expect: typeof import('vitest')['expect']
   const extendRef: typeof import('@vueuse/core')['extendRef']
+  const extractBurgsData: typeof import('../utils/mapExtractors/mapExtractorBurgs')['extractBurgsData']
+  const extractCulturesData: typeof import('../utils/mapExtractors/mapExtractorCultures')['extractCulturesData']
+  const extractDiplomacyData: typeof import('../utils/mapExtractors/mapExtractorDiplomacy')['extractDiplomacyData']
+  const extractProvincesData: typeof import('../utils/mapExtractors/mapExtractorProvinces')['extractProvincesData']
+  const extractReligionsData: typeof import('../utils/mapExtractors/mapExtractorReligions')['extractReligionsData']
+  const extractStatesData: typeof import('../utils/mapExtractors/mapExtractorStates')['extractStatesData']
   const getActiveHead: typeof import('@unhead/vue')['getActiveHead']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
@@ -236,6 +242,7 @@ declare global {
   const mapWritableState: typeof import('pinia')['mapWritableState']
   const markRaw: typeof import('vue')['markRaw']
   const militaryUnitsDeck01: typeof import('../data/decks/militaryUnits/militaryUnitsDeck01')['militaryUnitsDeck01']
+  const namesBases: typeof import('../data/consts/constNamesBases')['namesBases']
   const navigationMenuTriggerStyle: typeof import('../components/ui/navigation-menu/index')['navigationMenuTriggerStyle']
   const nextTick: typeof import('vue')['nextTick']
   const normalizeUnknownQueryParams: typeof import('pocketbase')['normalizeUnknownQueryParams']
@@ -375,6 +382,7 @@ declare global {
   const useEventBus: typeof import('@vueuse/core')['useEventBus']
   const useEventListener: typeof import('@vueuse/core')['useEventListener']
   const useEventSource: typeof import('@vueuse/core')['useEventSource']
+  const useExtractMapData: typeof import('../utils/useExtractMapData')['useExtractMapData']
   const useEyeDropper: typeof import('@vueuse/core')['useEyeDropper']
   const useFavicon: typeof import('@vueuse/core')['useFavicon']
   const useFetch: typeof import('@vueuse/core')['useFetch']
@@ -744,6 +752,11 @@ declare module 'vue' {
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly expect: UnwrapRef<typeof import('vitest')['expect']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
+    readonly extractBurgsData: UnwrapRef<typeof import('../utils/mapExtractors/mapExtractorBurgs')['extractBurgsData']>
+    readonly extractCulturesData: UnwrapRef<typeof import('../utils/mapExtractors/mapExtractorCultures')['extractCulturesData']>
+    readonly extractProvincesData: UnwrapRef<typeof import('../utils/mapExtractors/mapExtractorProvinces')['extractProvincesData']>
+    readonly extractReligionsData: UnwrapRef<typeof import('../utils/mapExtractors/mapExtractorReligions')['extractReligionsData']>
+    readonly extractStatesData: UnwrapRef<typeof import('../utils/mapExtractors/mapExtractorStates')['extractStatesData']>
     readonly getActiveHead: UnwrapRef<typeof import('@unhead/vue')['getActiveHead']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
@@ -771,6 +784,7 @@ declare module 'vue' {
     readonly mapWritableState: UnwrapRef<typeof import('pinia')['mapWritableState']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
     readonly militaryUnitsDeck01: UnwrapRef<typeof import('../data/decks/militaryUnits/militaryUnitsDeck01')['militaryUnitsDeck01']>
+    readonly namesBases: UnwrapRef<typeof import('../data/consts/constNamesBases')['namesBases']>
     readonly navigationMenuTriggerStyle: UnwrapRef<typeof import('../components/ui/navigation-menu/index')['navigationMenuTriggerStyle']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly normalizeUnknownQueryParams: UnwrapRef<typeof import('pocketbase')['normalizeUnknownQueryParams']>
@@ -910,6 +924,7 @@ declare module 'vue' {
     readonly useEventBus: UnwrapRef<typeof import('@vueuse/core')['useEventBus']>
     readonly useEventListener: UnwrapRef<typeof import('@vueuse/core')['useEventListener']>
     readonly useEventSource: UnwrapRef<typeof import('@vueuse/core')['useEventSource']>
+    readonly useExtractMapData: UnwrapRef<typeof import('../utils/useExtractMapData')['useExtractMapData']>
     readonly useEyeDropper: UnwrapRef<typeof import('@vueuse/core')['useEyeDropper']>
     readonly useFavicon: UnwrapRef<typeof import('@vueuse/core')['useFavicon']>
     readonly useFetch: UnwrapRef<typeof import('@vueuse/core')['useFetch']>
