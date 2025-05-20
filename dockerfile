@@ -19,7 +19,7 @@ LABEL maintainer="garandplg@garandplg.com"
 LABEL version="0.0.38"
 LABEL description="Garand's WG. Pocketbase + Redis + Bun + Vue3 + Vite + TypeScript + TailwindCSS + Shadcn-vue"
 
-ARG PB_VERSION=0.22.26
+ARG PB_VERSION=0.28.1
 
 RUN apk add --no-cache \
   unzip \
