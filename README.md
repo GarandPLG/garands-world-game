@@ -1,8 +1,6 @@
 # Garand's WG
 
-<!-- TODO: Ogarnąć fajne logo-->
-
-![Logo](ścieżka/do/logo.png)
+![Banner](src/public/banner.png)
 
 ## 🌍 Opis
 

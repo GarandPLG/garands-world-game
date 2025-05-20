@@ -3,9 +3,11 @@ FROM oven/bun:latest AS build
 WORKDIR /build
 
 COPY package.json bun.lockb ./
-RUN bun install --frozen-lockfile
+
+RUN bun install  # --frozen-lockfile
 
 COPY . .
+
 RUN bun run build-only \
   && bun pm cache rm \
   && rm -rf /root/.bun \
