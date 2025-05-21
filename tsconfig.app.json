@@ -7,7 +7,7 @@
 		"src/auto-types/auto-imports.d.ts",
 		"src/auto-types/components.d.ts",
 		"src/auto-types/typed-router.d.ts",
-		"src/types/pb-types.d.ts",
+		"src/types/pb-types.ts",
 		"src/types/theme-types.d.ts",
 		"src/types/chartsTypes.d.ts"
 	],

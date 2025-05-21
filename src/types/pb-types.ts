@@ -123,11 +123,59 @@ export type BurgsRecord = {
 };
 
 export enum CulturesTypeOptions {
-	'Generic, River, Lake, Naval, Nomadic, Hunting, Highland' = 'Generic, River, Lake, Naval, Nomadic, Hunting, Highland'
+	'Generic' = 'Generic',
+	'River' = 'River',
+	'Lake' = 'Lake',
+	'Naval' = 'Naval',
+	'Nomadic' = 'Nomadic',
+	'Hunting' = 'Hunting',
+	'Highland' = 'Highland'
 }
 
 export enum CulturesNamesbaseOptions {
-	'German, English, French, Italian, Castillian, Ruthenian, Nordic, Greek, Roman, Finnic, Korean, Chinese, Japanese, Portuguese, Nahuatl, Hungarian, Turkish, Berber, Arabic, Inuit, Basque, Nigerian, Celtic, Mesopotamian, Iranian, Hawaiian, Karnataka, Quechua, Swahili, Vietnamese, Cantonese, Mongolian, Human Generic, Elven, Dark Elven, Dwarven, Goblin, Orc, Giant, Draconic, Arachnid, Serpents, Levantine' = 'German, English, French, Italian, Castillian, Ruthenian, Nordic, Greek, Roman, Finnic, Korean, Chinese, Japanese, Portuguese, Nahuatl, Hungarian, Turkish, Berber, Arabic, Inuit, Basque, Nigerian, Celtic, Mesopotamian, Iranian, Hawaiian, Karnataka, Quechua, Swahili, Vietnamese, Cantonese, Mongolian, Human Generic, Elven, Dark Elven, Dwarven, Goblin, Orc, Giant, Draconic, Arachnid, Serpents, Levantine'
+	'German' = 'German',
+	'English' = 'English',
+	'French' = 'French',
+	'Italian' = 'Italian',
+	'Castillian' = 'Castillian',
+	'Ruthenian' = 'Ruthenian',
+	'Nordic' = 'Nordic',
+	'Greek' = 'Greek',
+	'Roman' = 'Roman',
+	'Finnic' = 'Finnic',
+	'Korean' = 'Korean',
+	'Chinese' = 'Chinese',
+	'Japanese' = 'Japanese',
+	'Portuguese' = 'Portuguese',
+	'Nahuatl' = 'Nahuatl',
+	'Hungarian' = 'Hungarian',
+	'Turkish' = 'Turkish',
+	'Berber' = 'Berber',
+	'Arabic' = 'Arabic',
+	'Inuit' = 'Inuit',
+	'Basque' = 'Basque',
+	'Nigerian' = 'Nigerian',
+	'Celtic' = 'Celtic',
+	'Mesopotamian' = 'Mesopotamian',
+	'Iranian' = 'Iranian',
+	'Hawaiian' = 'Hawaiian',
+	'Karnataka' = 'Karnataka',
+	'Quechua' = 'Quechua',
+	'Swahili' = 'Swahili',
+	'Vietnamese' = 'Vietnamese',
+	'Cantonese' = 'Cantonese',
+	'Mongolian' = 'Mongolian',
+	'Human Generic' = 'Human Generic',
+	'Elven' = 'Elven',
+	'Dark Elven' = 'Dark Elven',
+	'Dwarven' = 'Dwarven',
+	'Goblin' = 'Goblin',
+	'Orc' = 'Orc',
+	'Giant' = 'Giant',
+	'Draconic' = 'Draconic',
+	'Arachnid' = 'Arachnid',
+	'Serpents' = 'Serpents',
+	'Levantine' = 'Levantine'
 }
 export type CulturesRecord = {
 	cells?: number;
@@ -136,10 +184,11 @@ export type CulturesRecord = {
 	id: string;
 	name: string;
 	namesbase: CulturesNamesbaseOptions;
-	population?: number;
+	ruralPopulation?: number;
 	turn: RecordIdString;
 	type?: CulturesTypeOptions;
 	updated?: IsoDateString;
+	urbanPopulation?: number;
 };
 
 export type MapsRecord = {
@@ -173,7 +222,10 @@ export type ProvincesRecord = {
 };
 
 export enum ReligionsTypeOptions {
-	'Organized, Heresy, Cult, Folk' = 'Organized, Heresy, Cult, Folk'
+	'Organized' = 'Organized',
+	'Heresy' = 'Heresy',
+	'Cult' = 'Cult',
+	'Folk' = 'Folk'
 }
 export type ReligionsRecord = {
 	cells?: number;
@@ -215,7 +267,70 @@ export type ReportsRecord = {
 };
 
 export enum StatesFormOptions {
-	'Beylik, Despotate, Dominion, Duchy, Emirate, Empire, Horde, Grand Duchy, Heptarchy, Khaganate, Khanate, Kingdom, Marches, Principality, Satrapy, Shogunate, Sultanate, Tsardom, Ulus, Viceroyalty, Chancellery, City-state, Diarchy, Federation, Free City, Most Serene Republic, Oligarchy, Protectorate, Republic, Tetrarchy, Trade Company, Triumvirate, Confederacy, Confederation, Conglomerate, Commonwealth, League, Union, United Hordes, United Kingdom, United Provinces, United Republic, United States, United Tribes, Bishopric, Brotherhood, Caliphate, Diocese, Divine Duchy, Divine Grand Duchy, Divine Principality, Divine Kingdom, Divine Empire, Eparchy, Exarchate, Holy State, Imamah, Patriarchate, Theocracy, Commune, Community, Council, Free Territory, Tribes' = 'Beylik, Despotate, Dominion, Duchy, Emirate, Empire, Horde, Grand Duchy, Heptarchy, Khaganate, Khanate, Kingdom, Marches, Principality, Satrapy, Shogunate, Sultanate, Tsardom, Ulus, Viceroyalty, Chancellery, City-state, Diarchy, Federation, Free City, Most Serene Republic, Oligarchy, Protectorate, Republic, Tetrarchy, Trade Company, Triumvirate, Confederacy, Confederation, Conglomerate, Commonwealth, League, Union, United Hordes, United Kingdom, United Provinces, United Republic, United States, United Tribes, Bishopric, Brotherhood, Caliphate, Diocese, Divine Duchy, Divine Grand Duchy, Divine Principality, Divine Kingdom, Divine Empire, Eparchy, Exarchate, Holy State, Imamah, Patriarchate, Theocracy, Commune, Community, Council, Free Territory, Tribes'
+	'Beylik' = 'Beylik',
+	'Despotate' = 'Despotate',
+	'Dominion' = 'Dominion',
+	'Duchy' = 'Duchy',
+	'Emirate' = 'Emirate',
+	'Empire' = 'Empire',
+	'Horde' = 'Horde',
+	'Grand Duchy' = 'Grand Duchy',
+	'Heptarchy' = 'Heptarchy',
+	'Khaganate' = 'Khaganate',
+	'Khanate' = 'Khanate',
+	'Kingdom' = 'Kingdom',
+	'Marches' = 'Marches',
+	'Principality' = 'Principality',
+	'Satrapy' = 'Satrapy',
+	'Shogunate' = 'Shogunate',
+	'Sultanate' = 'Sultanate',
+	'Tsardom' = 'Tsardom',
+	'Ulus' = 'Ulus',
+	'Viceroyalty' = 'Viceroyalty',
+	'Chancellery' = 'Chancellery',
+	'City-state' = 'City-state',
+	'Diarchy' = 'Diarchy',
+	'Federation' = 'Federation',
+	'Free City' = 'Free City',
+	'Most Serene Republic' = 'Most Serene Republic',
+	'Oligarchy' = 'Oligarchy',
+	'Protectorate' = 'Protectorate',
+	'Republic' = 'Republic',
+	'Tetrarchy' = 'Tetrarchy',
+	'Trade Company' = 'Trade Company',
+	'Triumvirate' = 'Triumvirate',
+	'Confederacy' = 'Confederacy',
+	'Confederation' = 'Confederation',
+	'Conglomerate' = 'Conglomerate',
+	'Commonwealth' = 'Commonwealth',
+	'League' = 'League',
+	'Union' = 'Union',
+	'United Hordes' = 'United Hordes',
+	'United Kingdom' = 'United Kingdom',
+	'United Provinces' = 'United Provinces',
+	'United Republic' = 'United Republic',
+	'United States' = 'United States',
+	'United Tribes' = 'United Tribes',
+	'Bishopric' = 'Bishopric',
+	'Brotherhood' = 'Brotherhood',
+	'Caliphate' = 'Caliphate',
+	'Diocese' = 'Diocese',
+	'Divine Duchy' = 'Divine Duchy',
+	'Divine Grand Duchy' = 'Divine Grand Duchy',
+	'Divine Principality' = 'Divine Principality',
+	'Divine Kingdom' = 'Divine Kingdom',
+	'Divine Empire' = 'Divine Empire',
+	'Eparchy' = 'Eparchy',
+	'Exarchate' = 'Exarchate',
+	'Holy State' = 'Holy State',
+	'Imamah' = 'Imamah',
+	'Patriarchate' = 'Patriarchate',
+	'Theocracy' = 'Theocracy',
+	'Commune' = 'Commune',
+	'Community' = 'Community',
+	'Council' = 'Council',
+	'Free Territory' = 'Free Territory',
+	'Tribes' = 'Tribes'
 }
 export type StatesRecord<
 	TbiomesCells = unknown,
@@ -270,7 +385,9 @@ export type TurnsRecord = {
 };
 
 export enum UsersRoleOptions {
-	'user, moderator, admin' = 'user, moderator, admin'
+	'user' = 'user',
+	'moderator' = 'moderator',
+	'admin' = 'admin'
 }
 export type UsersRecord = {
 	avatar?: string;
@@ -278,11 +395,11 @@ export type UsersRecord = {
 	email: string;
 	emailVisibility?: boolean;
 	id: string;
-	name?: string;
 	password: string;
 	role: UsersRoleOptions;
 	tokenKey: string;
 	updated?: IsoDateString;
+	username?: string;
 	verified?: boolean;
 };
 

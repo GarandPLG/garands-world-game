@@ -21,7 +21,8 @@ export interface mapExtractedCultures {
 	color: string;
 	cells: number;
 	type: string;
-	population: number;
+	ruralPopulation: number;
+	urbanPopulation: number;
 	namesbase: string;
 }
 

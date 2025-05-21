@@ -71,7 +71,9 @@ declare global {
   const DropdownMenuTrigger: typeof import('../components/ui/dropdown-menu/index')['DropdownMenuTrigger']
   const EffectScope: typeof import('vue')['EffectScope']
   const FORM_ITEM_INJECTION_KEY: typeof import('../components/ui/form/index')['FORM_ITEM_INJECTION_KEY']
+  const FieldContextKey: typeof import('vee-validate')['FieldContextKey']
   const Form: typeof import('../components/ui/form/index')['Form']
+  const FormContextKey: typeof import('vee-validate')['FormContextKey']
   const FormControl: typeof import('../components/ui/form/index')['FormControl']
   const FormDescription: typeof import('../components/ui/form/index')['FormDescription']
   const FormField: typeof import('../components/ui/form/index')['FormField']
@@ -173,6 +175,7 @@ declare global {
   const computedEager: typeof import('@vueuse/core')['computedEager']
   const computedInject: typeof import('@vueuse/core')['computedInject']
   const computedWithControl: typeof import('@vueuse/core')['computedWithControl']
+  const configure: typeof import('vee-validate')['configure']
   const constBiomesColors: typeof import('../data/consts/constBiomesColors')['constBiomesColors']
   const constBuildingsData: typeof import('../data/consts/constBuildingsData')['constBuildingsData']
   const constCultureToTechnologyGroup: typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']
@@ -202,6 +205,7 @@ declare global {
   const defaultColors: typeof import('../components/ui/chart/index')['defaultColors']
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
   const defineComponent: typeof import('vue')['defineComponent']
+  const defineRule: typeof import('vee-validate')['defineRule']
   const defineStore: typeof import('pinia')['defineStore']
   const describe: typeof import('vitest')['describe']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
@@ -390,12 +394,19 @@ declare global {
   const useFetchPopulationReport: typeof import('../composables/report/useFetchPopulationReport')['default']
   const useFetchTradeAdminTab: typeof import('../composables/admin-panel/useFetchTradeAdminTab')['default']
   const useFetchTradeReport: typeof import('../composables/report/useFetchTradeReport')['default']
+  const useField: typeof import('vee-validate')['useField']
+  const useFieldArray: typeof import('vee-validate')['useFieldArray']
+  const useFieldError: typeof import('vee-validate')['useFieldError']
+  const useFieldValue: typeof import('vee-validate')['useFieldValue']
   const useFileDialog: typeof import('@vueuse/core')['useFileDialog']
   const useFileSystemAccess: typeof import('@vueuse/core')['useFileSystemAccess']
   const useFilteredBuildings: typeof import('../composables/report/useBuildings')['useFilteredBuildings']
   const useFocus: typeof import('@vueuse/core')['useFocus']
   const useFocusWithin: typeof import('@vueuse/core')['useFocusWithin']
+  const useForm: typeof import('vee-validate')['useForm']
+  const useFormErrors: typeof import('vee-validate')['useFormErrors']
   const useFormField: typeof import('../components/ui/form/useFormField')['useFormField']
+  const useFormValues: typeof import('vee-validate')['useFormValues']
   const useFormatNumber: typeof import('../composables/useFormatNumber')['default']
   const useFps: typeof import('@vueuse/core')['useFps']
   const useFullscreen: typeof import('@vueuse/core')['useFullscreen']
@@ -410,6 +421,13 @@ declare global {
   const useIntersectionObserver: typeof import('@vueuse/core')['useIntersectionObserver']
   const useInterval: typeof import('@vueuse/core')['useInterval']
   const useIntervalFn: typeof import('@vueuse/core')['useIntervalFn']
+  const useIsFieldDirty: typeof import('vee-validate')['useIsFieldDirty']
+  const useIsFieldTouched: typeof import('vee-validate')['useIsFieldTouched']
+  const useIsFieldValid: typeof import('vee-validate')['useIsFieldValid']
+  const useIsFormDirty: typeof import('vee-validate')['useIsFormDirty']
+  const useIsFormTouched: typeof import('vee-validate')['useIsFormTouched']
+  const useIsFormValid: typeof import('vee-validate')['useIsFormValid']
+  const useIsSubmitting: typeof import('vee-validate')['useIsSubmitting']
   const useKeyModifier: typeof import('@vueuse/core')['useKeyModifier']
   const useLastChanged: typeof import('@vueuse/core')['useLastChanged']
   const useLink: typeof import('vue-router')['useLink']
@@ -457,10 +475,12 @@ declare global {
   const useReportInputsStore: typeof import('../stores/reportInputsStore')['useReportInputsStore']
   const useReportOutputsStore: typeof import('../stores/reportOutputsStore')['useReportOutputsStore']
   const useReportStore: typeof import('../stores/reportStore')['useReportStore']
+  const useResetForm: typeof import('vee-validate')['useResetForm']
   const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
   const useSSRWidth: typeof import('@vueuse/core')['useSSRWidth']
+  const useSVGMaps: typeof import('../utils/useSVGMaps')['useSVGMaps']
   const useScreenOrientation: typeof import('@vueuse/core')['useScreenOrientation']
   const useScreenSafeArea: typeof import('@vueuse/core')['useScreenSafeArea']
   const useScriptTag: typeof import('@vueuse/core')['useScriptTag']
@@ -480,6 +500,8 @@ declare global {
   const useStorage: typeof import('@vueuse/core')['useStorage']
   const useStorageAsync: typeof import('@vueuse/core')['useStorageAsync']
   const useStyleTag: typeof import('@vueuse/core')['useStyleTag']
+  const useSubmitCount: typeof import('vee-validate')['useSubmitCount']
+  const useSubmitForm: typeof import('vee-validate')['useSubmitForm']
   const useSupported: typeof import('@vueuse/core')['useSupported']
   const useSwipe: typeof import('@vueuse/core')['useSwipe']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
@@ -506,6 +528,8 @@ declare global {
   const useUserMedia: typeof import('@vueuse/core')['useUserMedia']
   const useVModel: typeof import('@vueuse/core')['useVModel']
   const useVModels: typeof import('@vueuse/core')['useVModels']
+  const useValidateField: typeof import('vee-validate')['useValidateField']
+  const useValidateForm: typeof import('vee-validate')['useValidateForm']
   const useVibrate: typeof import('@vueuse/core')['useVibrate']
   const useVirtualList: typeof import('@vueuse/core')['useVirtualList']
   const useWakeLock: typeof import('@vueuse/core')['useWakeLock']
@@ -516,6 +540,7 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
   const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
   const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
+  const validate: typeof import('vee-validate')['validate']
   const vi: typeof import('vitest')['vi']
   const vitest: typeof import('vitest')['vitest']
   const watch: typeof import('vue')['watch']
@@ -615,7 +640,9 @@ declare module 'vue' {
     readonly DropdownMenuTrigger: UnwrapRef<typeof import('../components/ui/dropdown-menu/index')['DropdownMenuTrigger']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly FORM_ITEM_INJECTION_KEY: UnwrapRef<typeof import('../components/ui/form/index')['FORM_ITEM_INJECTION_KEY']>
+    readonly FieldContextKey: UnwrapRef<typeof import('vee-validate')['FieldContextKey']>
     readonly Form: UnwrapRef<typeof import('../components/ui/form/index')['Form']>
+    readonly FormContextKey: UnwrapRef<typeof import('vee-validate')['FormContextKey']>
     readonly FormControl: UnwrapRef<typeof import('../components/ui/form/index')['FormControl']>
     readonly FormDescription: UnwrapRef<typeof import('../components/ui/form/index')['FormDescription']>
     readonly FormField: UnwrapRef<typeof import('../components/ui/form/index')['FormField']>
@@ -717,6 +744,7 @@ declare module 'vue' {
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
     readonly computedInject: UnwrapRef<typeof import('@vueuse/core')['computedInject']>
     readonly computedWithControl: UnwrapRef<typeof import('@vueuse/core')['computedWithControl']>
+    readonly configure: UnwrapRef<typeof import('vee-validate')['configure']>
     readonly constBiomesColors: UnwrapRef<typeof import('../data/consts/constBiomesColors')['constBiomesColors']>
     readonly constBuildingsData: UnwrapRef<typeof import('../data/consts/constBuildingsData')['constBuildingsData']>
     readonly constCultureToTechnologyGroup: UnwrapRef<typeof import('../data/consts/constCultureToTechnologieGroup')['constCultureToTechnologyGroup']>
@@ -746,6 +774,7 @@ declare module 'vue' {
     readonly defaultColors: UnwrapRef<typeof import('../components/ui/chart/index')['defaultColors']>
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
+    readonly defineRule: UnwrapRef<typeof import('vee-validate')['defineRule']>
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
     readonly describe: UnwrapRef<typeof import('vitest')['describe']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
@@ -932,11 +961,18 @@ declare module 'vue' {
     readonly useFetchPopulationReport: UnwrapRef<typeof import('../composables/report/useFetchPopulationReport')['default']>
     readonly useFetchTradeAdminTab: UnwrapRef<typeof import('../composables/admin-panel/useFetchTradeAdminTab')['default']>
     readonly useFetchTradeReport: UnwrapRef<typeof import('../composables/report/useFetchTradeReport')['default']>
+    readonly useField: UnwrapRef<typeof import('vee-validate')['useField']>
+    readonly useFieldArray: UnwrapRef<typeof import('vee-validate')['useFieldArray']>
+    readonly useFieldError: UnwrapRef<typeof import('vee-validate')['useFieldError']>
+    readonly useFieldValue: UnwrapRef<typeof import('vee-validate')['useFieldValue']>
     readonly useFileDialog: UnwrapRef<typeof import('@vueuse/core')['useFileDialog']>
     readonly useFileSystemAccess: UnwrapRef<typeof import('@vueuse/core')['useFileSystemAccess']>
     readonly useFocus: UnwrapRef<typeof import('@vueuse/core')['useFocus']>
     readonly useFocusWithin: UnwrapRef<typeof import('@vueuse/core')['useFocusWithin']>
+    readonly useForm: UnwrapRef<typeof import('vee-validate')['useForm']>
+    readonly useFormErrors: UnwrapRef<typeof import('vee-validate')['useFormErrors']>
     readonly useFormField: UnwrapRef<typeof import('../components/ui/form/useFormField')['useFormField']>
+    readonly useFormValues: UnwrapRef<typeof import('vee-validate')['useFormValues']>
     readonly useFormatNumber: UnwrapRef<typeof import('../composables/useFormatNumber')['default']>
     readonly useFps: UnwrapRef<typeof import('@vueuse/core')['useFps']>
     readonly useFullscreen: UnwrapRef<typeof import('@vueuse/core')['useFullscreen']>
@@ -951,6 +987,13 @@ declare module 'vue' {
     readonly useIntersectionObserver: UnwrapRef<typeof import('@vueuse/core')['useIntersectionObserver']>
     readonly useInterval: UnwrapRef<typeof import('@vueuse/core')['useInterval']>
     readonly useIntervalFn: UnwrapRef<typeof import('@vueuse/core')['useIntervalFn']>
+    readonly useIsFieldDirty: UnwrapRef<typeof import('vee-validate')['useIsFieldDirty']>
+    readonly useIsFieldTouched: UnwrapRef<typeof import('vee-validate')['useIsFieldTouched']>
+    readonly useIsFieldValid: UnwrapRef<typeof import('vee-validate')['useIsFieldValid']>
+    readonly useIsFormDirty: UnwrapRef<typeof import('vee-validate')['useIsFormDirty']>
+    readonly useIsFormTouched: UnwrapRef<typeof import('vee-validate')['useIsFormTouched']>
+    readonly useIsFormValid: UnwrapRef<typeof import('vee-validate')['useIsFormValid']>
+    readonly useIsSubmitting: UnwrapRef<typeof import('vee-validate')['useIsSubmitting']>
     readonly useKeyModifier: UnwrapRef<typeof import('@vueuse/core')['useKeyModifier']>
     readonly useLastChanged: UnwrapRef<typeof import('@vueuse/core')['useLastChanged']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
@@ -998,10 +1041,12 @@ declare module 'vue' {
     readonly useReportInputsStore: UnwrapRef<typeof import('../stores/reportInputsStore')['useReportInputsStore']>
     readonly useReportOutputsStore: UnwrapRef<typeof import('../stores/reportOutputsStore')['useReportOutputsStore']>
     readonly useReportStore: UnwrapRef<typeof import('../stores/reportStore')['useReportStore']>
+    readonly useResetForm: UnwrapRef<typeof import('vee-validate')['useResetForm']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSSRWidth: UnwrapRef<typeof import('@vueuse/core')['useSSRWidth']>
+    readonly useSVGMaps: UnwrapRef<typeof import('../utils/useSVGMaps')['useSVGMaps']>
     readonly useScreenOrientation: UnwrapRef<typeof import('@vueuse/core')['useScreenOrientation']>
     readonly useScreenSafeArea: UnwrapRef<typeof import('@vueuse/core')['useScreenSafeArea']>
     readonly useScriptTag: UnwrapRef<typeof import('@vueuse/core')['useScriptTag']>
@@ -1021,6 +1066,8 @@ declare module 'vue' {
     readonly useStorage: UnwrapRef<typeof import('@vueuse/core')['useStorage']>
     readonly useStorageAsync: UnwrapRef<typeof import('@vueuse/core')['useStorageAsync']>
     readonly useStyleTag: UnwrapRef<typeof import('@vueuse/core')['useStyleTag']>
+    readonly useSubmitCount: UnwrapRef<typeof import('vee-validate')['useSubmitCount']>
+    readonly useSubmitForm: UnwrapRef<typeof import('vee-validate')['useSubmitForm']>
     readonly useSupported: UnwrapRef<typeof import('@vueuse/core')['useSupported']>
     readonly useSwipe: UnwrapRef<typeof import('@vueuse/core')['useSwipe']>
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
@@ -1047,6 +1094,8 @@ declare module 'vue' {
     readonly useUserMedia: UnwrapRef<typeof import('@vueuse/core')['useUserMedia']>
     readonly useVModel: UnwrapRef<typeof import('@vueuse/core')['useVModel']>
     readonly useVModels: UnwrapRef<typeof import('@vueuse/core')['useVModels']>
+    readonly useValidateField: UnwrapRef<typeof import('vee-validate')['useValidateField']>
+    readonly useValidateForm: UnwrapRef<typeof import('vee-validate')['useValidateForm']>
     readonly useVibrate: UnwrapRef<typeof import('@vueuse/core')['useVibrate']>
     readonly useVirtualList: UnwrapRef<typeof import('@vueuse/core')['useVirtualList']>
     readonly useWakeLock: UnwrapRef<typeof import('@vueuse/core')['useWakeLock']>
@@ -1057,6 +1106,7 @@ declare module 'vue' {
     readonly useWindowFocus: UnwrapRef<typeof import('@vueuse/core')['useWindowFocus']>
     readonly useWindowScroll: UnwrapRef<typeof import('@vueuse/core')['useWindowScroll']>
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
+    readonly validate: UnwrapRef<typeof import('vee-validate')['validate']>
     readonly vi: UnwrapRef<typeof import('vitest')['vi']>
     readonly vitest: UnwrapRef<typeof import('vitest')['vitest']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>

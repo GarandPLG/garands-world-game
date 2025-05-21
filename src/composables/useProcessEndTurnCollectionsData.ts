@@ -1,10 +1,18 @@
+import type {
+	mapExtractedBurgs,
+	mapExtractedCultures,
+	mapExtractedProvinces,
+	mapExtractedReligions,
+	mapExtractedStates
+} from '@/types/mapExtractors';
+import type { CollectionRecords, Collections } from '@/types/pb-types';
 import type { RecordModel } from 'pocketbase';
 
 const pb = usePocketBase();
 const { toast } = useToast();
 
 async function createRecord(
-	collectionName: string,
+	collectionName: Collections,
 	data: Record<string, any>,
 	errorMessage: string
 ): Promise<RecordModel> {
@@ -22,10 +30,22 @@ async function createRecord(
 	}
 }
 
-export default async function useProcessEndTurnCollectionsData(
-	collectionName: string,
-	data: any[],
-	mapFunction: (entity: any) => Record<string, any>,
+type ExtractedDataType =
+	| mapExtractedStates
+	| mapExtractedCultures
+	| mapExtractedReligions
+	| mapExtractedProvinces
+	| mapExtractedBurgs;
+
+type MapFunctionReturn<C extends Collections> = Partial<CollectionRecords[C]>;
+
+export default async function useProcessEndTurnCollectionsData<
+	C extends Collections,
+	T extends ExtractedDataType
+>(
+	collectionName: C,
+	data: T[],
+	mapFunction: (entity: T) => MapFunctionReturn<C>,
 	errorPrefix: string
 ): Promise<{ [key: string]: string }> {
 	const startTime = Date.now();
@@ -35,7 +55,17 @@ export default async function useProcessEndTurnCollectionsData(
 			createRecord(
 				collectionName,
 				mapFunction(entity),
-				`Błąd przy tworzeniu ${errorPrefix} ${entity.Name || entity.State || entity.Province || entity.Burg}!`
+				`Błąd przy tworzeniu ${errorPrefix} ${
+					'name' in entity
+						? entity.name
+						: 'State' in entity
+							? entity.State
+							: 'Province' in entity
+								? entity.Province
+								: 'Burg' in entity
+									? entity.Burg
+									: ''
+				}!`
 			)
 		)
 	);

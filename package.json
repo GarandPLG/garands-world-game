@@ -13,7 +13,7 @@
 		"type-check": "vue-tsc --build --force",
 		"lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
 		"format": "prettier --write src/",
-		"typegen": "pocketbase-typegen --db ./pocketbase/pb_data/data.db --out ./src/types/pb-types.d.ts"
+		"typegen": "pocketbase-typegen --db ./pocketbase/pb_data/data.db --out ./src/types/pb-types.ts"
 	},
 	"dependencies": {
 		"@types/bun": "^1.2.2",
@@ -36,7 +36,7 @@
 		"vee-validate": "^4.15.0",
 		"vue": "^3.5.13",
 		"vue-router": "^4.5.0",
-		"zod": "^3.24.1"
+		"zod": "^3.25.7"
 	},
 	"devDependencies": {
 		"@michaelhthomas/fluxhtml": "npm:@jsr/michaelhthomas__fluxhtml",
