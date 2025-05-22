@@ -17,6 +17,8 @@ export function extractBurgsData(mapData: AzgaarJSONFull): mapExtractedBurgs[] {
 			const state = burg.state && states[burg.state] ? states[burg.state] : null;
 			const stateName = state && 'name' in state ? state.name || '' : '';
 
+			const isCapital = state && 'capital' in state ? state.capital === burg.i : false;
+
 			const province = Array.isArray(provinces)
 				? provinces.find(
 						p =>
@@ -42,6 +44,7 @@ export function extractBurgsData(mapData: AzgaarJSONFull): mapExtractedBurgs[] {
 				state: stateName,
 				province: provinceName,
 				population: Math.round(burg.population * POPULATION_FACTOR),
+				isCapital: isCapital,
 				isPort: !!burg.port,
 				isCitadel: !!burg.citadel,
 				isPlaza: !!burg.plaza,

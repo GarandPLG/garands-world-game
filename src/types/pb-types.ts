@@ -107,6 +107,7 @@ export type BurgsRecord = {
 	culture: RecordIdString;
 	emblemSVG?: string;
 	id: string;
+	isCapital?: boolean;
 	isCitadel?: boolean;
 	isPlaza?: boolean;
 	isPort?: boolean;
@@ -201,7 +202,42 @@ export type MapsRecord = {
 };
 
 export enum ProvincesFormOptions {
-	'Area, Autonomy, Barony, Canton, Captaincy, Chiefdom, Clan, Colony, Council, County, Deanery, Department, Dependency, Diaconate, District, Earldom, Governorate, Island, Islands, Land, Landgrave, Mandate, Margrave, Municipality, Occupation zone, Parish, Prefecture, Province, Region, Republic, Reservation, Seneschalty, Shire, State, Territory, Tribe' = 'Area, Autonomy, Barony, Canton, Captaincy, Chiefdom, Clan, Colony, Council, County, Deanery, Department, Dependency, Diaconate, District, Earldom, Governorate, Island, Islands, Land, Landgrave, Mandate, Margrave, Municipality, Occupation zone, Parish, Prefecture, Province, Region, Republic, Reservation, Seneschalty, Shire, State, Territory, Tribe'
+	'Area' = 'Area',
+	'Autonomy' = 'Autonomy',
+	'Barony' = 'Barony',
+	'Canton' = 'Canton',
+	'Captaincy' = 'Captaincy',
+	'Chiefdom' = 'Chiefdom',
+	'Clan' = 'Clan',
+	'Colony' = 'Colony',
+	'Council' = 'Council',
+	'County' = 'County',
+	'Deanery' = 'Deanery',
+	'Department' = 'Department',
+	'Dependency' = 'Dependency',
+	'Diaconate' = 'Diaconate',
+	'District' = 'District',
+	'Earldom' = 'Earldom',
+	'Governorate' = 'Governorate',
+	'Island' = 'Island',
+	'Islands' = 'Islands',
+	'Land' = 'Land',
+	'Landgrave' = 'Landgrave',
+	'Mandate' = 'Mandate',
+	'Margrave' = 'Margrave',
+	'Municipality' = 'Municipality',
+	'Occupation zone' = 'Occupation zone',
+	'Parish' = 'Parish',
+	'Prefecture' = 'Prefecture',
+	'Province' = 'Province',
+	'Region' = 'Region',
+	'Republic' = 'Republic',
+	'Reservation' = 'Reservation',
+	'Seneschalty' = 'Seneschalty',
+	'Shire' = 'Shire',
+	'State' = 'State',
+	'Territory' = 'Territory',
+	'Tribe' = 'Tribe'
 }
 export type ProvincesRecord = {
 	burgs?: number;
@@ -362,7 +398,33 @@ export type StatesRecord<
 };
 
 export enum TradesProductOptions {
-	'Groceries, Clothes, Furniture, Fish, Fabrics, Grain, Paper, Wood, Iron, Tools, Dyes, Glass, Silk, Coffee, Fruit, Gold, Alcohol, LuxuryClothes, LuxuryFurniture, Meat, Sugar, Tea, Weapon, RangedWeapon, Armor, SiegeEquipment, Ships' = 'Groceries, Clothes, Furniture, Fish, Fabrics, Grain, Paper, Wood, Iron, Tools, Dyes, Glass, Silk, Coffee, Fruit, Gold, Alcohol, LuxuryClothes, LuxuryFurniture, Meat, Sugar, Tea, Weapon, RangedWeapon, Armor, SiegeEquipment, Ships'
+	'Groceries' = 'Groceries',
+	'Clothes' = 'Clothes',
+	'Furniture' = 'Furniture',
+	'Fish' = 'Fish',
+	'Fabrics' = 'Fabrics',
+	'Grain' = 'Grain',
+	'Paper' = 'Paper',
+	'Wood' = 'Wood',
+	'Iron' = 'Iron',
+	'Tools' = 'Tools',
+	'Dyes' = 'Dyes',
+	'Glass' = 'Glass',
+	'Silk' = 'Silk',
+	'Coffee' = 'Coffee',
+	'Fruit' = 'Fruit',
+	'Gold' = 'Gold',
+	'Alcohol' = 'Alcohol',
+	'LuxuryClothes' = 'LuxuryClothes',
+	'LuxuryFurniture' = 'LuxuryFurniture',
+	'Meat' = 'Meat',
+	'Sugar' = 'Sugar',
+	'Tea' = 'Tea',
+	'Weapon' = 'Weapon',
+	'RangedWeapon' = 'RangedWeapon',
+	'Armor' = 'Armor',
+	'SiegeEquipment' = 'SiegeEquipment',
+	'Ships' = 'Ships'
 }
 export type TradesRecord = {
 	created?: IsoDateString;

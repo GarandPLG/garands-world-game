@@ -76,12 +76,6 @@ const { handleSubmit } = useForm({
 });
 
 const onSubmit = handleSubmit(async values => {
-	// if (!values.jsonFullFile || !values.mapFile || !values.emblemsHTMLFile)
-	// 	return toast({
-	// 		title: 'Jakieś pole jest puste!',
-	// 		description: 'Wypełnij wszystkie pola.'
-	// 	});
-
 	const azgaarJSONFull = await values.jsonFullFile.text();
 	const { extStatesData, extCulturesData, extReligionsData, extBurgsData, extProvincesData } =
 		useExtractMapData(JSON.parse(azgaarJSONFull) as AzgaarJSONFull);
@@ -135,6 +129,7 @@ const onSubmit = handleSubmit(async values => {
 			color: state.color,
 			cells: state.cells,
 			burgs: state.burgs,
+			provinces: state.provinces,
 			urbanPopulation: state.urbanPopulation,
 			ruralPopulation: state.ruralPopulation,
 			capital: state.capital,
@@ -148,6 +143,117 @@ const onSubmit = handleSubmit(async values => {
 		'Państwa'
 	);
 
+	const provincesResponses = await useProcessEndTurnCollectionsData(
+		Collections.Provinces,
+		extProvincesData,
+		province => ({
+			turn: turn.value.id,
+			name: province.name,
+			nameFull: province.nameFull,
+			form: province.form as unknown as ProvincesFormOptions,
+			state: statesResponses[province.state],
+			color: province.color,
+			capital: province.capital,
+			burgs: province.burgs,
+			cells: province.cells,
+			ruralPopulation: province.ruralPopulation,
+			urbanPopulation: province.urbanPopulation,
+			emblemSVG: svgMaps.province.get(province.nameFull)
+		}),
+		'Prowincje'
+	);
+
+	await useProcessEndTurnCollectionsData(
+		Collections.Burgs,
+		extBurgsData,
+		burg => ({
+			turn: turn.value.id,
+			name: burg.name,
+			culture: culturesResponses[burg.culture],
+			religion: religionsResponses[burg.religion],
+			state: statesResponses[burg.state],
+			province: provincesResponses[burg.province],
+			population: burg.population,
+			isCapital: burg.isCapital,
+			isPort: burg.isPort,
+			isCitadel: burg.isCitadel,
+			isWalls: burg.isWalls,
+			isPlaza: burg.isPlaza,
+			isTemple: burg.isTemple,
+			isShantyTown: burg.isShantyTown,
+			cityGeneratorLink: '',
+			emblemSVG: svgMaps.burg.get(burg.name)
+		}),
+		'Miasta'
+	);
+
+	let startTime = new Date().getTime();
+	await useHandleTradeDeals(
+		currentTurnTradeDeals.value,
+		statesFromPreviousTurn,
+		turn.value,
+		statesResponses,
+		'create',
+		'Błąd podczas powielania obecnych umów handlowych'
+	);
+
+	await useHandleTradeDeals(
+		nextTurnTradeDeals.value,
+		statesFromPreviousTurn,
+		turn.value,
+		statesResponses,
+		'update',
+		'Błąd podczas aktualizowania przyszłych umów handlowych'
+	);
+	let endTime = new Date().getTime();
+
+	toast({
+		title: 'Powielono umowy handlowe!',
+		description: `Kontynuowano + zaktualizowano ${currentTurnTradeDeals.value.length + nextTurnTradeDeals.value.length} umów handlowych w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
+	});
+
+	startTime = new Date().getTime();
+	try {
+		turn.value = await pb.collection('turns').create({ value: turn.value.value + 1 });
+	} catch (error) {
+		toast({
+			title: `Błąd przy tworzeniu następnej tury!`,
+			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+		});
+		if (error instanceof Error) throw error;
+	}
+
+	try {
+		turns.value = await pb.collection('turns').getFullList({ sort: '-value' });
+	} catch (error) {
+		toast({
+			title: `Błąd przy tworzeniu nowej listy tur!`,
+			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+		});
+		if (error instanceof Error) throw error;
+	}
+
+	await pb
+		.collection('maps')
+		.create({
+			turn: turn.value.id,
+			name: values.mapFile.name.split(/ (?=\d{4}-\d{2}-\d{2}-\d{2}-\d{2})/)[0],
+			map: values.mapFile
+		})
+		.catch((error: unknown) => {
+			toast({
+				title: `Błąd przy tworzeniu mapy!`,
+				description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
+			});
+			if (error instanceof Error) throw error;
+		});
+	endTime = new Date().getTime();
+
+	toast({
+		title: 'Mapa i nowa tura zostały dodane!',
+		description: `Dodano mapę i nową turę w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
+	});
+
 	redis.flushAll();
 
 	const endTimeAll = new Date().getTime();
@@ -157,187 +263,6 @@ const onSubmit = handleSubmit(async values => {
 		description: `Zakończono turę w czasie: ${((endTimeAll - startTimeAll) / 1000).toFixed(3)} s`
 	});
 });
-// const onSubmit = handleSubmit(async values => {
-// 	const startTimeAll = new Date().getTime();
-
-// 	const statesResponses = await useProcessEndTurnCollectionsData(
-// 		'states',
-// 		statesData,
-// 		state => {
-// 			const stateFromPreviousTurn = statesFromPreviousTurn.find(s => s.name === state.State);
-// 			const user = stateFromPreviousTurn?.user || null;
-
-// 			return {
-// 				user: user,
-// 				turn: turn.value.id,
-// 				name: state.State,
-// 				nameFull: state['Full Name'],
-// 				form: state.Form,
-// 				color: state.Color,
-// 				cells: parseInt(state.Cells),
-// 				burgs: parseInt(state.Burgs),
-// 				urbanPopulation: parseInt(state['Urban Population']),
-// 				ruralPopulation: parseInt(state['Rural Population']),
-// 				capital: state.Capital,
-// 				culture: culturesResponses[state.Culture],
-// 				culturesCells: statesByNumberOfCellsGroupedByCulturesFinalData[state.State],
-// 				religionsCells: statesByNumberOfCellsGroupedByReligionsFinalData[state.State],
-// 				biomesCells: statesByNumberOfCellsGroupedByBiomeFinalData[state.State],
-// 				relations: relationsFinalData[state.State],
-// 				emblemSVG: svgMaps.state.get(state['Full Name'])
-// 			};
-// 		},
-// 		'Państwa'
-// 	);
-
-// 	const provincesResponses = await useProcessEndTurnCollectionsData(
-// 		'provinces',
-// 		provincesData,
-// 		province => ({
-// 			turn: turn.value.id,
-// 			name: province.Province,
-// 			nameFull: province['Full Name'],
-// 			state: statesResponses[province.State],
-// 			color: province.Color,
-// 			cells: parseInt(provincesCellsFinalData[province.Province]),
-// 			burgs: parseInt(province.Burgs),
-// 			ruralPopulation: parseInt(province['Rural Population']),
-// 			urbanPopulation: parseInt(province['Urban Population']),
-// 			capital: province.Capital,
-// 			form: province.Form,
-// 			emblemSVG: svgMaps.province.get(province['Full Name'])
-// 		}),
-// 		'Prowincje'
-// 	);
-
-// 	await useProcessEndTurnCollectionsData(
-// 		'burgs',
-// 		burgsData,
-// 		burg => ({
-// 			turn: turn.value.id,
-// 			name: burg.Burg,
-// 			province: provincesResponses[burg.Province],
-// 			state: statesResponses[burg.State],
-// 			culture: culturesResponses[burg.Culture],
-// 			religion: religionsResponses[burg.Religion],
-// 			population: parseInt(burg.Population),
-// 			isCapital: burg.Capital === 'capital',
-// 			isPort: burg.Port === 'port',
-// 			isCitadel: burg.Citadel === 'citadel',
-// 			isWalls: burg.Walls === 'walls',
-// 			isPlaza: burg.Plaza === 'plaza',
-// 			isTemple: burg.Temple === 'temple',
-// 			isShantyTown: burg['Shanty Town'] === 'shanty town',
-// 			cityGeneratorLink: burg['City Generator Link'],
-// 			emblemSVG: svgMaps.burg.get(burg.Burg)
-// 		}),
-// 		'Miasta'
-// 	);
-
-// 	startTime = new Date().getTime();
-// 	await handleTradeDeals(
-// 		currentTurnTradeDeals.value,
-// 		statesResponses,
-// 		'create',
-// 		'Błąd podczas powielania obecnych umów handlowych'
-// 	);
-
-// 	await handleTradeDeals(
-// 		nextTurnTradeDeals.value,
-// 		statesResponses,
-// 		'update',
-// 		'Błąd podczas aktualizowania przyszłych umów handlowych'
-// 	);
-// 	endTime = new Date().getTime();
-
-// 	toast({
-// 		title: 'Powielono umowy handlowe!',
-// 		description: `Kontynuowano + zaktualizowano ${currentTurnTradeDeals.value.length + nextTurnTradeDeals.value.length} umów handlowych w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
-// 	});
-
-// 	// FIXME: Poprawić drawio, żeby znowu odwzorowywał obecną bazę danych
-
-// 	// TODO: uprościć ten pierdolnik 2
-// 	// =============================================================================
-// 	startTime = new Date().getTime();
-// 	try {
-// 		turn.value = await pb.collection('turns').create({ value: turn.value.value + 1 });
-// 	} catch (error) {
-// 		toast({
-// 			title: `Błąd przy tworzeniu następnej tury!`,
-// 			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
-// 		});
-// 		if (error instanceof Error) throw error;
-// 	}
-
-// 	try {
-// 		turns.value = await pb.collection('turns').getFullList({ sort: '-value' });
-// 	} catch (error) {
-// 		toast({
-// 			title: `Błąd przy tworzeniu nowej listy tur!`,
-// 			description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
-// 		});
-// 		if (error instanceof Error) throw error;
-// 	}
-
-// 	await pb
-// 		.collection('maps')
-// 		.create({
-// 			turn: turn.value.id,
-// 			name: values.map.name.split(/ (?=\d{4}-\d{2}-\d{2}-\d{2}-\d{2})/)[0],
-// 			file: values.map
-// 		})
-// 		.catch((error: unknown) => {
-// 			toast({
-// 				title: `Błąd przy tworzeniu mapy!`,
-// 				description: error instanceof Error ? `${error.name}: ${error.message}` : 'Nieznany błąd.'
-// 			});
-// 			if (error instanceof Error) throw error;
-// 		});
-// 	endTime = new Date().getTime();
-
-// 	toast({
-// 		title: 'Mapa i nowa tura zostały dodane!',
-// 		description: `Dodano mapę i nową turę w czasie: ${((endTime - startTime) / 1000).toFixed(3)} s`
-// 	});
-
-// 	// TODO: powielanie umów handlowych
-
-// 	// =============================================================================
-// });
-
-// const handleTradeDeals = async (
-// 	tradeDeals: TradesResponse<unknown>[],
-// 	responses: { [key: string]: string },
-// 	operation: string,
-// 	errorMessage: string
-// ) => {
-// 	try {
-// 		await Promise.all(
-// 			tradeDeals.map(tradeDeal => {
-// 				const newTradeDeal = {
-// 					turn: operation === 'create' ? turn.value.id : tradeDeal.turn,
-// 					product: tradeDeal.product,
-// 					exportState: getNewStateID(tradeDeal.exportState, responses),
-// 					importState: getNewStateID(tradeDeal.importState, responses),
-// 					volume: tradeDeal.volume,
-// 					isDiscontinued: tradeDeal.isDiscontinued,
-// 					...(operation === 'create' && { price: tradeDeal.price })
-// 				};
-
-// 				return operation === 'create'
-// 					? pb.collection('trades').create(newTradeDeal)
-// 					: pb.collection('trades').update(tradeDeal.id, newTradeDeal);
-// 			})
-// 		);
-// 	} catch (error) {
-// 		toast({
-// 			title: errorMessage,
-// 			description: error instanceof Error ? error.message : 'Wystąpił nieznany błąd.'
-// 		});
-// 		if (error instanceof Error) throw error;
-// 	}
-// };
 </script>
 
 <template>

@@ -57,6 +57,7 @@ export interface mapExtractedBurgs {
 	state: string;
 	province: string;
 	population: number;
+	isCapital: boolean;
 	isPort: boolean;
 	isCitadel: boolean;
 	isPlaza: boolean;

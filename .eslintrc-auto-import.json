@@ -567,6 +567,7 @@
     "useValidateField": true,
     "useValidateForm": true,
     "validate": true,
-    "useSVGMaps": true
+    "useSVGMaps": true,
+    "useHandleTradeDeals": true
   }
 }

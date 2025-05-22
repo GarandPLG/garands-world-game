@@ -76,7 +76,7 @@ export function extractStatesData(mapData: AzgaarJSONFull): mapExtractedStates[]
 				capital: capitalBurg?.name || '',
 				cells: state.cells || 0,
 				burgs: state.burgs || 0,
-				provinces: state.provinces?.length || 0,
+				provinces: state.provinces.length,
 				ruralPopulation: Math.round((state.rural || 0) * POPULATION_FACTOR),
 				urbanPopulation: Math.round((state.urban || 0) * POPULATION_FACTOR),
 				relations: diplomacyObject,
