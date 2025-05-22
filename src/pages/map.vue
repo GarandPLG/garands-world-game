@@ -1,29 +1,9 @@
 <script setup lang="ts">
-useHead({
-	title: "Garand's WG | Mapa"
-});
+import type { MapsResponse, TurnsResponse } from '@/types/pb-types';
 
-interface Map {
-	collectionId: string;
-	collectionName: string;
-	created: string;
-	date: string;
-	file: string;
-	id: string;
-	name: string;
-	turn: string;
-	updated: string;
-	expand?: {
-		turn: {
-			collectionId: string;
-			collectionName: string;
-			created: string;
-			id: string;
-			updated: string;
-			value: number;
-		};
-	};
-}
+type Map = MapsResponse<{
+	turn?: TurnsResponse;
+}>;
 
 const pb = usePocketBase();
 const { toast } = useToast();
@@ -45,7 +25,7 @@ const pbMaps = await pb
 const maps: { [key: string]: Map } = pbMaps.reduce((acc, map: Map) => {
 	let key: string;
 
-	if (map.expand) key = `Tura ${map.expand.turn.value}`;
+	if (map.expand) key = `Tura ${map.expand.turn?.value}`;
 	else key = map.name;
 
 	acc[key] = map;
@@ -55,6 +35,10 @@ const maps: { [key: string]: Map } = pbMaps.reduce((acc, map: Map) => {
 const defaultMap = computed(() => Object.keys(maps)[Object.keys(maps).length - 1]);
 
 const pb_origin = import.meta.env.PROD ? 'http://localhost:8090' : 'http://localhost:5173/pb';
+
+useHead({
+	title: "Garand's WG | Mapa"
+});
 </script>
 
 <template>
@@ -78,7 +62,7 @@ const pb_origin = import.meta.env.PROD ? 'http://localhost:8090' : 'http://local
 			>
 				<iframe
 					title="mapa"
-					:src="`https://azgaar.github.io/Fantasy-Map-Generator/?maplink=${pb_origin}/api/files/${map.collectionId}/${map.id}/${map.file}`"
+					:src="`https://azgaar.github.io/Fantasy-Map-Generator/?maplink=${pb_origin}/api/files/${map.collectionId}/${map.id}/${map.map}`"
 					width="100%"
 					height="100%"
 					class="items-center justify-center"

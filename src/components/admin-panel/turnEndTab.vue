@@ -188,6 +188,8 @@ const onSubmit = handleSubmit(async values => {
 	);
 
 	let startTime = new Date().getTime();
+	// FIXME: Nie przenosi do następnej tury
+	// FIXME: Nie przenosi flag, czyli odniesień do states
 	await useHandleTradeDeals(
 		currentTurnTradeDeals.value,
 		statesFromPreviousTurn,
