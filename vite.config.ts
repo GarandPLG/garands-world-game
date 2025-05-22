@@ -1,16 +1,16 @@
-import path                            from 'path';
+import path from 'path';
 
 import { unheadVueComposablesImports } from '@unhead/vue';
-import vue                             from '@vitejs/plugin-vue';
-import AutoImport                      from 'unplugin-auto-import/vite';
-import Components                      from 'unplugin-vue-components/vite';
-import VueRouter                       from 'unplugin-vue-router/vite';
-import { defineConfig }                from 'vite';
-import vueDevTools                     from 'vite-plugin-vue-devtools';
+import vue from '@vitejs/plugin-vue';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import VueRouter from 'unplugin-vue-router/vite';
+import { defineConfig } from 'vite';
+import vueDevTools from 'vite-plugin-vue-devtools';
 // import { VueRouterAutoImports } from 'unplugin-vue-router';
 
-import autoprefixer                    from 'autoprefixer';
-import tailwind                        from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
+import tailwind from 'tailwindcss';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -34,6 +34,7 @@ export default defineConfig({
 				'pinia',
 				'@vueuse/core',
 				'vitest',
+				'vee-validate',
 				unheadVueComposablesImports
 			],
 			dirs: [

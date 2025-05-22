@@ -20,7 +20,7 @@ export function extractStatesData(mapData: AzgaarJSONFull): mapExtractedStates[]
 				state.culture !== undefined && cultures[state.culture] ? cultures[state.culture].name : '';
 
 			const diplomacyObject: Record<string, string> = {};
-			if (state.diplomacy && Array.isArray(state.diplomacy)) {
+			if (state.name !== 'Neutrals' && state.diplomacy && Array.isArray(state.diplomacy)) {
 				state.diplomacy.forEach((relation, index) => {
 					if (index === state.i || relation === 'x' || !relation) return;
 
@@ -37,17 +37,20 @@ export function extractStatesData(mapData: AzgaarJSONFull): mapExtractedStates[]
 			cells.forEach(cell => {
 				if (cell.state === state.i) {
 					const biomeName = biomesData.name[cell.biome];
-					if (biomeName) biomesCells[biomeName] = (biomesCells[biomeName] || 0) + 1;
 
-					if (cell.culture !== undefined && cultures[cell.culture]) {
-						const cultureName = cultures[cell.culture].name;
-						if (cultureName) culturesCells[cultureName] = (culturesCells[cultureName] || 0) + 1;
-					}
+					if (biomeName && biomeName !== 'Marine') {
+						biomesCells[biomeName] = (biomesCells[biomeName] || 0) + 1;
 
-					if (cell.religion !== undefined && religions[cell.religion]) {
-						const religionName = religions[cell.religion].name;
-						if (religionName)
-							religionsCells[religionName] = (religionsCells[religionName] || 0) + 1;
+						if (cell.culture !== undefined && cultures[cell.culture]) {
+							const cultureName = cultures[cell.culture].name;
+							if (cultureName) culturesCells[cultureName] = (culturesCells[cultureName] || 0) + 1;
+						}
+
+						if (cell.religion !== undefined && religions[cell.religion]) {
+							const religionName = religions[cell.religion].name;
+							if (religionName)
+								religionsCells[religionName] = (religionsCells[religionName] || 0) + 1;
+						}
 					}
 				}
 			});
@@ -73,7 +76,7 @@ export function extractStatesData(mapData: AzgaarJSONFull): mapExtractedStates[]
 				capital: capitalBurg?.name || '',
 				cells: state.cells || 0,
 				burgs: state.burgs || 0,
-				provinces: state.provinces?.length || 0,
+				provinces: state.provinces.length,
 				ruralPopulation: Math.round((state.rural || 0) * POPULATION_FACTOR),
 				urbanPopulation: Math.round((state.urban || 0) * POPULATION_FACTOR),
 				relations: diplomacyObject,

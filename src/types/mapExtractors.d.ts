@@ -21,7 +21,8 @@ export interface mapExtractedCultures {
 	color: string;
 	cells: number;
 	type: string;
-	population: number;
+	ruralPopulation: number;
+	urbanPopulation: number;
 	namesbase: string;
 }
 
@@ -56,6 +57,7 @@ export interface mapExtractedBurgs {
 	state: string;
 	province: string;
 	population: number;
+	isCapital: boolean;
 	isPort: boolean;
 	isCitadel: boolean;
 	isPlaza: boolean;

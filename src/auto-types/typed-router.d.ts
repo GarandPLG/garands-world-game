@@ -32,6 +32,5 @@ declare module 'vue-router/auto-routes' {
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,
     '/reports/[turn]/[state]': RouteRecordInfo<'/reports/[turn]/[state]', '/reports/:turn/:state', { turn: ParamValue<true>, state: ParamValue<true> }, { turn: ParamValue<false>, state: ParamValue<false> }>,
     '/reset-password': RouteRecordInfo<'/reset-password', '/reset-password', Record<never, never>, Record<never, never>>,
-    '/test': RouteRecordInfo<'/test', '/test', Record<never, never>, Record<never, never>>,
   }
 }

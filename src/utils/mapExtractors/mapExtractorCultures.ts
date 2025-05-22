@@ -13,16 +13,13 @@ export function extractCulturesData(mapData: AzgaarJSONFull): mapExtractedCultur
 	return cultures
 		.filter((culture: Culture) => !culture.removed)
 		.map((culture: Culture) => {
-			const totalPopulation = Math.round(
-				((culture.rural || 0) + (culture.urban || 0)) * POPULATION_FACTOR
-			);
-
 			return {
 				name: culture.name || '',
 				color: culture.color || '',
 				cells: culture.cells || 0,
 				type: culture.type || '',
-				population: totalPopulation,
+				ruralPopulation: Math.round(culture.rural * POPULATION_FACTOR) || 0,
+				urbanPopulation: Math.round(culture.urban * POPULATION_FACTOR) || 0,
 				namesbase: culture.base !== undefined ? namesBases[culture.base] : ''
 			};
 		});
