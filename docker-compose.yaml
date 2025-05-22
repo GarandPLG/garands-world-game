@@ -1,7 +1,7 @@
 name: 'garands-wg'
 services:
   pocketbase:
-    image: dpr.garandplg.com/garandplg/garands-world-game:latest
+    image: gitea.garandplg.com/garands-world-game/garands-world-game:latest
     container_name: wg-app
     ports:
       - '8090:8090'
@@ -16,7 +16,7 @@ services:
       timeout: 5s
       retries: 5
   redis-api:
-    image: dpr.garandplg.com/garandplg/gwg-redis-api:latest
+    image: gitea.garandplg.com/garands-world-game/gwg-redis-api:latest
     container_name: redis-api
     restart: unless-stopped
     ports:
