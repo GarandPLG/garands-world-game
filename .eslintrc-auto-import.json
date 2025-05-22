@@ -568,6 +568,7 @@
     "useValidateForm": true,
     "validate": true,
     "useSVGMaps": true,
-    "useHandleTradeDeals": true
+    "useHandleTradeDeals": true,
+    "useFetchBuildings": true
   }
 }

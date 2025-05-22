@@ -3,7 +3,7 @@ import type { StatesResponse, TradesResponse, TurnsResponse } from '@/types/pb-t
 export default async function useHandleTradeDeals(
 	tradeDeals: TradesResponse<unknown>[],
 	statesFromPreviousTurn: StatesResponse<unknown, unknown, unknown, unknown, unknown>[],
-	turn: TurnsResponse<unknown>,
+	turn: globalThis.Ref<TurnsResponse<unknown>>,
 	responses: { [key: string]: string },
 	operation: string,
 	errorMessage: string
@@ -16,31 +16,29 @@ export default async function useHandleTradeDeals(
 	const pb = usePocketBase();
 	const { toast } = useToast();
 
-	return async () => {
-		try {
-			await Promise.all(
-				tradeDeals.map(tradeDeal => {
-					const newTradeDeal = {
-						turn: operation === 'create' ? turn.id : tradeDeal.turn,
-						product: tradeDeal.product,
-						exportState: getNewStateID(tradeDeal.exportState, responses),
-						importState: getNewStateID(tradeDeal.importState, responses),
-						volume: tradeDeal.volume,
-						isDiscontinued: tradeDeal.isDiscontinued,
-						...(operation === 'create' && { price: tradeDeal.price })
-					};
+	try {
+		await Promise.all(
+			tradeDeals.map(tradeDeal => {
+				const newTradeDeal = {
+					turn: operation === 'create' ? turn.value.id : tradeDeal.turn,
+					product: tradeDeal.product,
+					exportState: getNewStateID(tradeDeal.exportState, responses),
+					importState: getNewStateID(tradeDeal.importState, responses),
+					volume: tradeDeal.volume,
+					isDiscontinued: tradeDeal.isDiscontinued,
+					...(operation === 'create' && { price: tradeDeal.price })
+				};
 
-					return operation === 'create'
-						? pb.collection('trades').create(newTradeDeal)
-						: pb.collection('trades').update(tradeDeal.id, newTradeDeal);
-				})
-			);
-		} catch (error) {
-			toast({
-				title: errorMessage,
-				description: error instanceof Error ? error.message : 'Wystąpił nieznany błąd.'
-			});
-			if (error instanceof Error) throw error;
-		}
-	};
+				return operation === 'create'
+					? pb.collection('trades').create(newTradeDeal)
+					: pb.collection('trades').update(tradeDeal.id, newTradeDeal);
+			})
+		);
+	} catch (error) {
+		toast({
+			title: errorMessage,
+			description: error instanceof Error ? error.message : 'Wystąpił nieznany błąd.'
+		});
+		if (error instanceof Error) throw error;
+	}
 }

@@ -188,12 +188,10 @@ const onSubmit = handleSubmit(async values => {
 	);
 
 	let startTime = new Date().getTime();
-	// FIXME: Nie przenosi do następnej tury
-	// FIXME: Nie przenosi flag, czyli odniesień do states
 	await useHandleTradeDeals(
 		currentTurnTradeDeals.value,
 		statesFromPreviousTurn,
-		turn.value,
+		turn,
 		statesResponses,
 		'create',
 		'Błąd podczas powielania obecnych umów handlowych'
@@ -202,7 +200,7 @@ const onSubmit = handleSubmit(async values => {
 	await useHandleTradeDeals(
 		nextTurnTradeDeals.value,
 		statesFromPreviousTurn,
-		turn.value,
+		turn,
 		statesResponses,
 		'update',
 		'Błąd podczas aktualizowania przyszłych umów handlowych'

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const technologie = ref<number>(1);
-const buildings = useBuildings(technologie);
+const buildings = useFetchBuildings(technologie);
 
 console.log(buildings.value);
 </script>
@@ -32,8 +32,27 @@ console.log(buildings.value);
 			</TableHeader>
 
 			<TableBody class="h-full">
-				<TableRow class="h-full cursor-pointer">
-					<TableCell class="text-center"> </TableCell>
+				<TableRow
+					class="h-full cursor-pointer"
+					v-for="[key, building] in buildings.entries()"
+					:key="key"
+				>
+					<TableCell class="text-center">
+						{{ building.translation }}
+						<!-- <TooltipProvider>
+							<Tooltip>
+								<TooltipTrigger as-child>
+									<Icon :icon="building.icon" :width="'52'" :height="'52'" class="text-primary" />
+								</TooltipTrigger>
+
+								<TooltipContent>
+									<p class="text-center">
+										{{ building.translation }}
+									</p>
+								</TooltipContent>
+							</Tooltip>
+						</TooltipProvider> -->
+					</TableCell>
 
 					<TableCell class="text-center"> </TableCell>
 

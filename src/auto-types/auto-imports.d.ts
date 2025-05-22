@@ -348,7 +348,7 @@ declare global {
   const useBreakpoints: typeof import('@vueuse/core')['useBreakpoints']
   const useBroadcastChannel: typeof import('@vueuse/core')['useBroadcastChannel']
   const useBrowserLocation: typeof import('@vueuse/core')['useBrowserLocation']
-  const useBuildings: typeof import('../composables/report/useBuildings')['default']
+  const useBuildings: typeof import('../composables/report/useFetchBuildings')['default']
   const useCached: typeof import('@vueuse/core')['useCached']
   const useCachedData: typeof import('../composables/useCachedData')['useCachedData']
   const useCarousel: typeof import('../components/ui/carousel/useCarousel')['useCarousel']
@@ -391,6 +391,7 @@ declare global {
   const useFavicon: typeof import('@vueuse/core')['useFavicon']
   const useFetch: typeof import('@vueuse/core')['useFetch']
   const useFetchAdministrationReport: typeof import('../composables/report/useFetchAdministrationReport')['default']
+  const useFetchBuildings: typeof import('../composables/report/useFetchBuildings')['default']
   const useFetchPopulationReport: typeof import('../composables/report/useFetchPopulationReport')['default']
   const useFetchTradeAdminTab: typeof import('../composables/admin-panel/useFetchTradeAdminTab')['default']
   const useFetchTradeReport: typeof import('../composables/report/useFetchTradeReport')['default']
@@ -400,7 +401,7 @@ declare global {
   const useFieldValue: typeof import('vee-validate')['useFieldValue']
   const useFileDialog: typeof import('@vueuse/core')['useFileDialog']
   const useFileSystemAccess: typeof import('@vueuse/core')['useFileSystemAccess']
-  const useFilteredBuildings: typeof import('../composables/report/useBuildings')['useFilteredBuildings']
+  const useFilteredBuildings: typeof import('../composables/report/useFetchBuildings')['useFilteredBuildings']
   const useFocus: typeof import('@vueuse/core')['useFocus']
   const useFocusWithin: typeof import('@vueuse/core')['useFocusWithin']
   const useForm: typeof import('vee-validate')['useForm']
@@ -916,7 +917,6 @@ declare module 'vue' {
     readonly useBreakpoints: UnwrapRef<typeof import('@vueuse/core')['useBreakpoints']>
     readonly useBroadcastChannel: UnwrapRef<typeof import('@vueuse/core')['useBroadcastChannel']>
     readonly useBrowserLocation: UnwrapRef<typeof import('@vueuse/core')['useBrowserLocation']>
-    readonly useBuildings: UnwrapRef<typeof import('../composables/report/useBuildings')['default']>
     readonly useCached: UnwrapRef<typeof import('@vueuse/core')['useCached']>
     readonly useCachedData: UnwrapRef<typeof import('../composables/useCachedData')['useCachedData']>
     readonly useCarousel: UnwrapRef<typeof import('../components/ui/carousel/useCarousel')['useCarousel']>
@@ -959,6 +959,7 @@ declare module 'vue' {
     readonly useFavicon: UnwrapRef<typeof import('@vueuse/core')['useFavicon']>
     readonly useFetch: UnwrapRef<typeof import('@vueuse/core')['useFetch']>
     readonly useFetchAdministrationReport: UnwrapRef<typeof import('../composables/report/useFetchAdministrationReport')['default']>
+    readonly useFetchBuildings: UnwrapRef<typeof import('../composables/report/useFetchBuildings')['default']>
     readonly useFetchPopulationReport: UnwrapRef<typeof import('../composables/report/useFetchPopulationReport')['default']>
     readonly useFetchTradeAdminTab: UnwrapRef<typeof import('../composables/admin-panel/useFetchTradeAdminTab')['default']>
     readonly useFetchTradeReport: UnwrapRef<typeof import('../composables/report/useFetchTradeReport')['default']>
